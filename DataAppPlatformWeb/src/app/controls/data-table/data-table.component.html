@@ -1,0 +1,21 @@
+<p>
+  data-table works!
+</p>
+<p>entitySchema: {{entitySchema}}</p>
+<ul>
+  <li *ngFor="let column of columns"> 
+    {{ column.name }}
+  </li>
+ </ul>
+
+<span *ngIf="data.length == 0">Loading data table...</span>
+<div class="rTable" *ngIf="data.length > 0">
+  <div class="rTableRow">
+      <div class="rTableHead" [style.width]="column.width + '%'" *ngFor="let column of columns"><strong>{{column.displayName}}</strong></div>
+    <div class="rTableHead">&nbsp;</div>
+  </div>
+  <div class="rTableRow" *ngFor="let item of data">
+    <div class="rTableCell" *ngFor="let column of columns">{{item[column.name]}}</div>
+    <div class="rTableCell"></div>
+  </div>
+</div>

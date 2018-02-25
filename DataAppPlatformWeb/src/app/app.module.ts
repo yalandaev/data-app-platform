@@ -3,16 +3,25 @@ import { NgModule } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
+import { DataTableComponent } from './controls/data-table/data-table.component';
+import { ContactsComponent } from './sections/contacts/contacts.component';
+import { DataService } from './services/data.service';
+import { Http } from '@angular/http';
+import { HttpModule } from '@angular/http/src/http_module';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DataTableComponent,
+    ContactsComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
