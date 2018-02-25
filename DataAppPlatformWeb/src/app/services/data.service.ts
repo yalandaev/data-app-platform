@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class DataService {
 
-  url = 'https://195b162a-315e-4ee7-ac72-ca8ecb01ca31.mock.pstmn.io/data';
+  url = 'http://localhost:4300/api/DataService/GetData';
 
   constructor(private http: HttpClient) { }
 

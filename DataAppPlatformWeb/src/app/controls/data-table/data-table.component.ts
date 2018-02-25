@@ -14,10 +14,7 @@ export class DataTableComponent implements OnInit {
   currentPage = 1;
 
   constructor(private dataService: DataService) {
-    this.dataService.getData(new DataRequest(this.entitySchema, this.columns, this.filter, this.currentPage, this.pageSize))
-      .subscribe(data => {
-        this.data = data.Data;
-      });
+
   }
 
   @Input()
@@ -33,5 +30,9 @@ export class DataTableComponent implements OnInit {
   filter: {};
 
   ngOnInit() {
+    this.dataService.getData(new DataRequest(this.entitySchema, this.columns, this.filter, this.currentPage, this.pageSize))
+    .subscribe(data => {
+      this.data = data.Data;
+    });
   }
 }

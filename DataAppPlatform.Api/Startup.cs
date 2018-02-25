@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Serialization;
 
 namespace DataAppPlatform.Api
 {
@@ -23,7 +26,15 @@ namespace DataAppPlatform.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("defaultPolicy",
+                    policy => policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod());
+            });
+            services.AddMvc()
+                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver()); ;
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,6 +45,7 @@ namespace DataAppPlatform.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("defaultPolicy");
             app.UseMvc();
         }
     }
