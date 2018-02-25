@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.Core", "DataAppPlatform.Core\DataAppPlatform.Core.csproj", "{730CB392-2380-4BFC-BAD8-585898DFB6F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAppPlatform.Core", "DataAppPlatform.Core\DataAppPlatform.Core.csproj", "{730CB392-2380-4BFC-BAD8-585898DFB6F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.Api", "DataAppPlatform.Api\DataAppPlatform.Api.csproj", "{11D086C8-8C3E-43FC-A45A-1BA9C5C57000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.Core.Tests", "DataAppPlatform.Core.Tests\DataAppPlatform.Core.Tests.csproj", "{58F84E89-DF9B-41F1-BC09-C76F3958C219}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{730CB392-2380-4BFC-BAD8-585898DFB6F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{730CB392-2380-4BFC-BAD8-585898DFB6F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{730CB392-2380-4BFC-BAD8-585898DFB6F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11D086C8-8C3E-43FC-A45A-1BA9C5C57000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11D086C8-8C3E-43FC-A45A-1BA9C5C57000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11D086C8-8C3E-43FC-A45A-1BA9C5C57000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11D086C8-8C3E-43FC-A45A-1BA9C5C57000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58F84E89-DF9B-41F1-BC09-C76F3958C219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58F84E89-DF9B-41F1-BC09-C76F3958C219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58F84E89-DF9B-41F1-BC09-C76F3958C219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58F84E89-DF9B-41F1-BC09-C76F3958C219}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
