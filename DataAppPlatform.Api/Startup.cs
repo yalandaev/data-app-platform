@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace DataAppPlatform.Api
 {
@@ -33,7 +34,10 @@ namespace DataAppPlatform.Api
             });
             services.AddMvc()
                 .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver()); ;
-
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "DataService API", Version = "v1" });
+            });
 
         }
 
@@ -47,6 +51,11 @@ namespace DataAppPlatform.Api
 
             app.UseCors("defaultPolicy");
             app.UseMvc();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "DataService API V1");
+            });
         }
     }
 }
