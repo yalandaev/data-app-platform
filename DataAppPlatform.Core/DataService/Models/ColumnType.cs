@@ -10,6 +10,7 @@ namespace DataAppPlatform.Core.DataService.Models
         Boolean,
         Date,
         DateTime,
-        Int
+        Int,
+        Lookup
     }
 }

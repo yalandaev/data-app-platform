@@ -3,5 +3,6 @@ export enum ColumnType {
     Boolean,
     Date,
     DateTime,
-    Int
+    Int,
+    Lookup
 }

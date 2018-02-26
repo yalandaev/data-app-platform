@@ -10,7 +10,7 @@ namespace DataAppPlatform.SqlServer.Tests
     public class SqlServerDialectProviderTests
     {
         [Fact]
-        public void Should_GenerateQuery_When_OneColumnFilterNotExists()
+        public void Should_GenerateQueryWithSungleColumn_When_OneColumnFilterNotExists()
         {
             ISqlDialectProvider provider = new SqlServerDialectProvider();
             DataRequest request = new DataRequest()
@@ -30,7 +30,7 @@ namespace DataAppPlatform.SqlServer.Tests
         }
 
         [Fact]
-        public void Should_GenerateQuery_When_TwoColumnFilterNotExists()
+        public void Should_GenerateQueryWithTwoColumns_When_TwoColumnFilterNotExists()
         {
             ISqlDialectProvider provider = new SqlServerDialectProvider();
             DataRequest request = new DataRequest()
@@ -71,7 +71,7 @@ namespace DataAppPlatform.SqlServer.Tests
         }
 
         [Fact]
-        public void Should_GenerateQueryOrderById_When_SortFilledIn()
+        public void Should_GenerateQueryWithCorrectOrderBy_When_SortFilledIn()
         {
             ISqlDialectProvider provider = new SqlServerDialectProvider();
             DataRequest request = new DataRequest()
@@ -93,7 +93,7 @@ namespace DataAppPlatform.SqlServer.Tests
         }
 
         [Fact]
-        public void Should_GenerateQuery_When_PageMoreThanOne()
+        public void Should_GenerateQueryWithCorrectFetchOffset_When_PageMoreThanOne()
         {
             ISqlDialectProvider provider = new SqlServerDialectProvider();
             DataRequest request = new DataRequest()
@@ -112,6 +112,9 @@ namespace DataAppPlatform.SqlServer.Tests
             Assert.Equal(expectedQuery, query);
         }
     }
-
-
 }
+
+
+// IDEAS
+// ISchemaService - Будет отдавать схему таблиц для правильного построения джоинов.
+// Если в колонках подаётся лукапная схема, то нужно взять из лукапа ДисплайКолумн и её вывести. Наверное, для этого стоит добавить тип "Лукап" для колонки.
