@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DataAppPlatform.Core.DataService.Models.Filter;
 
 namespace DataAppPlatform.Core.DataService.Models
 {
@@ -8,6 +9,6 @@ namespace DataAppPlatform.Core.DataService.Models
         public int Page { get; set; }
         public int PageSize { get; set; }
         public List<DataTableColumn> Columns { get; set; }
-        public object Filter { get; set; }
+        public FilterGroup Filter { get; set; }
     }
 }

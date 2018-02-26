@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { DataTableColumn } from './models/column.model';
 import { DataService } from '../../services/data.service';
 import { DataRequest } from './models/dataRequest.model';
+import { FilterGroup } from './models/filter/filterGroup.model';
 
 @Component({
   selector: 'app-data-table',
@@ -27,7 +28,7 @@ export class DataTableComponent implements OnInit {
   pageSize: number;
 
   @Input()
-  filter: {};
+  filter: FilterGroup;
 
   ngOnInit() {
     this.dataService.getData(new DataRequest(this.entitySchema, this.columns, this.filter, this.currentPage, this.pageSize))
