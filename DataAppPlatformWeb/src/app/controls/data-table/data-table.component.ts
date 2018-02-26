@@ -3,6 +3,7 @@ import { DataTableColumn } from './models/column.model';
 import { DataService } from '../../services/data.service';
 import { DataRequest } from './models/dataRequest.model';
 import { FilterGroup } from './models/filter/filterGroup.model';
+import { Sort } from './models/filter/sort.model';
 
 @Component({
   selector: 'app-data-table',
@@ -22,6 +23,12 @@ export class DataTableComponent implements OnInit {
   entitySchema: string;
 
   @Input()
+  orderBy: string;
+
+  @Input()
+  sort: Sort;
+
+  @Input()
   columns: Array<DataTableColumn>;
 
   @Input()
@@ -31,7 +38,7 @@ export class DataTableComponent implements OnInit {
   filter: FilterGroup;
 
   ngOnInit() {
-    this.dataService.getData(new DataRequest(this.entitySchema, this.columns, this.filter, this.currentPage, this.pageSize))
+    this.dataService.getData(new DataRequest(this.entitySchema, this.orderBy, this.sort, this.columns, this.filter, this.currentPage, this.pageSize))
     .subscribe(data => {
       this.data = data.Data;
     });

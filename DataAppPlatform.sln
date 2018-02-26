@@ -5,9 +5,13 @@ VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAppPlatform.Core", "DataAppPlatform.Core\DataAppPlatform.Core.csproj", "{730CB392-2380-4BFC-BAD8-585898DFB6F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.Api", "DataAppPlatform.Api\DataAppPlatform.Api.csproj", "{11D086C8-8C3E-43FC-A45A-1BA9C5C57000}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAppPlatform.Api", "DataAppPlatform.Api\DataAppPlatform.Api.csproj", "{11D086C8-8C3E-43FC-A45A-1BA9C5C57000}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.Core.Tests", "DataAppPlatform.Core.Tests\DataAppPlatform.Core.Tests.csproj", "{58F84E89-DF9B-41F1-BC09-C76F3958C219}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAppPlatform.Core.Tests", "DataAppPlatform.Core.Tests\DataAppPlatform.Core.Tests.csproj", "{58F84E89-DF9B-41F1-BC09-C76F3958C219}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.SqlServer", "DataAppPlatform.SqlServer\DataAppPlatform.SqlServer.csproj", "{5DADD69E-4978-4B3A-9B0E-9E7C8FF70A48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.SqlServer.Tests", "DataAppPlatform.SqlServer.Tests\DataAppPlatform.SqlServer.Tests.csproj", "{39367CA0-64E6-470F-AB8D-3532E97838DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{58F84E89-DF9B-41F1-BC09-C76F3958C219}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58F84E89-DF9B-41F1-BC09-C76F3958C219}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58F84E89-DF9B-41F1-BC09-C76F3958C219}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DADD69E-4978-4B3A-9B0E-9E7C8FF70A48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DADD69E-4978-4B3A-9B0E-9E7C8FF70A48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DADD69E-4978-4B3A-9B0E-9E7C8FF70A48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DADD69E-4978-4B3A-9B0E-9E7C8FF70A48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39367CA0-64E6-470F-AB8D-3532E97838DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39367CA0-64E6-470F-AB8D-3532E97838DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39367CA0-64E6-470F-AB8D-3532E97838DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39367CA0-64E6-470F-AB8D-3532E97838DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

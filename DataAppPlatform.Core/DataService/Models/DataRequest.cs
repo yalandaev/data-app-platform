@@ -6,6 +6,8 @@ namespace DataAppPlatform.Core.DataService.Models
     public class DataRequest
     {
         public string EntitySchema { get; set; }
+        public string OrderBy { get; set; }
+        public Sort Sort { get; set; }
         public int Page { get; set; }
         public int PageSize { get; set; }
         public List<DataTableColumn> Columns { get; set; }
