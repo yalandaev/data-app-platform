@@ -23,6 +23,7 @@
     <ProjectReference Include="..\DataAppPlatform.Api.Contract\DataAppPlatform.Api.Contract.csproj" />
     <ProjectReference Include="..\DataAppPlatform.Api.Services\DataAppPlatform.Api.Services.csproj" />
     <ProjectReference Include="..\DataAppPlatform.Core\DataAppPlatform.Core.csproj" />
+    <ProjectReference Include="..\DataAppPlatform.SqlServer\DataAppPlatform.SqlServer.csproj" />
   </ItemGroup>
 
 </Project>

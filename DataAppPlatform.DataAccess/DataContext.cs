@@ -5,16 +5,21 @@ namespace DataAppPlatform.DataAccess
 {
     public class DataContext : DbContext
     {
+        public DataContext()
+        {
+            Database.EnsureCreated();
+        }
+
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
             Database.EnsureCreated();
         }
 
-        public DbSet<Contact> Users { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=dataappplatform;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Data Source=.\SQLEXPRESS;Initial Catalog=DataAppPlatform;Persist Security Info=True;User ID=sa;Password=password");
         }
     }
 }

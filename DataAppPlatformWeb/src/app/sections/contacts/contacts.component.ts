@@ -15,8 +15,20 @@ export class ContactsComponent implements OnInit {
   constructor() {
     this.columns = [
       {
-        name: 'Name',
-        displayName: 'Name',
+        name: 'FirstName',
+        displayName: 'First Name',
+        type: ColumnType.Text,
+        width: 10
+      },
+      {
+        name: 'LastName',
+        displayName: 'Last Name',
+        type: ColumnType.Text,
+        width: 10
+      },
+      {
+        name: 'Email',
+        displayName: 'Its email!',
         type: ColumnType.Text,
         width: 10
       },

@@ -25,18 +25,7 @@ namespace DataAppPlatform.Api.Controllers
         [HttpPost("GetData")]
         public DataResponse GetData([FromBody]DataRequest request)
         {
-            return new DataResponse()
-            {
-                Total = 100,
-                Data = new []
-                {
-                    new { Id = 1, Name = "Eugene", BirthDate = DateTime.Now },
-                    new { Id = 2, Name = "Mark", BirthDate = DateTime.Now },
-                    new { Id = 3, Name = "Peter", BirthDate = DateTime.Now },
-                    new { Id = 4, Name = "Samuel", BirthDate = DateTime.Now },
-                    new { Id = 5, Name = "Vlad", BirthDate = DateTime.Now }
-                }
-            };
+            return _dataService.GetData(request);
         }
     }
 }
