@@ -9,7 +9,7 @@ namespace DataAppPlatform.SqlServer.Tests
 {
     public class SqlServerDialectProviderTests
     {
-        [Fact]
+        [Fact(DisplayName = "Should generate correct query with single column when only one column passed without filter")]
         public void Should_GenerateQueryWithSungleColumn_When_OneColumnFilterNotExists()
         {
             ISqlDialectProvider provider = new SqlServerDialectProvider();

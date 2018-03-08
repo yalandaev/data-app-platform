@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAppPlatform.Core", "DataAppPlatform.Core\DataAppPlatform.Core.csproj", "{730CB392-2380-4BFC-BAD8-585898DFB6F4}"
 EndProject
@@ -9,9 +9,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAppPlatform.Api", "Data
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAppPlatform.Core.Tests", "DataAppPlatform.Core.Tests\DataAppPlatform.Core.Tests.csproj", "{58F84E89-DF9B-41F1-BC09-C76F3958C219}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.SqlServer", "DataAppPlatform.SqlServer\DataAppPlatform.SqlServer.csproj", "{5DADD69E-4978-4B3A-9B0E-9E7C8FF70A48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAppPlatform.SqlServer", "DataAppPlatform.SqlServer\DataAppPlatform.SqlServer.csproj", "{5DADD69E-4978-4B3A-9B0E-9E7C8FF70A48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.SqlServer.Tests", "DataAppPlatform.SqlServer.Tests\DataAppPlatform.SqlServer.Tests.csproj", "{39367CA0-64E6-470F-AB8D-3532E97838DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAppPlatform.SqlServer.Tests", "DataAppPlatform.SqlServer.Tests\DataAppPlatform.SqlServer.Tests.csproj", "{39367CA0-64E6-470F-AB8D-3532E97838DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.Entities", "DataAppPlatform.Entities\DataAppPlatform.Entities.csproj", "{920D87E9-A161-4AE1-8176-5A7181B5E265}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D7D12047-CCEF-470B-A50A-CAE34EB4846A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.Api.Contract", "DataAppPlatform.Api.Contract\DataAppPlatform.Api.Contract.csproj", "{58F6A66C-60C6-4C08-92F1-F1AC3CD42554}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.DataAccess", "DataAppPlatform.DataAccess\DataAppPlatform.DataAccess.csproj", "{07B72328-309E-4696-A5D1-5EB0416EE622}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,9 +47,25 @@ Global
 		{39367CA0-64E6-470F-AB8D-3532E97838DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39367CA0-64E6-470F-AB8D-3532E97838DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39367CA0-64E6-470F-AB8D-3532E97838DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{920D87E9-A161-4AE1-8176-5A7181B5E265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{920D87E9-A161-4AE1-8176-5A7181B5E265}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{920D87E9-A161-4AE1-8176-5A7181B5E265}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{920D87E9-A161-4AE1-8176-5A7181B5E265}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58F6A66C-60C6-4C08-92F1-F1AC3CD42554}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58F6A66C-60C6-4C08-92F1-F1AC3CD42554}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58F6A66C-60C6-4C08-92F1-F1AC3CD42554}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58F6A66C-60C6-4C08-92F1-F1AC3CD42554}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07B72328-309E-4696-A5D1-5EB0416EE622}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07B72328-309E-4696-A5D1-5EB0416EE622}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07B72328-309E-4696-A5D1-5EB0416EE622}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07B72328-309E-4696-A5D1-5EB0416EE622}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{58F84E89-DF9B-41F1-BC09-C76F3958C219} = {D7D12047-CCEF-470B-A50A-CAE34EB4846A}
+		{39367CA0-64E6-470F-AB8D-3532E97838DA} = {D7D12047-CCEF-470B-A50A-CAE34EB4846A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AA56534B-8950-4ECC-A9D1-21E5F38C3870}
