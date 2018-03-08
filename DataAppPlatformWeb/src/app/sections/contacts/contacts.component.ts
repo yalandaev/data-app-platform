@@ -36,7 +36,8 @@ export class ContactsComponent implements OnInit {
         name: 'BirthDate',
         displayName: 'Birth date',
         type: ColumnType.DateTime,
-        width: 15
+        width: 15,
+        formatter: 'date:format'
       }];
   }
 

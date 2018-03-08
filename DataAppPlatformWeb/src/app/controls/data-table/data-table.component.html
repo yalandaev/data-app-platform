@@ -15,7 +15,7 @@
     <div class="rTableHead">&nbsp;</div>
   </div>
   <div class="rTableRow" *ngFor="let item of data">
-    <div class="rTableCell" *ngFor="let column of columns">{{item[column.name]}}</div>
+    <div class="rTableCell" *ngFor="let column of columns">{{item[column.name] | useFilter:column }}</div>
     <div class="rTableCell"></div>
   </div>
 </div>

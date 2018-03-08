@@ -9,13 +9,15 @@ import { DataService } from './services/data.service';
 import { Http } from '@angular/http';
 import { HttpModule } from '@angular/http/src/http_module';
 import { HttpClientModule } from '@angular/common/http';
+import { UseFilterPipe } from './controls/data-table/pipes/use-filter.pipe';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     DataTableComponent,
-    ContactsComponent
+    ContactsComponent,
+    UseFilterPipe
   ],
   imports: [
     BrowserModule,

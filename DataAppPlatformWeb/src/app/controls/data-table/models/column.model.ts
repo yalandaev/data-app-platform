@@ -5,4 +5,5 @@ export class DataTableColumn {
     public displayName: string;
     public type: ColumnType;
     public width: number;
+    public formatter?: string;
 }
