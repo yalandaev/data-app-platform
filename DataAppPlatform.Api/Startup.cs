@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAppPlatform.Api.Services;
+using DataAppPlatform.Core.DataService.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -38,6 +40,7 @@ namespace DataAppPlatform.Api
             {
                 c.SwaggerDoc("v1", new Info { Title = "DataService API", Version = "v1" });
             });
+            services.AddTransient<IDataService, DataService>();
 
         }
 

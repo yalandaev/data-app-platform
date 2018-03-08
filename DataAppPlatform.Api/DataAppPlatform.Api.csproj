@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="2.1.0" />
@@ -20,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAppPlatform.Api.Contract\DataAppPlatform.Api.Contract.csproj" />
+    <ProjectReference Include="..\DataAppPlatform.Api.Services\DataAppPlatform.Api.Services.csproj" />
     <ProjectReference Include="..\DataAppPlatform.Core\DataAppPlatform.Core.csproj" />
   </ItemGroup>
 

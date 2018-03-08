@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAppPlatform.Core.DataService.Interfaces;
 using DataAppPlatform.Core.DataService.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,13 @@ namespace DataAppPlatform.Api.Controllers
     [EnableCors("defaultPolicy")]
     public class DataServiceController : Controller
     {
+        private IDataService _dataService;
+
+        public DataServiceController(IDataService dataService)
+        {
+            _dataService = dataService;
+        }
+
         [HttpPost("GetData")]
         public DataResponse GetData([FromBody]DataRequest request)
         {

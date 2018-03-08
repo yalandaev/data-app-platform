@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataAppPlatform.Api.Contract\DataAppPlatform.Api.Contract.csproj" />
+    <ProjectReference Include="..\DataAppPlatform.Core\DataAppPlatform.Core.csproj" />
+    <ProjectReference Include="..\DataAppPlatform.DataAccess\DataAppPlatform.DataAccess.csproj" />
+    <ProjectReference Include="..\DataAppPlatform.Entities\DataAppPlatform.Entities.csproj" />
+  </ItemGroup>
+
+</Project>
