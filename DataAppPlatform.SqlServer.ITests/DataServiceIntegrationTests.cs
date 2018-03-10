@@ -147,5 +147,52 @@ namespace DataAppPlatform.SqlServer.ITests
             Assert.Equal("Carmen",
                 ((IDictionary<string, object>)((response.Data as ExpandoObject[]).ToList()[0]))["FirstName"]);
         }
+
+        [Fact]
+        public void ReferenceColumnTest()
+        {
+            DataRequest request = new DataRequest()
+            {
+                Columns = new List<DataTableColumn>()
+                {
+                    new DataTableColumn()
+                    {
+                        DisplayName = "First name",
+                        Name = "FirstName",
+                        Type = ColumnType.Text,
+                        Width = 10
+                    },
+                    new DataTableColumn()
+                    {
+                        DisplayName = "Manager",
+                        Name = "Manager.FirstName",
+                        Type = ColumnType.Text,
+                        Width = 10
+                    }
+                },
+                EntitySchema = "Contacts",
+                Page = 1,
+                PageSize = 10,
+                OrderBy = "FirstName",
+                Sort = Sort.ASC
+            };
+
+            _dataContext.Contacts.Add(new Contact()
+            {
+                FirstName = "Abram",
+                Manager = new Contact() { FirstName = "Bruce" } 
+            });
+            _dataContext.SaveChanges();
+
+            DataResponse response = _dataService.GetData(request);
+
+            var actualJsonData = JsonConvert.SerializeObject(response.Data, Formatting.Indented);
+            var expectedJsonData =
+                File.ReadAllText(
+                    $@"ExpectedResponses\DataServiceIntegrationTests\{MethodBase.GetCurrentMethod().Name}.json");
+
+            Assert.NotNull(response);
+            Assert.Equal(expectedJsonData, actualJsonData);
+        }
     }
 }

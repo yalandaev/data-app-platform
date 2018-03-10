@@ -10,5 +10,7 @@ namespace DataAppPlatform.Entities
         public DateTime? BirthDate { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
+        public int? ManagerId { get; set; }
+        public Contact Manager { get; set; }
     }
 }

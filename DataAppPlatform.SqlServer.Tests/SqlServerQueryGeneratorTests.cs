@@ -111,6 +111,41 @@ namespace DataAppPlatform.SqlServer.Tests
 
             Assert.Equal(expectedQuery, query);
         }
+
+        [Fact]
+        public void Should_GenerateQueryWithReferenceColumn()
+        {
+            ISqlQueryGenerator provider = new SqlServerQueryGenerator();
+
+            DataRequest request = new DataRequest()
+            {
+                Columns = new List<DataTableColumn>()
+                {
+                    new DataTableColumn()
+                    {
+                        DisplayName = "First name",
+                        Name = "FirstName",
+                        Type = ColumnType.Text,
+                        Width = 10
+                    },
+                    new DataTableColumn()
+                    {
+                        DisplayName = "Manager",
+                        Name = "Manager.FirstName",
+                        Type = ColumnType.Text,
+                        Width = 10
+                    }
+                },
+                EntitySchema = "Contacts",
+                Page = 1,
+                PageSize = 10
+            };
+
+            string expectedQuery = "SELECT [T1].[FirstName],[T2].[FirstName] FROM [Contacts] AS [T1] INNER JOIN [Contacts] AS [T2] ON [T1].[ManagerId] = [T2].[Id] ORDER BY [T1].[Id] DESC OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY";
+            string query = provider.GetQuery(request);
+
+            Assert.Equal(expectedQuery, query);
+        }
     }
 }
 
