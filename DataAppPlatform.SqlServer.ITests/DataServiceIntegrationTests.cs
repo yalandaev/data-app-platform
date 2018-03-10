@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -59,8 +60,8 @@ namespace DataAppPlatform.SqlServer.ITests
                 Sort = Sort.ASC
             };
 
-            _dataContext.Contacts.Add(new Contact() {FirstName = "John", LastName = "Doe"});
-            _dataContext.Contacts.Add(new Contact() {FirstName = "Foo", LastName = "Bar"});
+            _dataContext.Contacts.Add(new Contact() { FirstName = "Abram", LastName = "Doe" });
+            _dataContext.Contacts.Add(new Contact() { FirstName = "Bruce", LastName = "Bar" });
             _dataContext.SaveChanges();
 
             DataResponse response = _dataService.GetData(request);
@@ -73,6 +74,78 @@ namespace DataAppPlatform.SqlServer.ITests
             Assert.NotNull(response);
             Assert.Equal(2, ((Array)response.Data).Length);
             Assert.Equal(expectedJsonData, actualJsonData);
+        }
+
+        [Fact]
+        public void SimpleQuerySortTest()
+        {
+            DataRequest request = new DataRequest()
+            {
+                Columns = new List<DataTableColumn>()
+                {
+                    new DataTableColumn()
+                    {
+                        DisplayName = "First name",
+                        Name = "FirstName",
+                        Type = ColumnType.Text,
+                        Width = 10
+                    }
+                },
+                EntitySchema = "Contacts",
+                Page = 1,
+                PageSize = 10,
+                OrderBy = "FirstName",
+                Sort = Sort.ASC
+            };
+
+            _dataContext.Contacts.Add(new Contact() { FirstName = "Abram" });
+            _dataContext.Contacts.Add(new Contact() { FirstName = "Bruce" });
+            _dataContext.SaveChanges();
+
+            DataResponse response = _dataService.GetData(request);
+            Assert.Equal("Abram", 
+                ((IDictionary<string, object>)((response.Data as ExpandoObject[]).ToList()[0]))["FirstName"]);
+            
+            request.Sort = Sort.DESC;
+            response = _dataService.GetData(request);
+            Assert.Equal("Bruce", 
+                ((IDictionary<string, object>)((response.Data as ExpandoObject[]).ToList()[0]))["FirstName"]);
+        }
+
+        [Fact]
+        public void SimpleQueryPagingTest()
+        {
+            DataRequest request = new DataRequest()
+            {
+                Columns = new List<DataTableColumn>()
+                {
+                    new DataTableColumn()
+                    {
+                        DisplayName = "First name",
+                        Name = "FirstName",
+                        Type = ColumnType.Text,
+                        Width = 10
+                    }
+                },
+                EntitySchema = "Contacts",
+                Page = 2,
+                PageSize = 2,
+                OrderBy = "FirstName",
+                Sort = Sort.ASC
+            };
+
+            _dataContext.Contacts.Add(new Contact() { FirstName = "Abram" });
+            _dataContext.Contacts.Add(new Contact() { FirstName = "Bruce" });
+            _dataContext.Contacts.Add(new Contact() { FirstName = "Carmen" });
+            _dataContext.Contacts.Add(new Contact() { FirstName = "Dracula" });
+            _dataContext.SaveChanges();
+
+            DataResponse response = _dataService.GetData(request);
+
+            Assert.NotNull(response);
+            Assert.Equal(2, ((Array)response.Data).Length);
+            Assert.Equal("Carmen",
+                ((IDictionary<string, object>)((response.Data as ExpandoObject[]).ToList()[0]))["FirstName"]);
         }
     }
 }

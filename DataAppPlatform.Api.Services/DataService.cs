@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
@@ -15,11 +16,13 @@ namespace DataAppPlatform.Api.Services
     {
         private readonly ISqlQueryGenerator _queryGenerator;
         private readonly DataContext _dataContext;
+        private string _connectionString;
 
         public DataService(ISqlQueryGenerator queryGenerator, DataContext dataContext)
         {
             _queryGenerator = queryGenerator;
             _dataContext = dataContext;
+            _connectionString = _dataContext.Database.GetDbConnection().ConnectionString;
         }
 
         public DataResponse GetData(DataRequest request)
@@ -55,12 +58,14 @@ namespace DataAppPlatform.Api.Services
 
         private IEnumerable<T> Query<T>(string queryString, Func<IDictionary<string, object>, T> map)
         {
-            using (var connection = _dataContext.Database.GetDbConnection())
+            using (var connection = new SqlConnection(_connectionString))
             {
+                
                 connection.Open();
                 var data = connection.Query(queryString);
                 foreach (var d in data)
                     yield return map.Invoke(d);
+                connection.Dispose();
             }
         }
     }

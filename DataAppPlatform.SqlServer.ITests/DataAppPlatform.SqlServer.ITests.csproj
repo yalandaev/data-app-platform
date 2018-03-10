@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
-    <None Remove="ExpectedResponses\DataServiceIntegrationTests\SimpleQueryTest.json" />
   </ItemGroup>
 
   <ItemGroup>
