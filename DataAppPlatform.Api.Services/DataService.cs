@@ -13,18 +13,18 @@ namespace DataAppPlatform.Api.Services
 {
     public class DataService: IDataService
     {
-        private readonly ISqlDialectProvider _dialectProvider;
+        private readonly ISqlQueryGenerator _queryGenerator;
         private readonly DataContext _dataContext;
 
-        public DataService(ISqlDialectProvider dialectProvider, DataContext dataContext)
+        public DataService(ISqlQueryGenerator queryGenerator, DataContext dataContext)
         {
-            _dialectProvider = dialectProvider;
+            _queryGenerator = queryGenerator;
             _dataContext = dataContext;
         }
 
         public DataResponse GetData(DataRequest request)
         {
-            var sqlString = _dialectProvider.GetQuery(request);
+            var sqlString = _queryGenerator.GetQuery(request);
             Debug.WriteLine(sqlString);
 
             var queryResult = GetData(sqlString, GetMappedObject);

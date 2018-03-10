@@ -4,7 +4,7 @@ using DataAppPlatform.Core.DataService.Models;
 
 namespace DataAppPlatform.SqlServer
 {
-    public class SqlServerDialectProvider: ISqlDialectProvider
+    public class SqlServerQueryGenerator: ISqlQueryGenerator
     {
         public string GetQuery(DataRequest request)
         {

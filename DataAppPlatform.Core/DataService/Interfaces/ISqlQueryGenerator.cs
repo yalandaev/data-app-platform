@@ -3,7 +3,7 @@ using DataAppPlatform.Core.DataService.Models;
 
 namespace DataAppPlatform.Core.DataService.Interfaces
 {
-    public interface ISqlDialectProvider
+    public interface ISqlQueryGenerator
     {
         string GetQuery(DataRequest request);
     }

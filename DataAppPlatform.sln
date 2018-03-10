@@ -11,17 +11,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAppPlatform.Core.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAppPlatform.SqlServer", "DataAppPlatform.SqlServer\DataAppPlatform.SqlServer.csproj", "{5DADD69E-4978-4B3A-9B0E-9E7C8FF70A48}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAppPlatform.SqlServer.Tests", "DataAppPlatform.SqlServer.Tests\DataAppPlatform.SqlServer.Tests.csproj", "{39367CA0-64E6-470F-AB8D-3532E97838DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAppPlatform.SqlServer.UTests", "DataAppPlatform.SqlServer.Tests\DataAppPlatform.SqlServer.UTests.csproj", "{39367CA0-64E6-470F-AB8D-3532E97838DA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.Entities", "DataAppPlatform.Entities\DataAppPlatform.Entities.csproj", "{920D87E9-A161-4AE1-8176-5A7181B5E265}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D7D12047-CCEF-470B-A50A-CAE34EB4846A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests-Unit", "Tests-Unit", "{D7D12047-CCEF-470B-A50A-CAE34EB4846A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.Api.Contract", "DataAppPlatform.Api.Contract\DataAppPlatform.Api.Contract.csproj", "{58F6A66C-60C6-4C08-92F1-F1AC3CD42554}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.DataAccess", "DataAppPlatform.DataAccess\DataAppPlatform.DataAccess.csproj", "{07B72328-309E-4696-A5D1-5EB0416EE622}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.Api.Services", "DataAppPlatform.Api.Services\DataAppPlatform.Api.Services.csproj", "{5648F709-29D0-46FD-8DF8-FD23A9C954B4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests-Integration", "Tests-Integration", "{6C77C75E-6C4F-47AF-8C0C-1F3C039E7AD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.SqlServer.ITests", "DataAppPlatform.SqlServer.ITests\DataAppPlatform.SqlServer.ITests.csproj", "{B6DF9682-6A45-4425-AE47-4A30BABB1652}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,6 +69,10 @@ Global
 		{5648F709-29D0-46FD-8DF8-FD23A9C954B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5648F709-29D0-46FD-8DF8-FD23A9C954B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5648F709-29D0-46FD-8DF8-FD23A9C954B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6DF9682-6A45-4425-AE47-4A30BABB1652}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6DF9682-6A45-4425-AE47-4A30BABB1652}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6DF9682-6A45-4425-AE47-4A30BABB1652}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6DF9682-6A45-4425-AE47-4A30BABB1652}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +80,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{58F84E89-DF9B-41F1-BC09-C76F3958C219} = {D7D12047-CCEF-470B-A50A-CAE34EB4846A}
 		{39367CA0-64E6-470F-AB8D-3532E97838DA} = {D7D12047-CCEF-470B-A50A-CAE34EB4846A}
+		{B6DF9682-6A45-4425-AE47-4A30BABB1652} = {6C77C75E-6C4F-47AF-8C0C-1F3C039E7AD3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AA56534B-8950-4ECC-A9D1-21E5F38C3870}

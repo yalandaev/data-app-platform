@@ -47,7 +47,7 @@ namespace DataAppPlatform.Api
             // DependencyInjection
             services.AddTransient<IDataService, DataService>();
             services.AddTransient<DataContext>();
-            services.AddTransient<ISqlDialectProvider, SqlServerDialectProvider>();
+            services.AddTransient<ISqlQueryGenerator, SqlServerQueryGenerator>();
 
         }
 

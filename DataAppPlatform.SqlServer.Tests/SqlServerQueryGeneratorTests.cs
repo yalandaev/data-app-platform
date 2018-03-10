@@ -7,12 +7,12 @@ using Xunit;
 
 namespace DataAppPlatform.SqlServer.Tests
 {
-    public class SqlServerDialectProviderTests
+    public class SqlServerQueryGeneratorTests
     {
         [Fact(DisplayName = "Should generate correct query with single column when only one column passed without filter")]
         public void Should_GenerateQueryWithSungleColumn_When_OneColumnFilterNotExists()
         {
-            ISqlDialectProvider provider = new SqlServerDialectProvider();
+            ISqlQueryGenerator provider = new SqlServerQueryGenerator();
             DataRequest request = new DataRequest()
             {
                 EntitySchema = "Contact",
@@ -32,7 +32,7 @@ namespace DataAppPlatform.SqlServer.Tests
         [Fact]
         public void Should_GenerateQueryWithTwoColumns_When_TwoColumnFilterNotExists()
         {
-            ISqlDialectProvider provider = new SqlServerDialectProvider();
+            ISqlQueryGenerator provider = new SqlServerQueryGenerator();
             DataRequest request = new DataRequest()
             {
                 EntitySchema = "Contact",
@@ -53,7 +53,7 @@ namespace DataAppPlatform.SqlServer.Tests
         [Fact]
         public void Should_GenerateQueryOrderById_When_SortNotFilledIn()
         {
-            ISqlDialectProvider provider = new SqlServerDialectProvider();
+            ISqlQueryGenerator provider = new SqlServerQueryGenerator();
             DataRequest request = new DataRequest()
             {
                 EntitySchema = "Contact",
@@ -73,7 +73,7 @@ namespace DataAppPlatform.SqlServer.Tests
         [Fact]
         public void Should_GenerateQueryWithCorrectOrderBy_When_SortFilledIn()
         {
-            ISqlDialectProvider provider = new SqlServerDialectProvider();
+            ISqlQueryGenerator provider = new SqlServerQueryGenerator();
             DataRequest request = new DataRequest()
             {
                 EntitySchema = "Contact",
@@ -95,7 +95,7 @@ namespace DataAppPlatform.SqlServer.Tests
         [Fact]
         public void Should_GenerateQueryWithCorrectFetchOffset_When_PageMoreThanOne()
         {
-            ISqlDialectProvider provider = new SqlServerDialectProvider();
+            ISqlQueryGenerator provider = new SqlServerQueryGenerator();
             DataRequest request = new DataRequest()
             {
                 EntitySchema = "Contact",
