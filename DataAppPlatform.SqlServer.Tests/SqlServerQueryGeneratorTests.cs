@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using DataAppPlatform.Core.DataService.Interfaces;
 using DataAppPlatform.Core.DataService.Models;
 using DataAppPlatform.Core.DataService.Models.Filter;
@@ -113,36 +115,65 @@ namespace DataAppPlatform.SqlServer.Tests
         }
 
         [Fact]
-        public void Should_GenerateQueryWithReferenceColumn()
+        public void Should_GenerateQuery_When_ComplexQuery()
         {
             ISqlQueryGenerator provider = new SqlServerQueryGenerator();
 
-            DataRequest request = new DataRequest()
+//            DataRequest request = new DataRequest()
+//            {
+//                Columns = new List<DataTableColumn>()
+//                {
+//                    new DataTableColumn()
+//                    {
+//                        DisplayName = "First name",
+//                        Name = "FirstName",
+//                        Type = ColumnType.Text,
+//                        Width = 10
+//                    },
+//                    new DataTableColumn()
+//                    {
+//                        DisplayName = "Manager",
+//                        Name = "Manager.FirstName",
+//                        Type = ColumnType.Text,
+//                        Width = 10
+//                    }
+//                },
+//                EntitySchema = "Contacts",
+//                Page = 1,
+//                PageSize = 10
+//            };
+
+            QueryModel queryModelel = new QueryModel();
+            queryModelel.Offset = 0;
+            queryModelel.Fetch = 10;
+            queryModelel.RootSchema = new QueryTableModel()
             {
-                Columns = new List<DataTableColumn>()
+                TableName = "[Contacts]",
+                Alias = "[T1]",
+                ReferenceName = string.Empty,
+                Columns = new List<QueryColumnModel>()
                 {
-                    new DataTableColumn()
-                    {
-                        DisplayName = "First name",
-                        Name = "FirstName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    },
-                    new DataTableColumn()
-                    {
-                        DisplayName = "Manager",
-                        Name = "Manager.FirstName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    }
+                    new QueryColumnModel() {Name = "[FirstName]", Alias = "FirstName"}
                 },
-                EntitySchema = "Contacts",
-                Page = 1,
-                PageSize = 10
+                Join = new List<QueryTableModel>()
+                {
+                    new QueryTableModel()
+                    {
+                        TableName = "[Contacts]",
+                        Alias = "[T2]",
+                        ReferenceName = "Manager",
+                        Columns = new List<QueryColumnModel>()
+                        {
+                            new QueryColumnModel() {Name = "[FirstName]", Alias = "Manager.FirstName"}
+                        }
+                    }
+                }
             };
 
-            string expectedQuery = "SELECT [T1].[FirstName],[T2].[FirstName] FROM [Contacts] AS [T1] INNER JOIN [Contacts] AS [T2] ON [T1].[ManagerId] = [T2].[Id] ORDER BY [T1].[Id] DESC OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY";
-            string query = provider.GetQuery(request);
+            var expectedQuery =
+                File.ReadAllText(
+                    $@"ExpectedQueries\SqlServerQueryGeneratorTests\{MethodBase.GetCurrentMethod().Name}.sql");
+            string query = provider.GetQuery(queryModelel);
 
             Assert.Equal(expectedQuery, query);
         }

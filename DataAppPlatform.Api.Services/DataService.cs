@@ -10,23 +10,28 @@ using DataAppPlatform.Core.DataService.Models;
 using DataAppPlatform.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataAppPlatform.Api.Services
+namespace DataAppPlatform.DataServices
 {
     public class DataService: IDataService
     {
         private readonly ISqlQueryGenerator _queryGenerator;
         private readonly DataContext _dataContext;
         private string _connectionString;
+        private IDataRequestConverter _dataRequestConverter;
 
-        public DataService(ISqlQueryGenerator queryGenerator, DataContext dataContext)
+        public DataService(ISqlQueryGenerator queryGenerator, DataContext dataContext, IDataRequestConverter dataRequestConverter)
         {
             _queryGenerator = queryGenerator;
             _dataContext = dataContext;
+            _dataRequestConverter = dataRequestConverter;
             _connectionString = _dataContext.Database.GetDbConnection().ConnectionString;
         }
 
         public DataResponse GetData(DataRequest request)
         {
+            QueryModel queryModel = _dataRequestConverter.GetQueryModel(request);
+            var sqlString2 = _queryGenerator.GetQuery(request);
+
             var sqlString = _queryGenerator.GetQuery(request);
             Debug.WriteLine(sqlString);
 

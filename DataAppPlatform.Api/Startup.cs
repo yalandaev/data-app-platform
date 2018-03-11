@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DataAppPlatform.Api.Services;
 using DataAppPlatform.Core.DataService.Interfaces;
 using DataAppPlatform.DataAccess;
+using DataAppPlatform.DataServices;
 using DataAppPlatform.SqlServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -48,6 +48,8 @@ namespace DataAppPlatform.Api
             services.AddTransient<IDataService, DataService>();
             services.AddTransient<DataContext>();
             services.AddTransient<ISqlQueryGenerator, SqlServerQueryGenerator>();
+            services.AddTransient<IDataRequestConverter, DataRequestConverter>();
+            services.AddTransient<ISchemaInfoProvider, SqlServerSchemaInfoProvider>();
 
         }
 

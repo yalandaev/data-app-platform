@@ -1,20 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using DataAppPlatform.Api.Services;
 using DataAppPlatform.Core.DataService.Models;
 using DataAppPlatform.Core.DataService.Models.Filter;
 using DataAppPlatform.DataAccess;
 using DataAppPlatform.Entities;
-using Microsoft.EntityFrameworkCore;
+using DataAppPlatform.SqlServer;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace DataAppPlatform.SqlServer.ITests
+namespace DataAppPlatform.DataServices.Tests
 {
     // TODO: Use fixtures
     public class DataServiceIntegrationTests
@@ -25,7 +23,7 @@ namespace DataAppPlatform.SqlServer.ITests
         public DataServiceIntegrationTests()
         {
             _dataContext = new DataContext();
-            _dataService = new DataService(new SqlServerQueryGenerator(), _dataContext);
+            _dataService = new DataServices.DataService(new SqlServerQueryGenerator(), _dataContext, new DataRequestConverter(new SqlServerSchemaInfoProvider()));
 
             _dataContext.Contacts.RemoveRange(_dataContext.Contacts.ToList());
             _dataContext.SaveChanges();
@@ -173,7 +171,7 @@ namespace DataAppPlatform.SqlServer.ITests
                 EntitySchema = "Contacts",
                 Page = 1,
                 PageSize = 10,
-                OrderBy = "FirstName",
+                OrderBy = "Manager.FirstName",
                 Sort = Sort.ASC
             };
 
