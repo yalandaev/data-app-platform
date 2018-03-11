@@ -27,7 +27,8 @@ namespace DataAppPlatform.DataServices
                     Alias = $"[T{joinCounter++}]",
                     ReferenceName = string.Empty,
                     Columns = new List<QueryColumnModel>(),
-                    Join = new List<QueryTableModel>()
+                    Join = new List<QueryTableModel>(),
+                    JoinPath = string.Empty
                 },
                 OrderBy = $"[{(string.IsNullOrEmpty(request.OrderBy) ? "Id" : request.OrderBy)}]",
                 Sort = request.Sort == 0 ? "DESC" : request.Sort.ToString("F"),
@@ -39,106 +40,130 @@ namespace DataAppPlatform.DataServices
                 .Select(x => new QueryColumnModel()
                 {
                     Name = $"[{x.Name}]",
-                    Alias = $"[{x.Name}]"
+                    Alias = $"{x.Name}"
                 }).ToList();
 
             model.RootSchema.Columns.AddRange(rootColumns);
 
-            //А что если соседних джоинов нет, а есть сразу "дальние", т.е. на несколько колонок: "Department.Head.Manager.FirstName"
-
-            var rootJoins = request.Columns
-                .Where(x => x.Name.Split('.').Length == 2)
-                .GroupBy(x => x.Name.Split('.')[0]);
-
-            foreach (var join in rootJoins)
+            foreach (DataTableColumn column in request.Columns)
             {
-                var joinModel = new QueryTableModel()
-                {
-                    Parent = model.RootSchema,
-                    Alias = $"[T{joinCounter++}]",
-                    ReferenceName = join.Key,
-                    Columns = new List<QueryColumnModel>()
-                };
-                joinModel.TableName = $"[{_schemaInfoProvider.GetColumnSchema(joinModel.Parent.TableName, joinModel.ReferenceName)}]";
+                var joinTokens = column.Name.Split('.');
+                if(joinTokens.Length == 1)
+                    continue;
 
-                var columns = join.Select(x => new QueryColumnModel()
-                {
-                    Name = $"[{x.Name.Replace($"{join.Key}.", "")}]",
-                    Alias = x.Name
-                });
+                joinTokens = joinTokens.Take(joinTokens.Count() - 1).ToArray();
 
-                joinModel.Columns.AddRange(columns);
-
-                joinModel.Parent.Join.Add(joinModel);
+                BuldJoinChain(model.RootSchema, joinTokens);
             }
-
-            foreach (var join in model.RootSchema.Join)
-            {
-                ProcessJoinRecoursive(request, join, ref joinCounter, 2);
-            }
-
-            var orderByTokens = request.OrderBy.Split('.');
-            if (orderByTokens.Length == 1)
-                model.OrderBy = $"{model.RootSchema.Alias}.[{request.OrderBy}]";
-
-            if (orderByTokens.Length > 1)
-            {
-                List<string> pathTokens = new List<string>();
-                var path = string.Empty;
-                for (int i = 0; i < orderByTokens.Length - 1; i++)
-                {
-                    pathTokens.Add(orderByTokens[i]);
-                }
-                path = string.Join('.', pathTokens);
-
-                // TODO: GET alias by path
-                // Сейчас ошибка в DataRequestConverter - неправильно считает OrderBy = "Department.Head.Manager.FirstName" (джоин повторяется с родительским)
-
-            }
+            SetAliasesToJoinTable(model.RootSchema, ref joinCounter);
+            SetColumnsToJoinTable(model.RootSchema, request);
+            model.OrderBy = GetOrderByExpression(request, model);
 
             return model;
         }
 
-        private void ProcessJoinRecoursive(DataRequest request, QueryTableModel parent, ref int joinCounter, int level)
+        private string GetOrderByExpression(DataRequest request, QueryModel queryModel)
         {
-            var path = GetReferencePath(parent);
-            var joins = request.Columns
-                .Where(x => x.Name.StartsWith(path) && x.Name.Split('.').Length == level + 1)
-                .GroupBy(x => x.Name.Split('.')[0]);
-
-            if (!joins.Any())
-                return;
-
-            parent.Join = new List<QueryTableModel>();
-
-            foreach (var join in joins)
+            if (!string.IsNullOrEmpty(request.OrderBy))
             {
-                var joinModel = new QueryTableModel()
-                {
-                    Parent = parent,
-                    Alias = $"[T{joinCounter++}]",
-                    ReferenceName = join.FirstOrDefault().Name.Split('.')[level - 1],
-                    Columns = new List<QueryColumnModel>()
-                };
-                joinModel.TableName = $"[{_schemaInfoProvider.GetColumnSchema(joinModel.Parent.TableName, joinModel.ReferenceName)}]";
-                var joinColumns = join.Select(x => new QueryColumnModel()
-                {
-                    Name = $"[{x.Name.Replace($"{join.Key}.{joinModel.ReferenceName}.", "")}]",
-                    Alias = x.Name
-                });
-                joinModel.Columns.AddRange(joinColumns);
+                var orderByTokens = request.OrderBy.Split('.');
+                if (orderByTokens.Length == 1)
+                    return $"{queryModel.RootSchema.Alias}.[{request.OrderBy}]";
 
-                parent.Join.Add(joinModel);
+                if (orderByTokens.Length > 1)
+                {
+                    List<string> pathTokens = new List<string>();
+                    var path = string.Empty;
+                    for (int i = 0; i < orderByTokens.Length - 1; i++)
+                    {
+                        pathTokens.Add(orderByTokens[i]);
+                    }
+                    path = string.Join('.', pathTokens);
 
-                ProcessJoinRecoursive(request, joinModel, ref joinCounter, level++);
+                    var alias = FindTableAliasByJoinPath(queryModel.RootSchema, path);
+                    return $"{alias}.[{orderByTokens[orderByTokens.Length - 1]}]";
+                }
+            }        
+            return "[T1].[Id]";
+        }
+
+        private string FindTableAliasByJoinPath(QueryTableModel parent, string joinPath)
+        {
+            var table = parent.Join.SingleOrDefault(x => x.JoinPath == joinPath);
+            if (table != null)
+                return table.Alias;
+
+            foreach (QueryTableModel joinModel in parent.Join)
+            {
+                return FindTableAliasByJoinPath(joinModel, joinPath);
+            }
+
+            return string.Empty;
+        }
+
+        private void SetAliasesToJoinTable(QueryTableModel parent, ref int joinCounter)
+        {
+            foreach (QueryTableModel joinModel in parent.Join)
+            {
+                joinModel.Alias = $"[T{joinCounter++}]";
+                SetAliasesToJoinTable(joinModel, ref joinCounter);
             }
         }
 
-        private string GetReferencePath(QueryTableModel model)
+        private void SetColumnsToJoinTable(QueryTableModel parent, DataRequest request)
         {
-            if (model == null)
-                return string.Empty;
-            return $"{GetReferencePath(model.Parent)}{(model.Parent == null || model.Parent.ReferenceName == string.Empty  ? "" : ".")}{model.ReferenceName}";
+            foreach (QueryTableModel joinModel in parent.Join)
+            {
+                int joinLevel = joinModel.JoinPath.Split('.').Length + 1;
+                var columns = request.Columns
+                    .Where(x => x.Name.Split('.').Length == joinLevel && x.Name.StartsWith(joinModel.JoinPath))
+                    .Select(x => new QueryColumnModel()
+                    {
+                        Name = $"[{x.Name.Split('.')[joinLevel - 1]}]",
+                        Alias = x.Name
+                    });
+                joinModel.Columns.AddRange(columns);
+                SetColumnsToJoinTable(joinModel, request);
+            }
+        }
+
+        private void BuldJoinChain(QueryTableModel parent, string[] joinTokens, int level = 1)
+        {
+            if (joinTokens.Length < level)
+                return;
+
+            QueryTableModel joinModel;
+
+            var joinPath = GetJoinPath(joinTokens, level);
+            joinModel = parent.Join.SingleOrDefault(x => x.JoinPath == joinPath);
+
+            if (joinModel == null)
+            {
+                joinModel = new QueryTableModel()
+                {
+                    Parent = parent,
+                    ReferenceName = joinTokens[level - 1],
+                    JoinPath = joinPath,
+                    Columns = new List<QueryColumnModel>(),
+                    Join = new List<QueryTableModel>()
+                };
+                joinModel.TableName = $"[{_schemaInfoProvider.GetColumnSchema(joinModel.Parent.TableName, joinModel.ReferenceName)}]";
+
+                parent.Join.Add(joinModel);
+            }
+
+            level++;
+            BuldJoinChain(joinModel, joinTokens, level);
+        }
+
+        private string GetJoinPath(string[] joinTokens, int level)
+        {
+            List<string> pathList = new List<string>();
+            for (int i = 0; i < level; i++)
+            {
+                pathList.Add(joinTokens[i]);
+            }
+            return string.Join('.', pathList);
         }
     }
 }

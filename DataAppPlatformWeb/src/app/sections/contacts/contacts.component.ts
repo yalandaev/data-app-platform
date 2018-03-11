@@ -15,6 +15,12 @@ export class ContactsComponent implements OnInit {
   constructor() {
     this.columns = [
       {
+        name: 'Id',
+        displayName: 'Id',
+        type: ColumnType.Text,
+        width: 10,
+      },
+      {
         name: 'FirstName',
         displayName: 'First Name',
         type: ColumnType.Text,
@@ -38,6 +44,18 @@ export class ContactsComponent implements OnInit {
         type: ColumnType.DateTime,
         width: 15,
         formatter: 'date:format'
+      },
+      {
+        name: 'Manager.FirstName',
+        displayName: 'Manager',
+        type: ColumnType.Text,
+        width: 15,
+      },
+      {
+        name: 'Manager.Manager.FirstName',
+        displayName: 'Manager of manager',
+        type: ColumnType.Text,
+        width: 15,
       }];
   }
 

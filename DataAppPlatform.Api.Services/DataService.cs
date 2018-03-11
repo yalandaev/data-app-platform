@@ -30,9 +30,9 @@ namespace DataAppPlatform.DataServices
         public DataResponse GetData(DataRequest request)
         {
             QueryModel queryModel = _dataRequestConverter.GetQueryModel(request);
-            var sqlString2 = _queryGenerator.GetQuery(request);
+            var sqlString = _queryGenerator.GetQuery(queryModel);
 
-            var sqlString = _queryGenerator.GetQuery(request);
+//            var sqlString = _queryGenerator.GetQuery(request);
             Debug.WriteLine(sqlString);
 
             var queryResult = GetData(sqlString, GetMappedObject);

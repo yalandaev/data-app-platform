@@ -6,7 +6,7 @@ namespace DataAppPlatform.SqlServer
     {
         public string GetColumnSchema(string tableName, string referenceField)
         {
-            if (tableName == "Contacts" && referenceField == "Manager")
+            if (tableName == "[Contacts]" && referenceField == "Manager")
                 return "Contacts";
 
             return string.Empty;

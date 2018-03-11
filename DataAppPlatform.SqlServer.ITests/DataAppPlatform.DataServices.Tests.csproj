@@ -8,10 +8,14 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="ExpectedResponses\DataServiceIntegrationTests\ReferenceColumnTest.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedResponses\DataServiceIntegrationTests\ReferenceColumnTest.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ExpectedResponses\DataServiceIntegrationTests\SimpleQueryTest.json">

@@ -30,8 +30,8 @@ namespace DataAppPlatform.SqlServer
             string query = "SELECT" + "\r\n\t";
             query += string.Join(",\r\n\t", columns) + "\r\n";
             query += from + "\r\n";
-            query += string.Join(",\r\n", joins);
-            query += $"\r\nORDER BY [T1].[Id] DESC\r\nOFFSET {queryModel.Offset} ROWS FETCH NEXT {queryModel.Fetch} ROWS ONLY"; // TODO: 'ORDER BY' NOW STATIC! 
+            query += string.Join("\r\n", joins);
+            query += $"\r\nORDER BY {queryModel.OrderBy} {queryModel.Sort}\r\nOFFSET {queryModel.Offset} ROWS FETCH NEXT {queryModel.Fetch} ROWS ONLY";
 
             return query;
         }
@@ -55,7 +55,7 @@ namespace DataAppPlatform.SqlServer
         private List<string> GetJoins(QueryTableModel tableModel)
         {
             var joins = tableModel.Join.Select(t =>
-                $"INNER JOIN {t.TableName} AS {t.Alias} ON {tableModel.Alias}.[{t.ReferenceName}Id] = {t.Alias}.[Id]").ToList();
+                $"LEFT JOIN {t.TableName} AS {t.Alias} ON {tableModel.Alias}.[{t.ReferenceName}Id] = {t.Alias}.[Id]").ToList();
             foreach (var joinTable in tableModel.Join)
             {
                 if(joinTable.Join == null)

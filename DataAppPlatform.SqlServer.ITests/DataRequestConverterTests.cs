@@ -46,7 +46,7 @@ namespace DataAppPlatform.DataServices.Tests
             Assert.Equal($"[{request.EntitySchema}]", queryModel.RootSchema.TableName);
             Assert.Equal("[T1]", queryModel.RootSchema.Alias);
             Assert.Equal(string.Empty, queryModel.RootSchema.ReferenceName);
-            Assert.Equal("[Id]", queryModel.OrderBy);
+            Assert.Equal("[T1].[Id]", queryModel.OrderBy);
             Assert.Equal(Sort.DESC.ToString(), queryModel.Sort);
             Assert.Equal(0, queryModel.Offset);
             Assert.Equal(10, queryModel.Fetch);
@@ -85,7 +85,7 @@ namespace DataAppPlatform.DataServices.Tests
 
             Assert.NotNull(queryModel);
 
-            Assert.Equal($"[{request.OrderBy}]", queryModel.OrderBy);
+            Assert.Equal($"[T1].[{request.OrderBy}]", queryModel.OrderBy);
             Assert.Equal(Sort.ASC.ToString(), queryModel.Sort);
             Assert.Equal(30, queryModel.Offset);
             Assert.Equal(15, queryModel.Fetch);
@@ -191,28 +191,27 @@ namespace DataAppPlatform.DataServices.Tests
         [Fact]
         public void Should_GenerateQueryModel_When_ComplexRequestWithoutTableChain()
         {
-            // При отсутствии последовательных связей к "дальней" колонки - не создаются джоины
             DataRequest request = new DataRequest()
             {
                 Columns = new List<DataTableColumn>()
                 {
                     new DataTableColumn()
                     {
-                        DisplayName = "Department Head FirstName",
+                        DisplayName = "Department Head First Name",
                         Name = "Department.Head.FirstName",
                         Type = ColumnType.Text,
                         Width = 10
                     },
                     new DataTableColumn()
                     {
-                        DisplayName = "Department Head LastName",
+                        DisplayName = "Department Head Last Name",
                         Name = "Department.Head.LastName",
                         Type = ColumnType.Text,
                         Width = 10
                     },
                     new DataTableColumn()
                     {
-                        DisplayName = "Department Manager Head FirstName",
+                        DisplayName = "Department Manager Head First Name",
                         Name = "Department.Head.Manager.FirstName",
                         Type = ColumnType.Text,
                         Width = 10
@@ -236,9 +235,8 @@ namespace DataAppPlatform.DataServices.Tests
 
             Assert.Equal("[T1]", queryModel.RootSchema.Alias);
             Assert.True(queryModel.RootSchema.Join.Any(x => x.Alias == "[T2]"));
-            Assert.True(queryModel.RootSchema.Join.Any(x => x.Alias == "[T3]"));
-            Assert.True(queryModel.RootSchema.Join.Any(x => x.Alias == "[T4]"));
-            Assert.True(queryModel.RootSchema.Join.Any(x => x.Alias == "[T5]"));
+            Assert.True(queryModel.RootSchema.Join[0].Join.Any(x => x.Alias == "[T3]"));
+            Assert.True(queryModel.RootSchema.Join[0].Join[0].Join.Any(x => x.Alias == "[T4]"));
         }
     }
 }
