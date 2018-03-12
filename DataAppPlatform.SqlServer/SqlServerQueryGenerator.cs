@@ -79,6 +79,10 @@ namespace DataAppPlatform.SqlServer
                     return $"({condition.Column} LIKE '%{condition.Value}%')";
                 case ComparisonType.NotContains:
                     return $"({condition.Column} NOT LIKE '%{condition.Value}%')";
+                case ComparisonType.StartWith:
+                    return $"({condition.Column} NOT LIKE '{condition.Value}%')";
+                case ComparisonType.EndWith:
+                    return $"({condition.Column} NOT LIKE '%{condition.Value}')";
                 default:
                     return string.Empty;
             }

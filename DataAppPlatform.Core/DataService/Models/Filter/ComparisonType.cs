@@ -11,6 +11,8 @@
         FilledIn,
         NotFilledIn,
         Contains,
-        NotContains
+        NotContains,
+        StartWith,
+        EndWith
     }
 }

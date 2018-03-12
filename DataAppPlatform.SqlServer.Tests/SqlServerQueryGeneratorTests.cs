@@ -119,41 +119,18 @@ namespace DataAppPlatform.SqlServer.Tests
         {
             ISqlQueryGenerator provider = new SqlServerQueryGenerator();
 
-//            DataRequest request = new DataRequest()
-//            {
-//                Columns = new List<DataTableColumn>()
-//                {
-//                    new DataTableColumn()
-//                    {
-//                        DisplayName = "First name",
-//                        Name = "FirstName",
-//                        Type = ColumnType.Text,
-//                        Width = 10
-//                    },
-//                    new DataTableColumn()
-//                    {
-//                        DisplayName = "Manager",
-//                        Name = "Manager.FirstName",
-//                        Type = ColumnType.Text,
-//                        Width = 10
-//                    }
-//                },
-//                EntitySchema = "Contacts",
-//                Page = 1,
-//                PageSize = 10
-//            };
-
-            QueryModel queryModelel = new QueryModel();
-            queryModelel.Offset = 0;
-            queryModelel.Fetch = 10;
-            queryModelel.RootSchema = new QueryTableModel()
+            QueryModel queryModel = new QueryModel();
+            queryModel.Offset = 0;
+            queryModel.Fetch = 10;
+            queryModel.RootSchema = new QueryTableModel()
             {
                 TableName = "[Contacts]",
                 Alias = "[T1]",
                 ReferenceName = string.Empty,
                 Columns = new List<QueryColumnModel>()
                 {
-                    new QueryColumnModel() {Name = "[FirstName]", Alias = "FirstName"}
+                    new QueryColumnModel() {Name = "[FirstName]", Alias = "FirstName"},
+                    new QueryColumnModel() {Name = "[LastName]", Alias = "LastName"}
                 },
                 Join = new List<QueryTableModel>()
                 {
@@ -162,25 +139,68 @@ namespace DataAppPlatform.SqlServer.Tests
                         TableName = "[Contacts]",
                         Alias = "[T2]",
                         ReferenceName = "Manager",
+                        JoinPath = "Manager",
                         Columns = new List<QueryColumnModel>()
                         {
                             new QueryColumnModel() {Name = "[FirstName]", Alias = "Manager.FirstName"}
+                        },
+                        Join = new List<QueryTableModel>()
+                        {
+                            new QueryTableModel()
+                            {
+                                TableName = "[Departments]",
+                                Alias = "[T3]",
+                                ReferenceName = "Department",
+                                JoinPath = "Manager.Department",
+                                Columns = new List<QueryColumnModel>()
+                                {
+                                    new QueryColumnModel() {Name = "[Name]", Alias = "Manager.Department.Name"}
+                                }
+                            }
                         }
                     }
                 }
             };
+            queryModel.Filter = new FilterGroup()
+            {
+                LogicalOperation = LogicalOperation.AND,
+                Conditions = new List<Condition>()
+                {
+                    new Condition()
+                    {
+                        Column = "[T1].[FirstName]",
+                        ComparisonType = ComparisonType.Equals,
+                        Value = "Value1"
+                    },
+                    new Condition() {Column = "[T1].[LastName]", ComparisonType = ComparisonType.FilledIn}
+                },
+                FilterGroups = new List<FilterGroup>()
+                {
+                    new FilterGroup()
+                    {
+                        LogicalOperation = LogicalOperation.AND,
+                        Conditions = new List<Condition>()
+                        {
+                            new Condition()
+                            {
+                                Column = "[T3].[Name]",
+                                ComparisonType = ComparisonType.NotEquals,
+                                Value = "Value2"
+                            },
+                            new Condition() {Column = "[T3].[Title]", ComparisonType = ComparisonType.Equals, Value = "Company"}
+                        },
+                        FilterGroups = new List<FilterGroup>()
+                    }
+                }
+            };
+            queryModel.OrderBy = "[T1].[FirstName]";
 
             var expectedQuery =
                 File.ReadAllText(
                     $@"ExpectedQueries\SqlServerQueryGeneratorTests\{MethodBase.GetCurrentMethod().Name}.sql");
-            string query = provider.GetQuery(queryModelel);
+            string query = provider.GetQuery(queryModel);
 
             Assert.Equal(expectedQuery, query);
         }
     }
 }
-
-
-// IDEAS
-// ISchemaService - Будет отдавать схему таблиц для правильного построения джоинов.
-// Если в колонках подаётся лукапная схема, то нужно взять из лукапа ДисплайКолумн и её вывести. Наверное, для этого стоит добавить тип "Лукап" для колонки.
