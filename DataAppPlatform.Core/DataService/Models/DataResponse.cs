@@ -6,5 +6,6 @@ namespace DataAppPlatform.Core.DataService.Models
     {
         public dynamic Data { get; set; }
         public int Total { get; set; }
+        public string DebugInformation { get; set; }
     }
 }

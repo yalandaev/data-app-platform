@@ -1,12 +1,7 @@
 <p>
-  data-table works!
+  data-table component
 </p>
-<p>entitySchema: {{entitySchema}}</p>
-<ul>
-  <li *ngFor="let column of columns"> 
-    {{ column.name }}
-  </li>
- </ul>
+
 
 <span *ngIf="data.length == 0">Loading data table...</span>
 <div class="rTable" *ngIf="data.length > 0">
@@ -19,3 +14,15 @@
     <div class="rTableCell"></div>
   </div>
 </div>
+
+<p>EntitySchema: {{entitySchema}}</p>
+<p>Columns:</p>
+<ul>
+  <li *ngFor="let column of columns"> 
+    {{ column.name }}
+  </li>
+ </ul>
+ <p>Filter:</p>
+ <pre>{{filter | json}}</pre>
+<p>Debug information:</p>
+<pre>{{debugInformation}}</pre>

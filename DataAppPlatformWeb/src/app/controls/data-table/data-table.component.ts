@@ -37,11 +37,14 @@ export class DataTableComponent implements OnInit {
   @Input()
   filter: FilterGroup;
 
+  debugInformation: string;
+
   ngOnInit() {
     this.dataService.getData(
       new DataRequest(this.entitySchema, this.orderBy, this.sort, this.columns, this.filter, this.currentPage, this.pageSize))
     .subscribe(data => {
       this.data = data.Data;
+      this.debugInformation = data.DebugInformation;
     });
   }
 

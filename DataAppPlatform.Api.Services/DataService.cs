@@ -39,7 +39,8 @@ namespace DataAppPlatform.DataServices
             return new DataResponse()
             {
                 Total = 100, // TODO: write method for count calculating
-                Data = queryResult.ToArray()
+                Data = queryResult.ToArray(),
+                DebugInformation = sqlString
             };
         }
 
