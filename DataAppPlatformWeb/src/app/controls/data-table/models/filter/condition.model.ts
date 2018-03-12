@@ -4,6 +4,6 @@ export class Condition {
     constructor(
         private column: string,
         private comparisonType: ComparisonType,
-        private value: any
+        private value?: any
     ) {}
 }

@@ -39,7 +39,7 @@ export class ContactsComponent implements OnInit {
       },
       {
         name: 'Email',
-        displayName: 'Its email!',
+        displayName: 'Email',
         type: ColumnType.Text,
         width: 10
       },
@@ -57,25 +57,26 @@ export class ContactsComponent implements OnInit {
         width: 15,
       },
       {
-        name: 'Manager.Manager.FirstName',
-        displayName: 'Manager of manager',
+        name: 'Manager.BirthDate',
+        displayName: 'Manager birthdate',
         type: ColumnType.Text,
         width: 15,
+        formatter: 'date:format'
       }];
 
       this.filter = new FilterGroup(
         LogicalOperation.AND,
         [
-          new Condition('Manager.Manager.FirstName', ComparisonType.Equals, 'Manager.Manager.FirstName'),
-          new Condition('Manager.FirstName', ComparisonType.Equals, 'Manager.FirstName'),
-          new Condition('Id', ComparisonType.Equals, 2)
+          new Condition('FirstName', ComparisonType.FilledIn),
+          new Condition('Manager.FirstName', ComparisonType.Equals, 'Mark'),
+          new Condition('LastName', ComparisonType.StartWith, 'Yalandaev')
         ],
         [
           new FilterGroup(
             LogicalOperation.OR,
             [
-              new Condition('FirstName', ComparisonType.Equals, 'FirstName'),
-              new Condition('LastName', ComparisonType.Equals, 'LastName')
+              new Condition('Manager.Phone', ComparisonType.Equals, '79171573840'),
+              new Condition('Manager.Email', ComparisonType.Equals, 'ivanov@gmail.com')
             ], [])
         ]);
     }

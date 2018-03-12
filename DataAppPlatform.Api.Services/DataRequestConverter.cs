@@ -62,6 +62,7 @@ namespace DataAppPlatform.DataServices
             SetAliasesToJoinTable(model.RootSchema, ref joinCounter, tableAliases);
             SetColumnsToJoinTable(model.RootSchema, request);
             SetAliasesToFilter(model.Filter, tableAliases);
+            // TODO: Build join chains from conditions!
             model.OrderBy = GetOrderByExpression(request, model);
 
 
