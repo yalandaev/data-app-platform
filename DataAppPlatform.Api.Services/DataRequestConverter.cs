@@ -70,26 +70,32 @@ namespace DataAppPlatform.DataServices
 
         private void SetAliasesToFilter(FilterGroup filter, Dictionary<string, string> tableAliases)
         {
-            foreach (var filterCondition in filter.Conditions)
+            if (filter?.Conditions != null)
             {
-                if (filterCondition.Column.Split('.').Length == 1)
+                foreach (var filterCondition in filter.Conditions)
                 {
-                    filterCondition.Column = $"[T1].[{filterCondition.Column}]";
-                }
-                else
-                {
+                    if (filterCondition.Column.Split('.').Length == 1)
                     {
-                        var filterConditionTokens = filterCondition.Column.Split('.');
-                        var columnPath = string.Join('.', filterConditionTokens.Take(filterConditionTokens.Length - 1));
-                        var columnName = filterConditionTokens.Skip(filterConditionTokens.Length - 1).Take(1).ToArray()[0].ToString();
-                        var alias = tableAliases[columnPath];
-                        filterCondition.Column = $"{alias}.[{columnName}]";
+                        filterCondition.Column = $"[T1].[{filterCondition.Column}]";
+                    }
+                    else
+                    {
+                        {
+                            var filterConditionTokens = filterCondition.Column.Split('.');
+                            var columnPath = string.Join('.', filterConditionTokens.Take(filterConditionTokens.Length - 1));
+                            var columnName = filterConditionTokens.Skip(filterConditionTokens.Length - 1).Take(1).ToArray()[0].ToString();
+                            var alias = tableAliases[columnPath];
+                            filterCondition.Column = $"{alias}.[{columnName}]";
+                        }
                     }
                 }
             }
-            foreach (var filterGroup in filter.FilterGroups)
+            if (filter?.FilterGroups != null)
             {
-                SetAliasesToFilter(filterGroup, tableAliases);
+                foreach (var filterGroup in filter.FilterGroups)
+                {
+                    SetAliasesToFilter(filterGroup, tableAliases);
+                }
             }
         }
 

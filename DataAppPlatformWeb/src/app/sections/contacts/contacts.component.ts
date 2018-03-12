@@ -67,7 +67,8 @@ export class ContactsComponent implements OnInit {
         LogicalOperation.AND,
         [
           new Condition('Manager.Manager.FirstName', ComparisonType.Equals, 'Manager.Manager.FirstName'),
-          new Condition('Manager.FirstName', ComparisonType.Equals, 'Manager.FirstName')
+          new Condition('Manager.FirstName', ComparisonType.Equals, 'Manager.FirstName'),
+          new Condition('Id', ComparisonType.Equals, 2)
         ],
         [
           new FilterGroup(

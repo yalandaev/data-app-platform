@@ -32,7 +32,6 @@ namespace DataAppPlatform.DataServices
             QueryModel queryModel = _dataRequestConverter.GetQueryModel(request);
             var sqlString = _queryGenerator.GetQuery(queryModel);
 
-//            var sqlString = _queryGenerator.GetQuery(request);
             Debug.WriteLine(sqlString);
 
             var queryResult = GetData(sqlString, GetMappedObject);
@@ -50,7 +49,7 @@ namespace DataAppPlatform.DataServices
 
             foreach (var column in row)
             {
-                ((IDictionary<string, object>)@object).Add(column.Key, column.Value);
+                ((IDictionary<string, object>)@object).Add(column.Key, column.Value == null ? string.Empty : column.Value);
             }
             return @object;
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Linq;
 using DataAppPlatform.Core.DataService.Interfaces;
 using DataAppPlatform.Core.DataService.Models;
@@ -33,7 +34,8 @@ namespace DataAppPlatform.SqlServer
             query += string.Join(",\r\n\t", columns) + "\r\n";
             query += from + "\r\n";
             query += string.Join("\r\n", joins);
-            query += $"\r\nWHERE {where}";
+            if(!string.IsNullOrEmpty(where))
+                query += $"\r\nWHERE {where}";
             query += $"\r\nORDER BY {queryModel.OrderBy} {queryModel.Sort}\r\nOFFSET {queryModel.Offset} ROWS FETCH NEXT {queryModel.Fetch} ROWS ONLY";
             
             return query;
@@ -41,27 +43,34 @@ namespace DataAppPlatform.SqlServer
 
         private string GetWhereExpression(FilterGroup filter)
         {
+            if (filter == null)
+                return string.Empty;
+
             List<string> conditions = new List<string>();
-            foreach (var condition in filter.Conditions)
+            if (filter.Conditions != null)
             {
-                conditions.Add(GetConditionExpression(condition));
-            }
-            if (filter.FilterGroups.Any())
-            {
-                foreach (var filterGroup in filter.FilterGroups)
+                foreach (var condition in filter.Conditions)
                 {
-                    conditions.Add(GetWhereExpression(filterGroup));
+                    conditions.Add(GetConditionExpression(condition));
                 }
             }
-
+            if (filter.FilterGroups != null)
+            {
+                if (filter.FilterGroups.Any())
+                {
+                    foreach (var filterGroup in filter.FilterGroups)
+                    {
+                        conditions.Add(GetWhereExpression(filterGroup));
+                    }
+                }
+            }
+            
             string whereExpression = string.Join($" {filter.LogicalOperation.ToString()} ", conditions);
             return $"({whereExpression})";
         }
 
         private string GetConditionExpression(Condition condition)
         {
-            // Учесть тип колонки - число, дата
-            // StartWith, EndWith
             switch (condition.ComparisonType)
             {
                 case ComparisonType.Equals:
@@ -70,7 +79,7 @@ namespace DataAppPlatform.SqlServer
                 case ComparisonType.MoreOrEquals:
                 case ComparisonType.Less:
                 case ComparisonType.LessOrEquals:
-                    return $"({condition.Column} {GetComparisonTypeString(condition.ComparisonType)} '{condition.Value}')";
+                    return $"({condition.Column} {GetComparisonTypeString(condition.ComparisonType)} {GetConditionValue(condition.Value)})";
                 case ComparisonType.FilledIn:
                     return $"({condition.Column} IS NOT NULL)";
                 case ComparisonType.NotFilledIn:
@@ -80,12 +89,21 @@ namespace DataAppPlatform.SqlServer
                 case ComparisonType.NotContains:
                     return $"({condition.Column} NOT LIKE '%{condition.Value}%')";
                 case ComparisonType.StartWith:
-                    return $"({condition.Column} NOT LIKE '{condition.Value}%')";
+                    return $"({condition.Column} LIKE '{condition.Value}%')";
                 case ComparisonType.EndWith:
-                    return $"({condition.Column} NOT LIKE '%{condition.Value}')";
+                    return $"({condition.Column} LIKE '%{condition.Value}')";
                 default:
                     return string.Empty;
             }
+        }
+
+        private string GetConditionValue(object value)
+        {
+            Debug.WriteLine(value.GetType());
+            if (value is Int32 || value is Int64 || value is float)
+                return value.ToString();
+
+            return $"'{value.ToString()}'";
         }
 
         private string GetComparisonTypeString(ComparisonType comparisonType)

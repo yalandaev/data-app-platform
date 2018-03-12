@@ -1,5 +1,9 @@
 ﻿[
   {
+    "FirstName": "Bruce",
+    "Manager.FirstName": ""
+  },
+  {
     "FirstName": "Abram",
     "Manager.FirstName": "Bruce"
   }

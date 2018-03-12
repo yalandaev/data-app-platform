@@ -52,7 +52,7 @@ namespace DataAppPlatform.SqlServer.Tests
                     {
                         new Condition() { Column  = "FirstName", ComparisonType = ComparisonType.Equals, Value = "Mark" },
                         new Condition() { Column  = "LastName", ComparisonType = ComparisonType.FilledIn },
-                        new Condition() { Column  = "Age", ComparisonType = ComparisonType.MoreOrEquals, Value = "15" },
+                        new Condition() { Column  = "Age", ComparisonType = ComparisonType.MoreOrEquals, Value = 15 },
                     },
                     FilterGroups = new List<FilterGroup>()
                     {
@@ -62,8 +62,8 @@ namespace DataAppPlatform.SqlServer.Tests
                             FilterGroups = new List<FilterGroup>(),
                             Conditions = new List<Condition>()
                             {
-                                new Condition() { Column = "Manager.Department.Head.FirstName", ComparisonType = ComparisonType.Contains, Value = "Joe"},
-                                new Condition() { Column = "Manager.Department.Head.Age", ComparisonType = ComparisonType.Less, Value = "50"}
+                                new Condition() { Column = "Manager.Department.Head.FirstName", ComparisonType = ComparisonType.StartWith, Value = "Joe"},
+                                new Condition() { Column = "Manager.Department.Head.Age", ComparisonType = ComparisonType.Less, Value = 50}
                             }
                         }
                     }

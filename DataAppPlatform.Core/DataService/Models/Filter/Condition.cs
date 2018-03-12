@@ -4,6 +4,6 @@
     {
         public string Column { get; set; }
         public ComparisonType ComparisonType { get; set; }
-        public string Value { get; set; }
+        public object Value { get; set; }
     }
 }
