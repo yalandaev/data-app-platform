@@ -4,6 +4,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Security;
 using DataAppPlatform.Core.DataService.Interfaces;
 using DataAppPlatform.Core.DataService.Models;
+using DataAppPlatform.Core.DataService.Models.Filter;
 
 namespace DataAppPlatform.DataServices
 {
@@ -33,7 +34,8 @@ namespace DataAppPlatform.DataServices
                 OrderBy = $"[{(string.IsNullOrEmpty(request.OrderBy) ? "Id" : request.OrderBy)}]",
                 Sort = request.Sort == 0 ? "DESC" : request.Sort.ToString("F"),
                 Fetch = request.PageSize,
-                Offset = (request.Page - 1) * request.PageSize
+                Offset = (request.Page - 1) * request.PageSize,
+                Filter = request.Filter
             };
 
             var rootColumns = request.Columns.Where(x => x.Name.Split('.').Length == 1)
@@ -55,11 +57,40 @@ namespace DataAppPlatform.DataServices
 
                 BuldJoinChain(model.RootSchema, joinTokens);
             }
-            SetAliasesToJoinTable(model.RootSchema, ref joinCounter);
+
+            Dictionary<string, string> tableAliases = new Dictionary<string, string>();
+            SetAliasesToJoinTable(model.RootSchema, ref joinCounter, tableAliases);
             SetColumnsToJoinTable(model.RootSchema, request);
+            SetAliasesToFilter(model.Filter, tableAliases);
             model.OrderBy = GetOrderByExpression(request, model);
 
+
             return model;
+        }
+
+        private void SetAliasesToFilter(FilterGroup filter, Dictionary<string, string> tableAliases)
+        {
+            foreach (var filterCondition in filter.Conditions)
+            {
+                if (filterCondition.Column.Split('.').Length == 1)
+                {
+                    filterCondition.Column = $"[T1].[{filterCondition.Column}]";
+                }
+                else
+                {
+                    {
+                        var filterConditionTokens = filterCondition.Column.Split('.');
+                        var columnPath = string.Join('.', filterConditionTokens.Take(filterConditionTokens.Length - 1));
+                        var columnName = filterConditionTokens.Skip(filterConditionTokens.Length - 1).Take(1).ToArray()[0].ToString();
+                        var alias = tableAliases[columnPath];
+                        filterCondition.Column = $"{alias}.[{columnName}]";
+                    }
+                }
+            }
+            foreach (var filterGroup in filter.FilterGroups)
+            {
+                SetAliasesToFilter(filterGroup, tableAliases);
+            }
         }
 
         private string GetOrderByExpression(DataRequest request, QueryModel queryModel)
@@ -101,12 +132,13 @@ namespace DataAppPlatform.DataServices
             return string.Empty;
         }
 
-        private void SetAliasesToJoinTable(QueryTableModel parent, ref int joinCounter)
+        private void SetAliasesToJoinTable(QueryTableModel parent, ref int joinCounter, Dictionary<string, string> tableAliases)
         {
             foreach (QueryTableModel joinModel in parent.Join)
             {
                 joinModel.Alias = $"[T{joinCounter++}]";
-                SetAliasesToJoinTable(joinModel, ref joinCounter);
+                tableAliases.Add(joinModel.JoinPath, joinModel.Alias);
+                SetAliasesToJoinTable(joinModel, ref joinCounter, tableAliases);
             }
         }
 

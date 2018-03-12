@@ -1,5 +1,5 @@
-import { LogicalOperation } from "./logicalOperation.model";
-import { Condition } from "./condition.model";
+import { LogicalOperation } from './logicalOperation.model';
+import { Condition } from './condition.model';
 
 export class FilterGroup {
     constructor(

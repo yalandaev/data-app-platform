@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { DataTableColumn } from '../../controls/data-table/models/column.model';
 import { ColumnType } from '../../controls/data-table/models/columnType';
+import { FilterGroup } from '../../controls/data-table/models/filter/filterGroup.model';
+import { LogicalOperation } from '../../controls/data-table/models/filter/logicalOperation.model';
+import { ComparisonType } from '../../controls/data-table/models/filter/comparisonType.model';
+import { Condition } from '../../controls/data-table/models/filter/condition.model';
 
 @Component({
   selector: 'app-contacts',
@@ -10,6 +14,7 @@ import { ColumnType } from '../../controls/data-table/models/columnType';
 export class ContactsComponent implements OnInit {
 
   columns: Array<DataTableColumn> = null;
+  filter: FilterGroup = null;
   data = null;
 
   constructor() {
@@ -57,7 +62,22 @@ export class ContactsComponent implements OnInit {
         type: ColumnType.Text,
         width: 15,
       }];
-  }
+
+      this.filter = new FilterGroup(
+        LogicalOperation.AND,
+        [
+          new Condition('Manager.Manager.FirstName', ComparisonType.Equals, 'Manager.Manager.FirstName'),
+          new Condition('Manager.FirstName', ComparisonType.Equals, 'Manager.FirstName')
+        ],
+        [
+          new FilterGroup(
+            LogicalOperation.OR,
+            [
+              new Condition('FirstName', ComparisonType.Equals, 'FirstName'),
+              new Condition('LastName', ComparisonType.Equals, 'LastName')
+            ], [])
+        ]);
+    }
 
   ngOnInit() {
   }
