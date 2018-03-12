@@ -57,16 +57,60 @@ namespace DataAppPlatform.DataServices
 
                 BuldJoinChain(model.RootSchema, joinTokens);
             }
+            BuldJoinChainFromFilter(model.RootSchema, request.Filter);
 
             Dictionary<string, string> tableAliases = new Dictionary<string, string>();
             SetAliasesToJoinTable(model.RootSchema, ref joinCounter, tableAliases);
             SetColumnsToJoinTable(model.RootSchema, request);
             SetAliasesToFilter(model.Filter, tableAliases);
-            // TODO: Build join chains from conditions!
             model.OrderBy = GetOrderByExpression(request, model);
 
-
             return model;
+        }
+
+        private void BuldJoinChainFromFilter(QueryTableModel rootSchema, FilterGroup filter)
+        {
+            if(filter == null)
+                return;
+
+            var columns = GetColumnsFromFilter(filter).Distinct();
+            foreach (string column in columns)
+            {
+                var joinTokens = column.Split('.');
+                if (joinTokens.Length == 1)
+                    continue;
+
+                joinTokens = joinTokens.Take(joinTokens.Count() - 1).ToArray();
+
+                BuldJoinChain(rootSchema, joinTokens);
+            }
+        }
+
+        private List<string> GetColumnsFromFilter(FilterGroup filter)
+        {
+            if (filter == null)
+                return null;
+
+            List<string> columns = new List<string>();
+
+            if (filter.Conditions != null)
+            {
+                foreach (Condition condition in filter.Conditions)
+                {
+                    columns.Add(condition.Column);
+                }
+            }
+            if (filter.FilterGroups != null)
+            {
+                foreach (FilterGroup filterGroup in filter.FilterGroups)
+                {
+                    var childFilterColumns = GetColumnsFromFilter(filterGroup);
+                    if(childFilterColumns != null)
+                        columns.AddRange(childFilterColumns);
+                }
+            }
+
+            return columns;
         }
 
         private void SetAliasesToFilter(FilterGroup filter, Dictionary<string, string> tableAliases)

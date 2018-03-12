@@ -238,5 +238,54 @@ namespace DataAppPlatform.DataServices.Tests
             Assert.True(queryModel.RootSchema.Join[0].Join.Any(x => x.Alias == "[T3]"));
             Assert.True(queryModel.RootSchema.Join[0].Join[0].Join.Any(x => x.Alias == "[T4]"));
         }
+
+        [Fact]
+        public void Should_GenerateQueryModel_When_JoinOnlyInFilter()
+        {
+            DataRequest request = new DataRequest()
+            {
+                Columns = new List<DataTableColumn>()
+                {
+                    new DataTableColumn()
+                    {
+                        DisplayName = "FirstName",
+                        Name = "FirstName",
+                        Type = ColumnType.Text,
+                        Width = 10
+                    }
+                },
+                Filter = new FilterGroup()
+                {
+                    LogicalOperation = LogicalOperation.AND,
+                    Conditions = new List<Condition>()
+                    {
+                        new Condition()
+                        {
+                            Column = "Manager.Department.Head.FirstName",
+                            ComparisonType = ComparisonType.Equals,
+                            Value = "SomeValue"
+                        }
+                    }
+                },
+                EntitySchema = "Contacts",
+                Page = 1,
+                PageSize = 10
+            };
+
+            var mockSchemaInfoProvider = new Mock<ISchemaInfoProvider>();
+            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]"), It.Is<string>(s => s == "Manager"))).Returns("Contacts");
+            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]"), It.Is<string>(s => s == "Department"))).Returns("Departments");
+            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Departments]"), It.Is<string>(s => s == "Head"))).Returns("Contacts");
+            IDataRequestConverter dataRequestConverter = new DataRequestConverter(mockSchemaInfoProvider.Object);
+
+            QueryModel queryModel = dataRequestConverter.GetQueryModel(request);
+
+            Assert.NotNull(queryModel);
+
+            Assert.Equal("[T1]", queryModel.RootSchema.Alias);
+            Assert.True(queryModel.RootSchema.Join.Any(x => x.Alias == "[T2]" && x.JoinPath == "Manager"));
+            Assert.True(queryModel.RootSchema.Join[0].Join.Any(x => x.Alias == "[T3]" && x.JoinPath == "Manager.Department"));
+            Assert.True(queryModel.RootSchema.Join[0].Join[0].Join.Any(x => x.Alias == "[T4]" && x.JoinPath == "Manager.Department.Head"));
+        }
     }
 }
