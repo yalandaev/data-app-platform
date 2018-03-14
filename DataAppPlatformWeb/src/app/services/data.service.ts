@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { DataRequest } from '../controls/data-table/models/dataRequest.model';
+import { DataRequest } from '../controls/data-table/models/data-request.model';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable()

@@ -1,5 +1,4 @@
-export enum Sort
-{
+export enum Sort {
     DESC = 1,
     ASC
 }

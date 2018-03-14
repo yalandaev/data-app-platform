@@ -1,4 +1,4 @@
-import { LogicalOperation } from './logicalOperation.model';
+import { LogicalOperation } from './logical-operation.enum';
 import { Condition } from './condition.model';
 
 export class FilterGroup {

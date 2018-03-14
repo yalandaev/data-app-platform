@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { DataTableColumn } from '../../controls/data-table/models/column.model';
-import { ColumnType } from '../../controls/data-table/models/columnType';
-import { FilterGroup } from '../../controls/data-table/models/filter/filterGroup.model';
-import { LogicalOperation } from '../../controls/data-table/models/filter/logicalOperation.model';
-import { ComparisonType } from '../../controls/data-table/models/filter/comparisonType.model';
+import { ColumnType } from '../../controls/data-table/models/column-type.enum';
+import { FilterGroup } from '../../controls/data-table/models/filter/filter-group.model';
+import { LogicalOperation } from '../../controls/data-table/models/filter/logical-operation.enum';
+import { ComparisonType } from '../../controls/data-table/models/filter/comparison-type.enum';
 import { Condition } from '../../controls/data-table/models/filter/condition.model';
+import { ConditionType } from '../../controls/data-table/models/filter/condition-type.enum';
 
 @Component({
   selector: 'app-contacts',
@@ -68,15 +69,15 @@ export class ContactsComponent implements OnInit {
         LogicalOperation.AND,
         [
           new Condition('FirstName', ComparisonType.FilledIn),
-          new Condition('Manager.FirstName', ComparisonType.Equals, 'Mark'),
-          new Condition('LastName', ComparisonType.StartWith, 'Yalandaev')
+          new Condition('Manager.FirstName', ComparisonType.Equals, ConditionType.Constant, 'Mark'),
+          new Condition('LastName', ComparisonType.StartWith, ConditionType.Constant, 'Yalandaev')
         ],
         [
           new FilterGroup(
             LogicalOperation.OR,
             [
-              new Condition('Manager.Phone', ComparisonType.Equals, '79171573840'),
-              new Condition('Manager.Email', ComparisonType.Equals, 'ivanov@gmail.com')
+              new Condition('Manager.Phone', ComparisonType.Equals, ConditionType.Constant, '79171573840'),
+              new Condition('Manager.Email', ComparisonType.Equals, ConditionType.Constant, 'ivanov@gmail.com')
             ], [])
         ]);
     }

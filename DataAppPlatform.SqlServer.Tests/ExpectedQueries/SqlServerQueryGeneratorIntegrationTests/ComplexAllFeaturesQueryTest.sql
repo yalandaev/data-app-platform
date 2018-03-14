@@ -11,6 +11,6 @@ FROM [Contacts] AS [T1]
 LEFT JOIN [Contacts] AS [T2] ON [T1].[ManagerId] = [T2].[Id]
 LEFT JOIN [Departments] AS [T3] ON [T2].[DepartmentId] = [T3].[Id]
 LEFT JOIN [Contacts] AS [T4] ON [T3].[HeadId] = [T4].[Id]
-WHERE (([T1].[FirstName] = 'Mark') AND ([T1].[LastName] IS NOT NULL) AND ([T1].[Age] >= 15) AND (([T4].[FirstName] LIKE 'Joe%') OR ([T4].[Age] < 50)))
+WHERE (([T1].[FirstName] = 'Mark') AND ([T1].[LastName] IS NOT NULL) AND ([T1].[Age] >= [T4].[Age]) AND (([T4].[FirstName] LIKE 'Joe%') OR ([T4].[Age] < 50)))
 ORDER BY [T4].[Age] ASC
 OFFSET 30 ROWS FETCH NEXT 15 ROWS ONLY

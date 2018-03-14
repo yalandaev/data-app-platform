@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DataTableColumn } from './models/column.model';
 import { DataService } from '../../services/data.service';
-import { DataRequest } from './models/dataRequest.model';
-import { FilterGroup } from './models/filter/filterGroup.model';
-import { Sort } from './models/filter/sort.model';
+import { DataRequest } from './models/data-request.model';
+import { FilterGroup } from './models/filter/filter-group.model';
+import { Sort } from './models/filter/sort.enum';
 
 @Component({
   selector: 'app-data-table',

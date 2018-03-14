@@ -79,7 +79,7 @@ namespace DataAppPlatform.SqlServer
                 case ComparisonType.MoreOrEquals:
                 case ComparisonType.Less:
                 case ComparisonType.LessOrEquals:
-                    return $"({condition.Column} {GetComparisonTypeString(condition.ComparisonType)} {GetConditionValue(condition.Value)})";
+                    return $"({condition.Column} {GetComparisonTypeString(condition.ComparisonType)} {GetConditionValue(condition)})";
                 case ComparisonType.FilledIn:
                     return $"({condition.Column} IS NOT NULL)";
                 case ComparisonType.NotFilledIn:
@@ -97,10 +97,11 @@ namespace DataAppPlatform.SqlServer
             }
         }
 
-        private string GetConditionValue(object value)
+        private string GetConditionValue(Condition condition)
         {
+            object value = condition.Value;
             Debug.WriteLine(value.GetType());
-            if (value is Int32 || value is Int64 || value is float)
+            if (value is Int32 || value is Int64 || value is float || condition.Type == ConditionType.Reference)
                 return value.ToString();
 
             return $"'{value.ToString()}'";

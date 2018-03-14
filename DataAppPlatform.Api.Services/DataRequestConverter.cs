@@ -125,13 +125,19 @@ namespace DataAppPlatform.DataServices
                     }
                     else
                     {
-                        {
-                            var filterConditionTokens = filterCondition.Column.Split('.');
-                            var columnPath = string.Join('.', filterConditionTokens.Take(filterConditionTokens.Length - 1));
-                            var columnName = filterConditionTokens.Skip(filterConditionTokens.Length - 1).Take(1).ToArray()[0].ToString();
-                            var alias = tableAliases[columnPath];
-                            filterCondition.Column = $"{alias}.[{columnName}]";
-                        }
+                        var filterConditionTokens = filterCondition.Column.Split('.');
+                        var columnPath = string.Join('.', filterConditionTokens.Take(filterConditionTokens.Length - 1));
+                        var columnName = filterConditionTokens.Skip(filterConditionTokens.Length - 1).Take(1).ToArray()[0];
+                        var alias = tableAliases[columnPath];
+                        filterCondition.Column = $"{alias}.[{columnName}]";
+                    }
+                    if (filterCondition.Type == ConditionType.Reference)
+                    {
+                        var valueColumnTokens = filterCondition.Value.ToString().Split('.');
+                        var valueColumnPath = string.Join('.', valueColumnTokens.Take(valueColumnTokens.Length - 1));
+                        var valueColumnName = valueColumnTokens.Skip(valueColumnTokens.Length - 1).Take(1).ToArray()[0];
+                        var valueColumnAlias = tableAliases[valueColumnPath];
+                        filterCondition.Value = $"{valueColumnAlias}.[{valueColumnName}]";
                     }
                 }
             }

@@ -1,4 +1,4 @@
-import { ColumnType } from './columnType';
+import { ColumnType } from './column-type.enum';
 
 export class DataTableColumn {
     public name: string;

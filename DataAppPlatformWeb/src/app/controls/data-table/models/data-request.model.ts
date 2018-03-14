@@ -1,6 +1,6 @@
 import { DataTableColumn } from './column.model';
-import { FilterGroup } from './filter/filterGroup.model';
-import { Sort } from './filter/sort.model';
+import { FilterGroup } from './filter/filter-group.model';
+import { Sort } from './filter/sort.enum';
 export class DataRequest {
     constructor(
         private entitySchema: string,
