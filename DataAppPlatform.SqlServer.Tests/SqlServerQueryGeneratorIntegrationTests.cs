@@ -86,7 +86,7 @@ namespace DataAppPlatform.SqlServer.Tests
         }
 
         [Fact]
-        public void GenerateJoinsFromReferenceConditionsTest()
+        public void GenerateJoinsFromReferenceValueConditionsTest()
         {
             DataRequest request = new DataRequest()
             {
@@ -101,6 +101,40 @@ namespace DataAppPlatform.SqlServer.Tests
                     Conditions = new List<Condition>()
                     {
                         new Condition() { Column  = "Age", ComparisonType = ComparisonType.Equals, Type = ConditionType.Reference, Value = "Manager.Department.Head.Age" },
+                    }
+                },
+                Page = 1,
+                PageSize = 15,
+                Sort = Sort.ASC
+            };
+
+            QueryModel queryModel = _dataRequestConverter.GetQueryModel(request);
+            string sqlQuery = _sqlServerQueryGenerator.GetQuery(queryModel);
+
+            var expectedQuery =
+                File.ReadAllText(
+                    $@"ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\{MethodBase.GetCurrentMethod().Name}.sql");
+
+
+            Assert.Equal(expectedQuery, sqlQuery);
+        }
+
+        [Fact]
+        public void GenerateJoinsFromColumnConditionsTest()
+        {
+            DataRequest request = new DataRequest()
+            {
+                EntitySchema = "Contacts",
+                Columns = new List<DataTableColumn>()
+                {
+                    new DataTableColumn() { Name = "FirstName", Type = ColumnType.Text }
+                },
+                Filter = new FilterGroup()
+                {
+                    LogicalOperation = LogicalOperation.AND,
+                    Conditions = new List<Condition>()
+                    {
+                        new Condition() { Column  = "Manager.Department.Head.Age", ComparisonType = ComparisonType.Equals, Type = ConditionType.Constant, Value = 20 },
                     }
                 },
                 Page = 1,
