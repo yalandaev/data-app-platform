@@ -98,6 +98,8 @@ namespace DataAppPlatform.DataServices
                 foreach (Condition condition in filter.Conditions)
                 {
                     columns.Add(condition.Column);
+                    if(condition.Type == ConditionType.Reference)
+                        columns.Add(condition.Value.ToString());
                 }
             }
             if (filter.FilterGroups != null)

@@ -8,11 +8,15 @@
 
   <ItemGroup>
     <None Remove="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\ComplexAllFeaturesQueryTest.sql" />
+    <None Remove="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\GenerateJoinsFromReferenceConditionsTest.sql" />
     <None Remove="ExpectedQueries\SqlServerQueryGeneratorTests\Should_GenerateQuery_When_ComplexQuery.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\ComplexAllFeaturesQueryTest.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\GenerateJoinsFromReferenceConditionsTest.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ExpectedQueries\SqlServerQueryGeneratorTests\Should_GenerateQuery_When_ComplexQuery.sql">
