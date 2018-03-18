@@ -1,11 +1,14 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Xml;
 using log4net;
+using log4net.Appender;
 using log4net.Repository;
+using log4net.Repository.Hierarchy;
 
 namespace DataAppPlatform.Core.Logging.Log4Net
 {
@@ -23,6 +26,26 @@ namespace DataAppPlatform.Core.Logging.Log4Net
                 Assembly.GetEntryAssembly(), typeof(log4net.Repository.Hierarchy.Hierarchy));
             _log = LogManager.GetLogger(_loggerRepository.Name, name);
             log4net.Config.XmlConfigurator.Configure(_loggerRepository, xmlElement);
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                var repository = LogManager.GetRepository(Assembly.GetEntryAssembly()) as Hierarchy;
+                if (repository != null)
+                {
+                    var appenders = repository.GetAppenders();
+                    if (appenders != null)
+                    {
+                        foreach (var appender in appenders)
+                        {
+                            if (appender is FileAppender)
+                            {
+                                var fileLogAppender = appender as FileAppender;
+                                fileLogAppender.File = fileLogAppender.File.Replace(@"\", Path.DirectorySeparatorChar.ToString());
+                                fileLogAppender.ActivateOptions();
+                            }
+                        }
+                    }
+                }
+            }
         }
         public IDisposable BeginScope<TState>(TState state)
         {
