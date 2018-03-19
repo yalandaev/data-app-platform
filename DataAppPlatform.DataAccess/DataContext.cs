@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using DataAppPlatform.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +27,7 @@ namespace DataAppPlatform.DataAccess
         }
 
         public DbSet<Contact> Contacts { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -32,6 +36,33 @@ namespace DataAppPlatform.DataAccess
                 .AddJsonFile("appsettings.json")
                 .Build();
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+        }
+
+        public override int SaveChanges()
+        {
+            AddTimestamps();
+            return base.SaveChanges();
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            AddTimestamps();
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void AddTimestamps()
+        {
+            var entities = ChangeTracker.Entries().Where(x => x.Entity is Entity && (x.State == EntityState.Added || x.State == EntityState.Modified));
+
+            foreach (var entity in entities)
+            {
+                if (entity.State == EntityState.Added)
+                {
+                    ((Entity)entity.Entity).CreatedOn = DateTime.UtcNow;
+                }
+
+                ((Entity)entity.Entity).ModifiedOn = DateTime.UtcNow;
+            }
         }
 
         private void AddSampleData()
@@ -71,6 +102,11 @@ namespace DataAppPlatform.DataAccess
                 Email = "maslov@gmail.com",
                 Phone = "79171574421",
                 Manager = contact1
+            });
+            Users.Add(new User()
+            {
+                Username = "Admin",
+                Password = "Password"
             });
             SaveChanges();
         }

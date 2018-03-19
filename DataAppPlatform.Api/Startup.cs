@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using DataAppPlatform.ApplicationServices;
 using DataAppPlatform.Core.DataService.Interfaces;
 using DataAppPlatform.Core.Logging.Log4Net;
+using DataAppPlatform.Core.Services.Interfaces;
 using DataAppPlatform.DataAccess;
 using DataAppPlatform.DataServices;
 using DataAppPlatform.SqlServer;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +20,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -32,6 +38,21 @@ namespace DataAppPlatform.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(SetAuthenticationOptions)
+                .AddJwtBearer(cfg =>
+                {
+                    cfg.RequireHttpsMetadata = false;
+                    cfg.SaveToken = true;
+
+                    cfg.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidIssuer = Configuration["Tokens:Issuer"],
+                        ValidAudience = Configuration["Tokens:Issuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"]))
+                    };
+
+                });
+
             services.AddCors(options =>
             {
                 options.AddPolicy("defaultPolicy",
@@ -51,6 +72,7 @@ namespace DataAppPlatform.Api
             services.AddTransient<ISqlQueryGenerator, SqlServerQueryGenerator>();
             services.AddTransient<IDataRequestConverter, DataRequestConverter>();
             services.AddTransient<ISchemaInfoProvider, SqlServerSchemaInfoProvider>();
+            services.AddTransient<IUserService, UserService>();
 
         }
 
@@ -58,6 +80,8 @@ namespace DataAppPlatform.Api
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddLog4Net();
+
+            app.UseAuthentication();
 
             if (env.IsDevelopment())
             {
@@ -71,6 +95,12 @@ namespace DataAppPlatform.Api
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "DataService API V1");
             });
+        }
+
+        private static void SetAuthenticationOptions(AuthenticationOptions options)
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         }
     }
 }

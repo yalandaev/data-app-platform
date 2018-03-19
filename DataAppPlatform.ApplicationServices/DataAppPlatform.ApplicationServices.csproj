@@ -5,12 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.1" />
-    <PackageReference Include="SharpRaven.Log4Net" Version="1.5.2" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\DataAppPlatform.Core\DataAppPlatform.Core.csproj" />
+    <ProjectReference Include="..\DataAppPlatform.DataAccess\DataAppPlatform.DataAccess.csproj" />
     <ProjectReference Include="..\DataAppPlatform.Entities\DataAppPlatform.Entities.csproj" />
   </ItemGroup>
 
