@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DataAppPlatform.Core.DataService.Interfaces;
 using DataAppPlatform.Core.DataService.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ namespace DataAppPlatform.Api.Controllers
     [Produces("application/json")]
     [Route("api/DataService")]
     [EnableCors("defaultPolicy")]
+    [Authorize]
     public class DataServiceController : Controller
     {
         private IDataService _dataService;
