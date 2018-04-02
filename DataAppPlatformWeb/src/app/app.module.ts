@@ -18,14 +18,18 @@ import { AuthGuard } from './auth/auth.guard';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './auth/token.interceptor';
 import { JwtInterceptor } from './auth/jwt.interceptor';
+import { ContactPageComponent } from './sections/contacts/contact-page.component';
+import { TextInputComponent } from './controls/input/text-input/text-input.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DataTableComponent,
     ContactsComponent,
+    ContactPageComponent,
     UseFilterPipe,
-    LoginComponent
+    LoginComponent,
+    TextInputComponent
   ],
   imports: [
     BrowserModule,

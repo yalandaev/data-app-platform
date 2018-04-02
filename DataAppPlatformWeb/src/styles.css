@@ -1,1 +1,173 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  input {
+    padding: 0 6px;
+    border: none;
+    box-sizing: border-box;
+    font: inherit;
+    font-size: 16px;
+    font-weight: lighter;
+    width: 100%;
+  }
+  
+  input:disabled {
+    background: white;
+  }
+  
+  textarea:focus, input:focus{
+      outline: none;
+  }
+  
+  .control {
+    font-size: 16px;
+    font-weight: lighter;
+  }
+  
+  .control a:visited {
+    color: #4a76d2;
+  }
+  
+  .control-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 20px 0px 0px 0px;
+  }
+  
+  .control-label-wrapper {
+    width: 150px;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 15px;
+  }
+  
+  .control-label {
+    color: #999999;
+    text-align: right;
+  }
+  
+  .control-input-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e5e5e5;
+    height: 40px;
+    width: 400px;
+  }
+  
+  .control-link-wrapper {
+    /*position: absolute;*/
+    padding-left: 7px;
+    flex-grow: 1;
+  }
+  
+  .control-link-wrapper a {
+    z-index: 1000;
+  }
+  
+  .control-editable {
+    cursor: text;
+  }
+  
+  .control-input-icon-wrapper {
+    display: block;
+    margin: 2px;
+  }
+  
+  .control-input-icons-wrapper {
+    display: flex;
+    margin-right: 5px;
+  }
+  
+  .control-lookup-icon-clickable {
+    cursor: pointer;
+  }
+  
+  .control-lookup-icon {
+    height: 20px;
+    width: 20px;
+    display: block;
+    background-size: cover;
+    opacity: 0.4;
+  }
+  
+  .control-lookup-icon:hover {
+    opacity: 1;
+  }
+  
+  .control-lookup-icon-clear {
+    background-image: url('./assets/icons/cross-out.png');
+  }
+  
+  .control-lookup-icon-search {
+    background-image: url('./assets/icons/search.png')
+  }
+  
+  .control-lookup-icon-locked {
+    background-image: url('./assets/icons/padlock.png');
+  } 
+  
+  .hidden {
+    display: none;
+  }
+  
+  /*Стиль для wrapper'а поля ввода в случае непрохождения валидации*/
+  .input-error {
+      box-shadow : 0 0 5 px #d45252;
+      border-color : #b03535
+  }
+  /*Псевдо-элемент для wrapper'а поля ввода, который выводит подсказку*/
+  .input-error:after {
+      content: attr(input-error-text);
+      font-size: 12px;
+      color: #fff;
+      background: #d45252;
+      position: absolute;
+      display: block;
+      margin-top: 30px;
+      margin-left: -1px;
+      z-index: 10;
+      word-wrap: break-word;
+      padding-left: 5px;
+      padding-right: 5px;
+      padding-top: 0px;
+      padding-bottom: 2px;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+  }
+  
+  .control-lookup-suggestions {
+    margin-top: 61px;
+    position: absolute;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: auto;
+    outline: 1px solid #e2e2e2;
+    text-align: center;
+    background-color: white;
+    z-index: 10000;
+  }
+  
+  .control-lookup-suggestions ul {
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
+    list-style-position: inside;
+    list-style-type: none;
+  }
+  
+  .control-lookup-suggestions ul li {
+    overflow: hidden;
+    border-width: 1px;
+    border-style: solid;
+    border-color: white;
+    padding-right: 24px;
+    padding-left: 8px;
+    text-align: left;
+    white-space: nowrap;
+    line-height: 38px;
+    cursor: pointer;
+  }

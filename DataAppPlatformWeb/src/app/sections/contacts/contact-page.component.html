@@ -1,0 +1,13 @@
+<p>
+    contact page works!
+</p>
+<p>Entity data: {{model | json}}</p>
+<br>
+<app-text-input
+    [(model)]="model.fname"
+    [propertySchema]="viewModel.fname"
+></app-text-input>
+<app-text-input
+    [(model)]="model.lname"
+    [propertySchema]="viewModel.lname"
+></app-text-input>
