@@ -1,7 +1,3 @@
-<p>
-    contact page works!
-</p>
-
 <app-text-input
     [(model)]="viewModel['FirstName']"
 ></app-text-input>
@@ -13,6 +9,13 @@
 ></app-text-input> 
 
 <button (click)="setValue()">ClickMe</button>
+<br>
+
+<p>ViewModel:</p>
+<pre>{{viewModel | json}}</pre>
+
+<p>Query columns:</p>
+<p>{{getQueryColumns() | json}}</p>
 
 <p>Data:</p>
 <pre>{{getOutputData() | json}}</pre>

@@ -9,6 +9,7 @@ import { EntityPropertySchema } from '../../controls/common/entity-property-sche
 })
 export class ContactPageComponent implements OnInit {
     readonly viewModel: IDictionary<EntityPropertySchema>;
+    selected: boolean;
 
     constructor() {
         this.viewModel = {
@@ -32,9 +33,19 @@ export class ContactPageComponent implements OnInit {
     ngOnInit() { }
 
     getData() {
+        const data = {
+            FirstName: {
+                value: 'Ivan'
+            },
+            LastName: {
+                value: 'Petrov'
+            }
+        };
+
         Object.keys(this.viewModel).forEach(key => {
-            this.viewModel[key].value = 'sample';
-            this.viewModel[key].oldValue = 'sample';
+            this.viewModel[key].value = data[key].value;
+            this.viewModel[key].oldValue = data[key].value;
+            this.viewModel[key].displayValue = data[key].displayValue;
         });
     }
 
@@ -44,16 +55,19 @@ export class ContactPageComponent implements OnInit {
             if (!forUpdate || (forUpdate && this.viewModel[key].value !== this.viewModel[key].oldValue)) {
                 data[key] = {
                     value: this.viewModel[key].value,
-                    oldValue: this.viewModel[key].oldValue,
+                    oldValue: this.viewModel[key].oldValue
                 };
             }
         });
         return data;
     }
 
+    private getQueryColumns() {
+        return Object.keys(this.viewModel);
+    }
+
     private setValue() {
         this.viewModel['LastName'].value = 'Changed from parent';
-        this.viewModel['LastName'].enabled = !this.viewModel['LastName'].enabled;
     }
 }
 
