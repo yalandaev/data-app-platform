@@ -4,6 +4,7 @@ import { DataService } from '../../services/data.service';
 import { DataRequest } from './models/data-request.model';
 import { FilterGroup } from './models/filter/filter-group.model';
 import { Sort } from './models/filter/sort.enum';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-data-table',
@@ -15,7 +16,9 @@ export class DataTableComponent implements OnInit {
   data = [];
   currentPage = 1;
 
-  constructor(private dataService: DataService) {
+  constructor(
+    private dataService: DataService,
+    private router: Router) {
 
   }
 
@@ -50,5 +53,9 @@ export class DataTableComponent implements OnInit {
 
   getFilter(column: DataTableColumn) {
     return column.formatter;
+  }
+
+  onRowClick(item: any) {
+    this.router.navigate(['/contacts/', item.Id]);
   }
 }

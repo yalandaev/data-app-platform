@@ -1,17 +1,17 @@
-<div class="control control-wrapper" [class.hidden]="!propertySchema.visible">
+<div class="control control-wrapper" [class.hidden]="!model.visible">
     <div class="control-label-wrapper">
-        <label class="control-label">{{propertySchema.label}}:</label>
+        <label class="control-label">{{model.label}}:</label>
     </div>
     <div class="control-input-wrapper">
         <input #textInput
             type="text" 
-            [(ngModel)]="value" #ctrl="ngModel" (ngModelChange)="onChanges($event)"
-            [disabled]="!propertySchema.enabled">
+            [(ngModel)]="model.value" #ctrl="ngModel" (ngModelChange)="onChanges($event)"
+            [disabled]="!model.enabled">
         <div class="control-input-icons-wrapper">
-            <div class="control-input-icon-wrapper" [class.hidden]="!propertySchema.enabled || value == null">
+            <div class="control-input-icon-wrapper" [class.hidden]="!model.enabled || model.value == null">
                 <div class="control-lookup-icon control-lookup-icon-clickable control-lookup-icon-clear" (click)="clear()"></div>
             </div>
-            <div class="control-input-icon-wrapper" [class.hidden]="propertySchema.enabled">
+            <div class="control-input-icon-wrapper" [class.hidden]="model.enabled">
                 <div class="control-lookup-icon control-lookup-icon-locked"></div>
             </div>
         </div>

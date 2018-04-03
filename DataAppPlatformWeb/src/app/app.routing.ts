@@ -8,10 +8,10 @@ import { ContactPageComponent } from './sections/contacts/contact-page.component
 
 const appRoutes: Routes = [
     { path: 'login', component: LoginComponent },
-    { path: '', component: ContactsComponent, canActivate: [AuthGuard] },
+    { path: 'contacts', component: ContactsComponent, canActivate: [AuthGuard] },
     { path: 'contacts/:id', component: ContactPageComponent, canActivate: [AuthGuard] },
     // otherwise redirect to home
-    { path: '**', redirectTo: '' }
+    { path: '**', redirectTo: 'contacts' }
 ];
 
 export const routing = RouterModule.forRoot(appRoutes);

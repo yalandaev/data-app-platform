@@ -1,4 +1,6 @@
 export class EntityPropertySchema {
+    value?: any;
+    oldValue?: any;
     label: string;
     enabled: boolean;
     visible: boolean;

@@ -12,27 +12,23 @@ export class TextInputComponent implements OnInit {
 
     constructor() { }
 
-    @Output() modelChange: EventEmitter<string> = new EventEmitter<string>();
-
-    @Input() set model(item: string) {
-        this.value = item;
-    }
+    @Output() modelChange: EventEmitter<EntityPropertySchema> = new EventEmitter<EntityPropertySchema>();
 
     @Input()
-    propertySchema: EntityPropertySchema;
+    model: EntityPropertySchema;
 
     private value: string;
     private errorMessage: any = '';
 
     onChanges(newValue) {
-        this.value = newValue;
-        this.modelChange.emit(newValue);
+        this.model.value = newValue;
+        this.modelChange.emit(this.model);
     }
 
     ngOnInit() { }
 
     private clear() {
-        this.model = null;
-        this.modelChange.emit(null);
+        this.model.value = null;
+        this.modelChange.emit(this.model);
     }
 }

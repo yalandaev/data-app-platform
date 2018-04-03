@@ -1,13 +1,21 @@
 <p>
     contact page works!
 </p>
-<p>Entity data: {{model | json}}</p>
-<br>
+
 <app-text-input
-    [(model)]="model.fname"
-    [propertySchema]="viewModel.fname"
+    [(model)]="viewModel['FirstName']"
 ></app-text-input>
 <app-text-input
-    [(model)]="model.lname"
-    [propertySchema]="viewModel.lname"
-></app-text-input>
+    [(model)]="viewModel['LastName']"
+></app-text-input> 
+<app-text-input
+    [(model)]="viewModel['LastName']"
+></app-text-input> 
+
+<button (click)="setValue()">ClickMe</button>
+
+<p>Data:</p>
+<pre>{{getOutputData() | json}}</pre>
+
+<p>Data to update:</p>
+<pre>{{getOutputData(true) | json}}</pre>
