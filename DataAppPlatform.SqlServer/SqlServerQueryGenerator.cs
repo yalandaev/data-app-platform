@@ -4,8 +4,8 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using DataAppPlatform.Core.DataService.Interfaces;
-using DataAppPlatform.Core.DataService.Models;
 using DataAppPlatform.Core.DataService.Models.Filter;
+using DataAppPlatform.Core.DataService.Models.TableData;
 
 namespace DataAppPlatform.SqlServer
 {

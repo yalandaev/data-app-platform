@@ -3,7 +3,9 @@ using System.IO;
 using System.Reflection;
 using DataAppPlatform.Core.DataService.Interfaces;
 using DataAppPlatform.Core.DataService.Models;
+using DataAppPlatform.Core.DataService.Models.EntityData;
 using DataAppPlatform.Core.DataService.Models.Filter;
+using DataAppPlatform.Core.DataService.Models.TableData;
 using DataAppPlatform.DataServices;
 using Moq;
 using Xunit;
@@ -19,9 +21,14 @@ namespace DataAppPlatform.SqlServer.Tests
         public SqlServerQueryGeneratorIntegrationTests()
         {
             var mockSchemaInfoProvider = new Mock<ISchemaInfoProvider>();
-            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]"), It.Is<string>(s => s == "Manager"))).Returns("Contacts");
-            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]"), It.Is<string>(s => s == "Department"))).Returns("Departments");
+            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]" || s == "Contacts"), It.Is<string>(s => s == "Manager"))).Returns("Contacts");
+            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]" || s == "Contacts"), It.Is<string>(s => s == "Department"))).Returns("Departments");
             mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Departments]"), It.Is<string>(s => s == "Head"))).Returns("Contacts");
+            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "Departments"), It.Is<string>(s => s == "Head"))).Returns("Contacts");
+            mockSchemaInfoProvider.Setup(x => x.GetTableDisplayColumn(It.Is<string>(s => s == "Contacts"))).Returns("FullName");
+            mockSchemaInfoProvider.Setup(x => x.GetTableDisplayColumn(It.Is<string>(s => s == "Departments"))).Returns("Title");
+            mockSchemaInfoProvider.Setup(x => x.GetColumnType(It.Is<string>(s => s == "Contacts"), It.Is<string>(s => s == "Manager" || s == "[Manager]"))).Returns(ColumnType.Lookup);
+            mockSchemaInfoProvider.Setup(x => x.GetColumnType(It.Is<string>(s => s == "Contacts"), It.Is<string>(s => s == "Department" || s == "[Department]"))).Returns(ColumnType.Lookup);
             _schemaInfoProvider = mockSchemaInfoProvider.Object;
 
             _dataRequestConverter = new DataRequestConverter(_schemaInfoProvider);
@@ -140,6 +147,33 @@ namespace DataAppPlatform.SqlServer.Tests
                 Page = 1,
                 PageSize = 15,
                 Sort = Sort.ASC
+            };
+
+            QueryModel queryModel = _dataRequestConverter.GetQueryModel(request);
+            string sqlQuery = _sqlServerQueryGenerator.GetQuery(queryModel);
+
+            var expectedQuery =
+                File.ReadAllText(
+                    $@"ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\{MethodBase.GetCurrentMethod().Name}.sql");
+
+
+            Assert.Equal(expectedQuery, sqlQuery);
+        }
+
+        [Fact]
+        public void GenerateQueryFromEntityDataRequestTest()
+        {
+            EntityDataRequest request = new EntityDataRequest()
+            {
+                EntitySchema = "Contacts",
+                EntityId = 1,
+                Columns = new List<string>()
+                {
+                    "FirstName",
+                    "LastName",
+                    "Manager",
+                    "Department"
+                }
             };
 
             QueryModel queryModel = _dataRequestConverter.GetQueryModel(request);

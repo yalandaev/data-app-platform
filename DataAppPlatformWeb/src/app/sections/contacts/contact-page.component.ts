@@ -1,5 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { EntityPropertySchema } from '../../controls/common/entity-property-schema';
+import { DataService } from '../../services/data.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { EntityDataRequest } from '../../controls/common/entity-data-request.model';
 
 
 @Component({
@@ -10,8 +13,15 @@ import { EntityPropertySchema } from '../../controls/common/entity-property-sche
 export class ContactPageComponent implements OnInit {
     readonly viewModel: IDictionary<EntityPropertySchema>;
     selected: boolean;
+    entitySchema: string;
+    entityId: number;
 
-    constructor() {
+    constructor(
+        private dataService: DataService,
+        private router: Router,
+        private route: ActivatedRoute
+    ) {
+        this.entitySchema = 'Contacts';
         this.viewModel = {
             'FirstName': {
                 label: 'First name',
@@ -27,26 +37,25 @@ export class ContactPageComponent implements OnInit {
             }
         };
 
-        this.getData();
+        this.route.params.subscribe( params => {
+            this.entityId = params['id'];
+            this.getData();
+        });
     }
 
     ngOnInit() { }
 
     getData() {
-        const data = {
-            FirstName: {
-                value: 'Ivan'
-            },
-            LastName: {
-                value: 'Petrov'
-            }
-        };
-
-        Object.keys(this.viewModel).forEach(key => {
-            this.viewModel[key].value = data[key].value;
-            this.viewModel[key].oldValue = data[key].value;
-            this.viewModel[key].displayValue = data[key].displayValue;
-        });
+        this.dataService.getEntityData(
+            new EntityDataRequest(this.entitySchema, this.entityId, this.getQueryColumns()))
+            .subscribe(response => {
+                const data = response.Fields;
+                Object.keys(this.viewModel).forEach(key => {
+                    this.viewModel[key].value = data[key].Value;
+                    this.viewModel[key].oldValue = data[key].Value;
+                    this.viewModel[key].displayValue = data[key].DisplayValue;
+                });
+            });
     }
 
     private getOutputData(forUpdate: boolean = false) {

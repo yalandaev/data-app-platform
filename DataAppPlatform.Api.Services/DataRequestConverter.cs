@@ -2,9 +2,12 @@
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Security;
+using System.Text.RegularExpressions;
 using DataAppPlatform.Core.DataService.Interfaces;
 using DataAppPlatform.Core.DataService.Models;
+using DataAppPlatform.Core.DataService.Models.EntityData;
 using DataAppPlatform.Core.DataService.Models.Filter;
+using DataAppPlatform.Core.DataService.Models.TableData;
 
 namespace DataAppPlatform.DataServices
 {
@@ -66,6 +69,64 @@ namespace DataAppPlatform.DataServices
             model.OrderBy = GetOrderByExpression(request, model);
 
             return model;
+        }
+
+        public QueryModel GetQueryModel(EntityDataRequest request)
+        {
+            int joinCounter = 1;
+            request.Columns.AddRange(request.Columns
+                .Where(column => _schemaInfoProvider.GetColumnType(request.EntitySchema, column) == ColumnType.Lookup)
+                .Select(column => $"{column}.{_schemaInfoProvider.GetTableDisplayColumn(_schemaInfoProvider.GetColumnSchema(request.EntitySchema, column))}"));
+            DataRequest dataRequest = TransformToDataRequest(request);
+
+            var queryModel = GetQueryModel(dataRequest);
+
+            foreach (var column in queryModel.RootSchema.Columns)
+            {
+                if (_schemaInfoProvider.GetColumnType(request.EntitySchema, column.Name) == ColumnType.Lookup)
+                    column.Name = column.Name.Insert(column.Name.Length - 1, "Id");
+                column.Alias += ".value";
+            }
+                
+
+            foreach (var join in queryModel.RootSchema.Join)
+            {
+                foreach (var column in join.Columns)
+                {
+                    var regex = new Regex(@"[^.]+$", RegexOptions.Singleline);
+                    column.Alias = regex.Replace(column.Alias, "displayValue");
+                }
+            }
+            return queryModel;
+        }
+
+        private DataRequest TransformToDataRequest(EntityDataRequest request)
+        {
+            DataRequest dataRequest = new DataRequest()
+            {
+                Columns = request.Columns.Select(column => new DataTableColumn()
+                {
+                    Name = column
+                }).ToList(),
+                EntitySchema = request.EntitySchema,
+                Filter = new FilterGroup()
+                {
+                    Conditions = new List<Condition>()
+                    {
+                        new Condition()
+                        {
+                            Column = "Id",
+                            Value = request.EntityId,
+                            Type = ConditionType.Constant,
+                            ComparisonType = ComparisonType.Equals
+                        }
+                    }
+                },
+                Page = 1,
+                PageSize = 1
+            };
+
+            return dataRequest;
         }
 
         private void BuldJoinChainFromFilter(QueryTableModel rootSchema, FilterGroup filter)

@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DataAppPlatform.Core.DataService.Interfaces;
 using DataAppPlatform.Core.DataService.Models;
+using DataAppPlatform.Core.DataService.Models.EntityData;
 using DataAppPlatform.Core.DataService.Models.Filter;
+using DataAppPlatform.Core.DataService.Models.TableData;
 using Moq;
 using Xunit;
 
@@ -286,6 +289,48 @@ namespace DataAppPlatform.DataServices.Tests
             Assert.True(queryModel.RootSchema.Join.Any(x => x.Alias == "[T2]" && x.JoinPath == "Manager"));
             Assert.True(queryModel.RootSchema.Join[0].Join.Any(x => x.Alias == "[T3]" && x.JoinPath == "Manager.Department"));
             Assert.True(queryModel.RootSchema.Join[0].Join[0].Join.Any(x => x.Alias == "[T4]" && x.JoinPath == "Manager.Department.Head"));
+        }
+
+        [Fact]
+        public void Should_GenerateQueryModel_When_EntityDataRequestPassed()
+        {
+            EntityDataRequest request = new EntityDataRequest()
+            {
+                EntitySchema = "Contacts",
+                EntityId = 1,
+                Columns = new List<string>()
+                {
+                    "FirstName",
+                    "LastName",
+                    "Manager",
+                    "Department"
+                }
+            };
+
+            var mockSchemaInfoProvider = new Mock<ISchemaInfoProvider>();
+            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]" || s == "Contacts"), It.Is<string>(s => s == "Manager"))).Returns("Contacts");
+            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]" || s == "Contacts"), It.Is<string>(s => s == "Department"))).Returns("Departments");
+            mockSchemaInfoProvider.Setup(x => x.GetTableDisplayColumn(It.Is<string>(s => s == "Contacts"))).Returns("FullName");
+            mockSchemaInfoProvider.Setup(x => x.GetTableDisplayColumn(It.Is<string>(s => s == "Departments"))).Returns("Title");
+            mockSchemaInfoProvider.Setup(x => x.GetColumnType(It.Is<string>(s => s == "Contacts"), It.Is<string>(s => s == "Manager" || s == "[Manager]"))).Returns(ColumnType.Lookup);
+            mockSchemaInfoProvider.Setup(x => x.GetColumnType(It.Is<string>(s => s == "Contacts"), It.Is<string>(s => s == "Department" || s == "[Department]"))).Returns(ColumnType.Lookup);
+            IDataRequestConverter dataRequestConverter = new DataRequestConverter(mockSchemaInfoProvider.Object);
+
+            QueryModel queryModel = dataRequestConverter.GetQueryModel(request);
+
+            Assert.NotNull(queryModel);
+            Assert.Equal("[T1]", queryModel.RootSchema.Alias);
+            Assert.NotNull((queryModel.Filter.Conditions.FirstOrDefault()));
+            Assert.True(Convert.ToInt32(queryModel.Filter.Conditions[0].Value) == 1);
+            Assert.True(queryModel.RootSchema.Join.Any(x => x.Alias == "[T2]"));
+            Assert.True(queryModel.RootSchema.Join.Any(x => x.Alias == "[T3]"));
+            Assert.True(queryModel.RootSchema.Columns.Any(x => x.Alias == "FirstName.value" && x.Name == "[FirstName]"));
+            Assert.True(queryModel.RootSchema.Columns.Any(x => x.Alias == "LastName.value" && x.Name == "[LastName]"));
+            Assert.True(queryModel.RootSchema.Columns.Any(x => x.Alias == "Manager.value" && x.Name == "[ManagerId]"));
+            Assert.True(queryModel.RootSchema.Join.First(x => x.ReferenceName == "Manager").Columns.Any(x => x.Alias == "Manager.displayValue" && x.Name == "[FullName]"));
+            Assert.True(queryModel.RootSchema.Columns.Any(x => x.Alias == "Department.value" && x.Name == "[DepartmentId]"));
+            Assert.True(queryModel.RootSchema.Join.First(x => x.ReferenceName == "Department").Columns.Any(x => x.Alias == "Department.displayValue" && x.Name == "[Title]"));
+            
         }
     }
 }

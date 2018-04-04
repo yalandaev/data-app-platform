@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using DataAppPlatform.Core.DataService.Interfaces;
 using DataAppPlatform.Core.DataService.Models;
+using DataAppPlatform.Core.DataService.Models.EntityData;
+using DataAppPlatform.Core.DataService.Models.TableData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -28,6 +30,12 @@ namespace DataAppPlatform.Api.Controllers
         public DataResponse GetData([FromBody]DataRequest request)
         {
             return _dataService.GetData(request);
+        }
+
+        [HttpPost("GetEntityData")]
+        public EntityDataResponse GetEntityData([FromBody]EntityDataRequest request)
+        {
+            return _dataService.GetEntityData(request);
         }
     }
 }

@@ -7,6 +7,8 @@ using System.Linq;
 using Dapper;
 using DataAppPlatform.Core.DataService.Interfaces;
 using DataAppPlatform.Core.DataService.Models;
+using DataAppPlatform.Core.DataService.Models.EntityData;
+using DataAppPlatform.Core.DataService.Models.TableData;
 using DataAppPlatform.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,6 +44,40 @@ namespace DataAppPlatform.DataServices
                 Data = queryResult.ToArray(),
                 DebugInformation = sqlString
             };
+        }
+
+        public EntityDataResponse GetEntityData(EntityDataRequest request)
+        {
+            QueryModel queryModel = _dataRequestConverter.GetQueryModel(request);
+            var sqlString = _queryGenerator.GetQuery(queryModel);
+            Debug.WriteLine(sqlString);
+            var queryResult = GetData(sqlString, GetMappedObject);
+
+            return GetEntityDataResponse(queryResult);
+        }
+
+        private EntityDataResponse GetEntityDataResponse(IEnumerable<ExpandoObject> queryResult)
+        {
+            EntityDataResponse response = new EntityDataResponse()
+            {
+                Fields = new Dictionary<string, EntityDataField>()
+            };
+            IDictionary<string, object> valuesDictionary = queryResult.FirstOrDefault();
+
+            var groups = valuesDictionary.GroupBy(x => x.Key.Split('.')[0]);
+            foreach (var @group in groups)
+            {
+                var value = @group.FirstOrDefault(x => x.Key == $"{@group.Key}.value").Value;
+                var displayValue = @group.FirstOrDefault(x => x.Key == $"{@group.Key}.displayValue").Value?.ToString();
+
+                response.Fields.Add(@group.Key, new EntityDataField()
+                {
+                    Value = value,
+                    DisplayValue = displayValue
+                });
+            }
+
+            return response;
         }
 
         private ExpandoObject GetMappedObject(IDictionary<string, object> row)

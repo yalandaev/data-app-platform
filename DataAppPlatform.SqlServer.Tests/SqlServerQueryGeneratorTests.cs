@@ -5,6 +5,7 @@ using System.Reflection;
 using DataAppPlatform.Core.DataService.Interfaces;
 using DataAppPlatform.Core.DataService.Models;
 using DataAppPlatform.Core.DataService.Models.Filter;
+using DataAppPlatform.Core.DataService.Models.TableData;
 using Xunit;
 
 namespace DataAppPlatform.SqlServer.Tests

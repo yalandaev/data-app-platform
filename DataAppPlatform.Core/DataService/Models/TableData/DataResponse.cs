@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace DataAppPlatform.Core.DataService.Models
+﻿namespace DataAppPlatform.Core.DataService.Models.TableData
 {
     public class DataResponse
     {

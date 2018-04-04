@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using DataAppPlatform.Core.DataService.Models;
+using DataAppPlatform.Core.DataService.Models.EntityData;
 using DataAppPlatform.Core.DataService.Models.Filter;
+using DataAppPlatform.Core.DataService.Models.TableData;
 using DataAppPlatform.DataAccess;
 using DataAppPlatform.Entities;
 using DataAppPlatform.SqlServer;
@@ -188,6 +190,49 @@ namespace DataAppPlatform.DataServices.Tests
             var expectedJsonData =
                 File.ReadAllText(
                     $@"ExpectedResponses\DataServiceIntegrationTests\{MethodBase.GetCurrentMethod().Name}.json");
+
+            Assert.NotNull(response);
+            Assert.Equal(expectedJsonData, actualJsonData);
+        }
+
+        [Fact]
+        public void EntityDataRequestTest()
+        {
+            EntityDataRequest request = new EntityDataRequest()
+            {
+                EntitySchema = "Contacts",
+                EntityId = 1,
+                Columns = new List<string>()
+                {
+                    "FirstName",
+                    "LastName",
+                    "Manager"
+                }
+            };
+
+            var manager = new Contact()
+            {
+                FirstName = "Bruce",
+                LastName = "Lee"
+            };
+            var contact = new Contact()
+            {
+                FirstName = "Abram",
+                LastName = "Fishman",
+                Manager = manager
+            };
+            _dataContext.Contacts.Add(contact);
+            _dataContext.SaveChanges();
+
+            request.EntityId = contact.Id;
+
+            var response = _dataService.GetEntityData(request);
+
+            var actualJsonData = JsonConvert.SerializeObject(response.Fields, Formatting.Indented);
+            var expectedJsonData =
+                File.ReadAllText(
+                    $@"ExpectedResponses\DataServiceIntegrationTests\{MethodBase.GetCurrentMethod().Name}.json");
+            expectedJsonData = expectedJsonData.Replace("29", manager.Id.ToString());
 
             Assert.NotNull(response);
             Assert.Equal(expectedJsonData, actualJsonData);

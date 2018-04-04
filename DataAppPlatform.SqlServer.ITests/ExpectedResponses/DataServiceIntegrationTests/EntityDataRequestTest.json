@@ -1,0 +1,14 @@
+﻿{
+  "FirstName": {
+    "Value": "Abram",
+    "DisplayValue": null
+  },
+  "LastName": {
+    "Value": "Fishman",
+    "DisplayValue": null
+  },
+  "Manager": {
+    "Value": 29,
+    "DisplayValue": "Bruce"
+  }
+}
