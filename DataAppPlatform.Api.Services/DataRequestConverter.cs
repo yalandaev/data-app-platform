@@ -73,7 +73,6 @@ namespace DataAppPlatform.DataServices
 
         public QueryModel GetQueryModel(EntityDataRequest request)
         {
-            int joinCounter = 1;
             request.Columns.AddRange(request.Columns
                 .Where(column => _schemaInfoProvider.GetColumnType(request.EntitySchema, column) == ColumnType.Lookup)
                 .Select(column => $"{column}.{_schemaInfoProvider.GetTableDisplayColumn(_schemaInfoProvider.GetColumnSchema(request.EntitySchema, column))}"));
