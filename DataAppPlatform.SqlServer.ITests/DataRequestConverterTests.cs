@@ -332,5 +332,42 @@ namespace DataAppPlatform.DataServices.Tests
             Assert.True(queryModel.RootSchema.Join.First(x => x.ReferenceName == "Department").Columns.Any(x => x.Alias == "Department.displayValue" && x.Name == "[Title]"));
             
         }
+
+        [Fact]
+        public void Should_ReplaceLookupFields()
+        {
+            EntityDataUpdateRequest request = new EntityDataUpdateRequest()
+            {
+                EntitySchema = "Contacts",
+                EntityId = 50,
+                Fields = new Dictionary<string, EntityDataFieldUpdate>()
+            };
+            request.Fields.Add("Manager", new EntityDataFieldUpdate()
+            {
+                Value = 12467
+            });
+            request.Fields.Add("Department", new EntityDataFieldUpdate()
+            {
+                Value = 4654
+            });
+
+            var mockSchemaInfoProvider = new Mock<ISchemaInfoProvider>();
+            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]" || s == "Contacts"), It.Is<string>(s => s == "Manager"))).Returns("Contacts");
+            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]" || s == "Contacts"), It.Is<string>(s => s == "Department"))).Returns("Departments");
+            mockSchemaInfoProvider.Setup(x => x.GetTableDisplayColumn(It.Is<string>(s => s == "Contacts"))).Returns("FullName");
+            mockSchemaInfoProvider.Setup(x => x.GetTableDisplayColumn(It.Is<string>(s => s == "Departments"))).Returns("Title");
+            mockSchemaInfoProvider.Setup(x => x.GetColumnType(It.Is<string>(s => s == "Contacts"), It.Is<string>(s => s == "Manager" || s == "[Manager]"))).Returns(ColumnType.Lookup);
+            mockSchemaInfoProvider.Setup(x => x.GetColumnType(It.Is<string>(s => s == "Contacts"), It.Is<string>(s => s == "Department" || s == "[Department]"))).Returns(ColumnType.Lookup);
+            IDataRequestConverter dataRequestConverter = new DataRequestConverter(mockSchemaInfoProvider.Object);
+
+            request = dataRequestConverter.ReplaceLookupFields(request);
+
+            Assert.NotNull(request);
+            Assert.True(request.Fields.ContainsKey("ManagerId"));
+            Assert.False(request.Fields.ContainsKey("Manager"));
+            Assert.True(request.Fields.ContainsKey("DepartmentId"));
+            Assert.False(request.Fields.ContainsKey("Department"));
+
+        }
     }
 }

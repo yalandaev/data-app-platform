@@ -37,5 +37,13 @@ namespace DataAppPlatform.Api.Controllers
         {
             return _dataService.GetEntityData(request);
         }
+
+        [HttpPost("SetEntityData")]
+        public void SetEntityData([FromBody]EntityDataUpdateRequest request)
+        {
+            _dataService.SetEntityData(request);
+        }
+
+        
     }
 }

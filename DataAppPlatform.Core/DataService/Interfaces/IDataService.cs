@@ -8,5 +8,6 @@ namespace DataAppPlatform.Core.DataService.Interfaces
     {
         DataResponse GetData(DataRequest request);
         EntityDataResponse GetEntityData(EntityDataRequest request);
+        void SetEntityData(EntityDataUpdateRequest request);
     }
 }

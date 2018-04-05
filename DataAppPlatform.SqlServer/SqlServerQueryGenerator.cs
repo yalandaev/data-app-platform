@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using DataAppPlatform.Core.DataService.Interfaces;
+using DataAppPlatform.Core.DataService.Models.EntityData;
 using DataAppPlatform.Core.DataService.Models.Filter;
 using DataAppPlatform.Core.DataService.Models.TableData;
 
@@ -39,6 +40,20 @@ namespace DataAppPlatform.SqlServer
             query += $"\r\nORDER BY {queryModel.OrderBy} {queryModel.Sort}\r\nOFFSET {queryModel.Offset} ROWS FETCH NEXT {queryModel.Fetch} ROWS ONLY";
             
             return query;
+        }
+
+        public string GetUpdateQuery(EntityDataUpdateRequest request)
+        {
+            string query = $"UPDATE [{request.EntitySchema}]" + "\r\n";
+            query += "SET " + GetSetUpdateExpression(request.Fields) + "\r\n";
+            query += $"WHERE [Id] = {request.EntityId}";
+
+            return query;
+        }
+
+        private string GetSetUpdateExpression(Dictionary<string, EntityDataFieldUpdate> fileds)
+        {
+            return string.Join(", ", fileds.Select(x => $"[{x.Key}] = '{x.Value.Value}'").ToList());
         }
 
         private string GetWhereExpression(FilterGroup filter)

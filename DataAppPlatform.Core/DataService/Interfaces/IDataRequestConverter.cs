@@ -8,5 +8,6 @@ namespace DataAppPlatform.Core.DataService.Interfaces
     {
         QueryModel GetQueryModel(DataRequest request);
         QueryModel GetQueryModel(EntityDataRequest request);
+        EntityDataUpdateRequest ReplaceLookupFields(EntityDataUpdateRequest request);
     }
 }

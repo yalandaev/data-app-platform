@@ -2,6 +2,7 @@ import { PageViewModel } from './page-view-model.model';
 import { DataService } from '../../services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EntityDataRequest } from '../common/entity-data-request.model';
+import { EntityDataUpdateRequest } from './entity-data-update-request.model';
 
 export abstract class BasePageComponent {
     public viewModel: PageViewModel;
@@ -37,7 +38,12 @@ export abstract class BasePageComponent {
         return data;
     }
 
-    public getData() {
+    protected save() {
+        const updateRequest = new EntityDataUpdateRequest(this.viewModel.entitySchema, this.getOutputData(true), this.viewModel.entityId);
+        this.dataService.setEntityData(updateRequest).subscribe(response => { console.log(response); });
+    }
+
+    protected getData() {
         this.dataService.getEntityData(
             new EntityDataRequest(this.viewModel.entitySchema, this.viewModel.entityId, this.getQueryColumns()))
             .subscribe(response => {

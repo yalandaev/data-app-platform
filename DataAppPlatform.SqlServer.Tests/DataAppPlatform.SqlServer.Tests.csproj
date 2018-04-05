@@ -10,6 +10,7 @@
     <None Remove="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\ComplexAllFeaturesQueryTest.sql" />
     <None Remove="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\GenerateJoinsFromColumnConditionsTest.sql" />
     <None Remove="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\GenerateQueryFromEntityDataRequestTest.sql" />
+    <None Remove="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\GenerateQueryFromEntityDataUpdateRequestTest.sql" />
     <None Remove="ExpectedQueries\SqlServerQueryGeneratorTests\Should_GenerateQuery_When_ComplexQuery.sql" />
   </ItemGroup>
 
@@ -24,6 +25,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\GenerateQueryFromEntityDataRequestTest.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\GenerateQueryFromEntityDataUpdateRequestTest.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ExpectedQueries\SqlServerQueryGeneratorTests\Should_GenerateQuery_When_ComplexQuery.sql">

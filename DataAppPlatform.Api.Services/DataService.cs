@@ -56,6 +56,18 @@ namespace DataAppPlatform.DataServices
             return GetEntityDataResponse(queryResult);
         }
 
+        public void SetEntityData(EntityDataUpdateRequest request)
+        {
+            request = _dataRequestConverter.ReplaceLookupFields(request);
+            var queryString = _queryGenerator.GetUpdateQuery(request);
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                connection.Query(queryString);
+                connection.Dispose();
+            }
+        }
+
         private EntityDataResponse GetEntityDataResponse(IEnumerable<ExpandoObject> queryResult)
         {
             EntityDataResponse response = new EntityDataResponse()

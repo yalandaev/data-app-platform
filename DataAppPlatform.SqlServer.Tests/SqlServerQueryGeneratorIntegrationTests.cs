@@ -186,5 +186,37 @@ namespace DataAppPlatform.SqlServer.Tests
 
             Assert.Equal(expectedQuery, sqlQuery);
         }
+
+        [Fact]
+        public void GenerateQueryFromEntityDataUpdateRequestTest()
+        {
+            EntityDataUpdateRequest request = new EntityDataUpdateRequest()
+            {
+                EntitySchema = "Contacts",
+                EntityId = 50,
+                Fields = new Dictionary<string, EntityDataFieldUpdate>()
+            };
+            request.Fields.Add("FirstName", new EntityDataFieldUpdate()
+            {
+                Value = "Foo"
+            });
+            request.Fields.Add("LastName", new EntityDataFieldUpdate()
+            {
+                Value = "Bar"
+            });
+            request.Fields.Add("ManagerId", new EntityDataFieldUpdate()
+            {
+                Value = 12467
+            });
+
+            string sqlQuery = _sqlServerQueryGenerator.GetUpdateQuery(request);
+
+            var expectedQuery =
+                File.ReadAllText(
+                    $@"ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\{MethodBase.GetCurrentMethod().Name}.sql");
+
+
+            Assert.Equal(expectedQuery, sqlQuery);
+        }
     }
 }

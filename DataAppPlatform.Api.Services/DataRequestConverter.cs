@@ -99,6 +99,16 @@ namespace DataAppPlatform.DataServices
             return queryModel;
         }
 
+        public EntityDataUpdateRequest ReplaceLookupFields(EntityDataUpdateRequest request)
+        {
+            foreach (var field in request.Fields.Where(x => _schemaInfoProvider.GetColumnType(request.EntitySchema, x.Key) == ColumnType.Lookup).ToList())
+            {
+                request.Fields.Remove(field.Key);
+                request.Fields.Add($"{field.Key}Id", field.Value);
+            }
+            return request;
+        }
+
         private DataRequest TransformToDataRequest(EntityDataRequest request)
         {
             DataRequest dataRequest = new DataRequest()
