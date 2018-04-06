@@ -41,18 +41,18 @@ namespace DataAppPlatform.DataServices
                 Filter = request.Filter
             };
 
-            var rootColumns = request.Columns.Where(x => x.Name.Split('.').Length == 1)
+            var rootColumns = request.Columns.Where(x => x.Split('.').Length == 1)
                 .Select(x => new QueryColumnModel()
                 {
-                    Name = $"[{x.Name}]",
-                    Alias = $"{x.Name}"
+                    Name = $"[{x}]",
+                    Alias = $"{x}"
                 }).ToList();
 
             model.RootSchema.Columns.AddRange(rootColumns);
 
-            foreach (DataTableColumn column in request.Columns)
+            foreach (string column in request.Columns)
             {
-                var joinTokens = column.Name.Split('.');
+                var joinTokens = column.Split('.');
                 if(joinTokens.Length == 1)
                     continue;
 
@@ -113,10 +113,7 @@ namespace DataAppPlatform.DataServices
         {
             DataRequest dataRequest = new DataRequest()
             {
-                Columns = request.Columns.Select(column => new DataTableColumn()
-                {
-                    Name = column
-                }).ToList(),
+                Columns = request.Columns,
                 EntitySchema = request.EntitySchema,
                 Filter = new FilterGroup()
                 {
@@ -277,11 +274,11 @@ namespace DataAppPlatform.DataServices
             {
                 int joinLevel = joinModel.JoinPath.Split('.').Length + 1;
                 var columns = request.Columns
-                    .Where(x => x.Name.Split('.').Length == joinLevel && x.Name.StartsWith(joinModel.JoinPath))
+                    .Where(x => x.Split('.').Length == joinLevel && x.StartsWith(joinModel.JoinPath))
                     .Select(x => new QueryColumnModel()
                     {
-                        Name = $"[{x.Name.Split('.')[joinLevel - 1]}]",
-                        Alias = x.Name
+                        Name = $"[{x.Split('.')[joinLevel - 1]}]",
+                        Alias = x
                     });
                 joinModel.Columns.AddRange(columns);
                 SetColumnsToJoinTable(joinModel, request);

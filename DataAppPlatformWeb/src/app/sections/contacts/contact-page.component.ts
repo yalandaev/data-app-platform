@@ -1,11 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { EntityPropertySchema } from '../../controls/common/entity-property-schema';
-import { DataService } from '../../services/data.service';
+import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { EntityDataRequest } from '../../controls/common/entity-data-request.model';
 import { PageViewModel } from '../../controls/edit-page/page-view-model.model';
 import { BasePageComponent } from '../../controls/edit-page/base-edit-page.component';
-import { EntityDataUpdateRequest } from '../../controls/edit-page/entity-data-update-request.model';
+import { DataService } from '../../core.module';
 
 @Component({
     selector: 'app-contact-page',

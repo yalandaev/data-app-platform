@@ -1,6 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import { EntityPropertySchema } from '../../common/entity-property-schema';
-
+import { EntityPropertySchema } from '../../edit-page/entity-property-schema';
 
 @Component({
     selector: 'app-text-input',

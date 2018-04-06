@@ -183,7 +183,7 @@ namespace DataAppPlatform.SqlServer
 
         private string GetColumns(DataRequest request)
         {
-            return string.Join(',', request.Columns.Select(x => $"[{x.Name}]"));
+            return string.Join(',', request.Columns.Select(x => $"[{x}]"));
         }
     }
 }

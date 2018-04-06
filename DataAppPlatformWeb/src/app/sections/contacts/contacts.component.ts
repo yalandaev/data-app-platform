@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DataTableColumn } from '../../controls/data-table/models/column.model';
 import { ColumnType } from '../../controls/data-table/models/column-type.enum';
-import { FilterGroup } from '../../controls/data-table/models/filter/filter-group.model';
-import { LogicalOperation } from '../../controls/data-table/models/filter/logical-operation.enum';
-import { ComparisonType } from '../../controls/data-table/models/filter/comparison-type.enum';
-import { Condition } from '../../controls/data-table/models/filter/condition.model';
-import { ConditionType } from '../../controls/data-table/models/filter/condition-type.enum';
+import { FilterGroup, Condition, LogicalOperation, ComparisonType, ConditionType } from '../../core.module';
+
 
 @Component({
   selector: 'app-contacts',

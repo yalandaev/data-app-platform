@@ -1,5 +1,6 @@
-import { EntityPropertySchema } from '../common/entity-property-schema';
-import { IDictionary } from '../../common/IDictionary.model';
+import { IDictionary } from '../../core.module/shared';
+import { EntityPropertySchema } from './entity-property-schema';
+
 
 export class PageViewModel {
     constructor(

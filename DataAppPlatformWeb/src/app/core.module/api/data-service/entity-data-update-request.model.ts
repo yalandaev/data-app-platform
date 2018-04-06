@@ -1,5 +1,5 @@
-import { IDictionary } from '../../common/IDictionary.model';
 import { EntityDataFieldUpdate } from './entity-data-field-update.model';
+import { IDictionary } from '../../shared/IDictionary.model';
 
 export class EntityDataUpdateRequest {
     constructor(

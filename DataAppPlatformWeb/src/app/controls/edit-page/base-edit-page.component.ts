@@ -1,8 +1,6 @@
 import { PageViewModel } from './page-view-model.model';
-import { DataService } from '../../services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { EntityDataRequest } from '../common/entity-data-request.model';
-import { EntityDataUpdateRequest } from './entity-data-update-request.model';
+import { DataService, EntityDataUpdateRequest, EntityDataRequest } from '../../core.module';
 
 export abstract class BasePageComponent {
     public viewModel: PageViewModel;

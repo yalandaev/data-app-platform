@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { DataRequest } from '../controls/data-table/models/data-request.model';
 import { HttpClient } from '@angular/common/http';
-import { EntityDataRequest } from '../controls/common/entity-data-request.model';
-import { EntityDataUpdateRequest } from '../controls/edit-page/entity-data-update-request.model';
+import { DataResponse } from '../api/data-service/data-response.model';
+import { DataRequest } from '../api/data-service/data-request.model';
+import { EntityDataRequest } from '../api/data-service/entity-data-request.model';
+import { EntityDataUpdateRequest } from '../api/data-service/entity-data-update-request.model';
 
 @Injectable()
 export class DataService {
@@ -12,8 +13,8 @@ export class DataService {
 
   constructor(private http: HttpClient) { }
 
-  getData(request: DataRequest): Observable<any> {
-    return this.http.post(this.url + 'GetData', request);
+  getData(request: DataRequest): Observable<DataResponse> {
+    return this.http.post<DataResponse>(this.url + 'GetData', request);
   }
 
   getEntityData(request: EntityDataRequest): Observable<any> {

@@ -19,9 +19,9 @@ namespace DataAppPlatform.SqlServer.Tests
             DataRequest request = new DataRequest()
             {
                 EntitySchema = "Contact",
-                Columns = new List<DataTableColumn>()
+                Columns = new List<string>()
                 {
-                    new DataTableColumn() { Name = "Name", Type = ColumnType.Text }
+                    "Name"
                 },
                 Page = 1,
                 PageSize = 10
@@ -39,10 +39,10 @@ namespace DataAppPlatform.SqlServer.Tests
             DataRequest request = new DataRequest()
             {
                 EntitySchema = "Contact",
-                Columns = new List<DataTableColumn>()
+                Columns = new List<string>()
                 {
-                    new DataTableColumn() { Name = "Name", Type = ColumnType.Text },
-                    new DataTableColumn() { Name = "Age", Type = ColumnType.Int }
+                    "Name",
+                    "Age"
                 },
                 Page = 1,
                 PageSize = 10
@@ -60,9 +60,9 @@ namespace DataAppPlatform.SqlServer.Tests
             DataRequest request = new DataRequest()
             {
                 EntitySchema = "Contact",
-                Columns = new List<DataTableColumn>()
+                Columns = new List<string>()
                 {
-                    new DataTableColumn() { Name = "Name", Type = ColumnType.Text }
+                    "Name"
                 },
                 Page = 1,
                 PageSize = 15
@@ -80,9 +80,9 @@ namespace DataAppPlatform.SqlServer.Tests
             DataRequest request = new DataRequest()
             {
                 EntitySchema = "Contact",
-                Columns = new List<DataTableColumn>()
+                Columns = new List<string>()
                 {
-                    new DataTableColumn() { Name = "Name", Type = ColumnType.Text }
+                    "Name"
                 },
                 Sort = Sort.ASC,
                 OrderBy = "Name",
@@ -102,9 +102,9 @@ namespace DataAppPlatform.SqlServer.Tests
             DataRequest request = new DataRequest()
             {
                 EntitySchema = "Contact",
-                Columns = new List<DataTableColumn>()
+                Columns = new List<string>()
                 {
-                    new DataTableColumn() { Name = "Name", Type = ColumnType.Text }
+                    "Name"
                 },
                 Page = 3,
                 PageSize = 15
@@ -120,81 +120,88 @@ namespace DataAppPlatform.SqlServer.Tests
         {
             ISqlQueryGenerator provider = new SqlServerQueryGenerator();
 
-            QueryModel queryModel = new QueryModel();
-            queryModel.Offset = 0;
-            queryModel.Fetch = 10;
-            queryModel.RootSchema = new QueryTableModel()
+            QueryModel queryModel = new QueryModel
             {
-                TableName = "[Contacts]",
-                Alias = "[T1]",
-                ReferenceName = string.Empty,
-                Columns = new List<QueryColumnModel>()
+                Offset = 0,
+                Fetch = 10,
+                RootSchema = new QueryTableModel()
                 {
-                    new QueryColumnModel() {Name = "[FirstName]", Alias = "FirstName"},
-                    new QueryColumnModel() {Name = "[LastName]", Alias = "LastName"}
-                },
-                Join = new List<QueryTableModel>()
-                {
-                    new QueryTableModel()
+                    TableName = "[Contacts]",
+                    Alias = "[T1]",
+                    ReferenceName = string.Empty,
+                    Columns = new List<QueryColumnModel>()
                     {
-                        TableName = "[Contacts]",
-                        Alias = "[T2]",
-                        ReferenceName = "Manager",
-                        JoinPath = "Manager",
-                        Columns = new List<QueryColumnModel>()
+                        new QueryColumnModel() {Name = "[FirstName]", Alias = "FirstName"},
+                        new QueryColumnModel() {Name = "[LastName]", Alias = "LastName"}
+                    },
+                    Join = new List<QueryTableModel>()
+                    {
+                        new QueryTableModel()
                         {
-                            new QueryColumnModel() {Name = "[FirstName]", Alias = "Manager.FirstName"}
-                        },
-                        Join = new List<QueryTableModel>()
-                        {
-                            new QueryTableModel()
+                            TableName = "[Contacts]",
+                            Alias = "[T2]",
+                            ReferenceName = "Manager",
+                            JoinPath = "Manager",
+                            Columns = new List<QueryColumnModel>()
                             {
-                                TableName = "[Departments]",
-                                Alias = "[T3]",
-                                ReferenceName = "Department",
-                                JoinPath = "Manager.Department",
-                                Columns = new List<QueryColumnModel>()
+                                new QueryColumnModel() {Name = "[FirstName]", Alias = "Manager.FirstName"}
+                            },
+                            Join = new List<QueryTableModel>()
+                            {
+                                new QueryTableModel()
                                 {
-                                    new QueryColumnModel() {Name = "[Name]", Alias = "Manager.Department.Name"}
+                                    TableName = "[Departments]",
+                                    Alias = "[T3]",
+                                    ReferenceName = "Department",
+                                    JoinPath = "Manager.Department",
+                                    Columns = new List<QueryColumnModel>()
+                                    {
+                                        new QueryColumnModel() {Name = "[Name]", Alias = "Manager.Department.Name"}
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            };
-            queryModel.Filter = new FilterGroup()
-            {
-                LogicalOperation = LogicalOperation.AND,
-                Conditions = new List<Condition>()
-                {
-                    new Condition()
-                    {
-                        Column = "[T1].[FirstName]",
-                        ComparisonType = ComparisonType.Equals,
-                        Value = "Value1"
-                    },
-                    new Condition() {Column = "[T1].[LastName]", ComparisonType = ComparisonType.FilledIn}
                 },
-                FilterGroups = new List<FilterGroup>()
+                Filter = new FilterGroup()
                 {
-                    new FilterGroup()
+                    LogicalOperation = LogicalOperation.AND,
+                    Conditions = new List<Condition>()
                     {
-                        LogicalOperation = LogicalOperation.AND,
-                        Conditions = new List<Condition>()
+                        new Condition()
                         {
-                            new Condition()
-                            {
-                                Column = "[T3].[Name]",
-                                ComparisonType = ComparisonType.NotEquals,
-                                Value = "Value2"
-                            },
-                            new Condition() {Column = "[T3].[Title]", ComparisonType = ComparisonType.Equals, Value = "Company"}
+                            Column = "[T1].[FirstName]",
+                            ComparisonType = ComparisonType.Equals,
+                            Value = "Value1"
                         },
-                        FilterGroups = new List<FilterGroup>()
+                        new Condition() {Column = "[T1].[LastName]", ComparisonType = ComparisonType.FilledIn}
+                    },
+                    FilterGroups = new List<FilterGroup>()
+                    {
+                        new FilterGroup()
+                        {
+                            LogicalOperation = LogicalOperation.AND,
+                            Conditions = new List<Condition>()
+                            {
+                                new Condition()
+                                {
+                                    Column = "[T3].[Name]",
+                                    ComparisonType = ComparisonType.NotEquals,
+                                    Value = "Value2"
+                                },
+                                new Condition()
+                                {
+                                    Column = "[T3].[Title]",
+                                    ComparisonType = ComparisonType.Equals,
+                                    Value = "Company"
+                                }
+                            },
+                            FilterGroups = new List<FilterGroup>()
+                        }
                     }
-                }
+                },
+                OrderBy = "[T1].[FirstName]"
             };
-            queryModel.OrderBy = "[T1].[FirstName]";
 
             var expectedQuery =
                 File.ReadAllText(

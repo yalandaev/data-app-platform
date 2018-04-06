@@ -18,22 +18,10 @@ namespace DataAppPlatform.DataServices.Tests
         {
             DataRequest request = new DataRequest()
             {
-                Columns = new List<DataTableColumn>()
+                Columns = new List<string>()
                 {
-                    new DataTableColumn()
-                    {
-                        DisplayName = "First name",
-                        Name = "FirstName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    },
-                    new DataTableColumn()
-                    {
-                        DisplayName = "Last name",
-                        Name = "LastName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    }
+                    "FirstName",
+                    "LastName"
                 },
                 EntitySchema = "Contacts",
                 Page = 1,
@@ -64,15 +52,9 @@ namespace DataAppPlatform.DataServices.Tests
         {
             DataRequest request = new DataRequest()
             {
-                Columns = new List<DataTableColumn>()
+                Columns = new List<string>()
                 {
-                    new DataTableColumn()
-                    {
-                        DisplayName = "First name",
-                        Name = "FirstName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    }
+                    "FirstName"
                 },
                 EntitySchema = "Contacts",
                 Page = 3,
@@ -99,57 +81,15 @@ namespace DataAppPlatform.DataServices.Tests
         {
             DataRequest request = new DataRequest()
             {
-                Columns = new List<DataTableColumn>()
+                Columns = new List<string>()
                 {
-                    new DataTableColumn()
-                    {
-                        DisplayName = "First name",
-                        Name = "FirstName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    },
-                    new DataTableColumn()
-                    {
-                        DisplayName = "Manager",
-                        Name = "Manager.FirstName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    },
-                    new DataTableColumn()
-                    {
-                        DisplayName = "Manager",
-                        Name = "Manager.LastName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    },
-                    new DataTableColumn()
-                    {
-                        DisplayName = "Department",
-                        Name = "Department.Name",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    },
-                    new DataTableColumn()
-                    {
-                        DisplayName = "Department Head FirstName",
-                        Name = "Department.Head.FirstName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    },
-                    new DataTableColumn()
-                    {
-                        DisplayName = "Department Head LastName",
-                        Name = "Department.Head.LastName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    },
-                    new DataTableColumn()
-                    {
-                        DisplayName = "Department Manager Head FirstName",
-                        Name = "Department.Head.Manager.FirstName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    }
+                    "FirstName",
+                    "Manager.FirstName",
+                    "Manager.LastName",
+                    "Department.Name",
+                    "Department.Head.FirstName",
+                    "Department.Head.LastName",
+                    "Department.Head.Manager.FirstName"
                 },
                 EntitySchema = "Contacts",
                 Page = 1,
@@ -196,29 +136,11 @@ namespace DataAppPlatform.DataServices.Tests
         {
             DataRequest request = new DataRequest()
             {
-                Columns = new List<DataTableColumn>()
+                Columns = new List<string>()
                 {
-                    new DataTableColumn()
-                    {
-                        DisplayName = "Department Head First Name",
-                        Name = "Department.Head.FirstName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    },
-                    new DataTableColumn()
-                    {
-                        DisplayName = "Department Head Last Name",
-                        Name = "Department.Head.LastName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    },
-                    new DataTableColumn()
-                    {
-                        DisplayName = "Department Manager Head First Name",
-                        Name = "Department.Head.Manager.FirstName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    }
+                    "Department.Head.FirstName",
+                    "Department.Head.LastName",
+                    "Department.Head.Manager.FirstName"
                 },
                 EntitySchema = "Contacts",
                 Page = 1,
@@ -247,15 +169,9 @@ namespace DataAppPlatform.DataServices.Tests
         {
             DataRequest request = new DataRequest()
             {
-                Columns = new List<DataTableColumn>()
+                Columns = new List<string>()
                 {
-                    new DataTableColumn()
-                    {
-                        DisplayName = "FirstName",
-                        Name = "FirstName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    }
+                    "FirstName"
                 },
                 Filter = new FilterGroup()
                 {

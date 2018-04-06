@@ -36,22 +36,10 @@ namespace DataAppPlatform.DataServices.Tests
         {
             DataRequest request = new DataRequest()
             {
-                Columns = new List<DataTableColumn>()
+                Columns = new List<string>()
                 {
-                    new DataTableColumn()
-                    {
-                        DisplayName = "First name",
-                        Name = "FirstName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    },
-                    new DataTableColumn()
-                    {
-                        DisplayName = "Last name",
-                        Name = "LastName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    }
+                    "FirstName",
+                    "LastName"
                 },
                 EntitySchema = "Contacts",
                 Page = 1,
@@ -81,15 +69,9 @@ namespace DataAppPlatform.DataServices.Tests
         {
             DataRequest request = new DataRequest()
             {
-                Columns = new List<DataTableColumn>()
+                Columns = new List<string>()
                 {
-                    new DataTableColumn()
-                    {
-                        DisplayName = "First name",
-                        Name = "FirstName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    }
+                    "FirstName"
                 },
                 EntitySchema = "Contacts",
                 Page = 1,
@@ -117,15 +99,9 @@ namespace DataAppPlatform.DataServices.Tests
         {
             DataRequest request = new DataRequest()
             {
-                Columns = new List<DataTableColumn>()
+                Columns = new List<string>()
                 {
-                    new DataTableColumn()
-                    {
-                        DisplayName = "First name",
-                        Name = "FirstName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    }
+                    "FirstName"
                 },
                 EntitySchema = "Contacts",
                 Page = 2,
@@ -153,22 +129,10 @@ namespace DataAppPlatform.DataServices.Tests
         {
             DataRequest request = new DataRequest()
             {
-                Columns = new List<DataTableColumn>()
+                Columns = new List<string>()
                 {
-                    new DataTableColumn()
-                    {
-                        DisplayName = "First name",
-                        Name = "FirstName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    },
-                    new DataTableColumn()
-                    {
-                        DisplayName = "Manager",
-                        Name = "Manager.FirstName",
-                        Type = ColumnType.Text,
-                        Width = 10
-                    }
+                    "FirstName",
+                    "Manager.FirstName"
                 },
                 EntitySchema = "Contacts",
                 Page = 1,

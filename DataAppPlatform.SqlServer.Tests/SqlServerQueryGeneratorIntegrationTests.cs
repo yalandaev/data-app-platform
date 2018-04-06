@@ -41,16 +41,16 @@ namespace DataAppPlatform.SqlServer.Tests
             DataRequest request = new DataRequest()
             {
                 EntitySchema = "Contacts",
-                Columns = new List<DataTableColumn>()
+                Columns = new List<string>()
                 {
-                    new DataTableColumn() { Name = "FirstName", Type = ColumnType.Text },
-                    new DataTableColumn() { Name = "LastName", Type = ColumnType.Text },
-                    new DataTableColumn() { Name = "Age", Type = ColumnType.Int },
-                    new DataTableColumn() { Name = "BirthDate", Type = ColumnType.Date },
-                    new DataTableColumn() { Name = "Manager.FirstName", Type = ColumnType.Text },
-                    new DataTableColumn() { Name = "Manager.LastName", Type = ColumnType.Text },
-                    new DataTableColumn() { Name = "Manager.Department.Head.FirstName", Type = ColumnType.Text },
-                    new DataTableColumn() { Name = "Manager.Department.Head.Age", Type = ColumnType.Int },
+                    "FirstName",
+                    "LastName",
+                    "Age",
+                    "BirthDate",
+                    "Manager.FirstName",
+                    "Manager.LastName",
+                    "Manager.Department.Head.FirstName",
+                    "Manager.Department.Head.Age"
                 },
                 Filter = new FilterGroup()
                 {
@@ -98,9 +98,9 @@ namespace DataAppPlatform.SqlServer.Tests
             DataRequest request = new DataRequest()
             {
                 EntitySchema = "Contacts",
-                Columns = new List<DataTableColumn>()
+                Columns = new List<string>()
                 {
-                    new DataTableColumn() { Name = "FirstName", Type = ColumnType.Text }
+                    "FirstName"
                 },
                 Filter = new FilterGroup()
                 {
@@ -132,9 +132,9 @@ namespace DataAppPlatform.SqlServer.Tests
             DataRequest request = new DataRequest()
             {
                 EntitySchema = "Contacts",
-                Columns = new List<DataTableColumn>()
+                Columns = new List<string>()
                 {
-                    new DataTableColumn() { Name = "FirstName", Type = ColumnType.Text }
+                    "FirstName"
                 },
                 Filter = new FilterGroup()
                 {

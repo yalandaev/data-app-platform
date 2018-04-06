@@ -1,10 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DataTableColumn } from './models/column.model';
-import { DataService } from '../../services/data.service';
-import { DataRequest } from './models/data-request.model';
-import { FilterGroup } from './models/filter/filter-group.model';
-import { Sort } from './models/filter/sort.enum';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
+import { DataRequest, FilterGroup, Sort, DataService } from '../../core.module';
 
 @Component({
   selector: 'app-data-table',
@@ -19,7 +16,6 @@ export class DataTableComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private router: Router) {
-
   }
 
   @Input()
@@ -44,7 +40,13 @@ export class DataTableComponent implements OnInit {
 
   ngOnInit() {
     this.dataService.getData(
-      new DataRequest(this.entitySchema, this.orderBy, this.sort, this.columns, this.filter, this.currentPage, this.pageSize))
+      new DataRequest(this.entitySchema,
+        this.orderBy,
+        this.sort,
+        this.columns.map(f => f.name),
+        this.filter,
+        this.currentPage,
+        this.pageSize))
     .subscribe(data => {
       this.data = data.Data;
       this.debugInformation = data.DebugInformation;
