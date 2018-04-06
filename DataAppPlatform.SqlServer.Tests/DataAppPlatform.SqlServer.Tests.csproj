@@ -8,14 +8,18 @@
 
   <ItemGroup>
     <None Remove="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\ComplexAllFeaturesQueryTest.sql" />
+    <None Remove="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\GenerateInsertQueryFromEntityDataChangeRequestTest.sql" />
     <None Remove="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\GenerateJoinsFromColumnConditionsTest.sql" />
+    <None Remove="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\GenerateQueryFromEntityDataChangeRequestTest.sql" />
     <None Remove="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\GenerateQueryFromEntityDataRequestTest.sql" />
-    <None Remove="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\GenerateQueryFromEntityDataUpdateRequestTest.sql" />
     <None Remove="ExpectedQueries\SqlServerQueryGeneratorTests\Should_GenerateQuery_When_ComplexQuery.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\ComplexAllFeaturesQueryTest.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\GenerateInsertQueryFromEntityDataChangeRequestTest.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\GenerateJoinsFromColumnConditionsTest.sql">
@@ -27,7 +31,7 @@
     <Content Include="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\GenerateQueryFromEntityDataRequestTest.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\GenerateQueryFromEntityDataUpdateRequestTest.sql">
+    <Content Include="ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\GenerateQueryFromEntityDataChangeRequestTest.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ExpectedQueries\SqlServerQueryGeneratorTests\Should_GenerateQuery_When_ComplexQuery.sql">

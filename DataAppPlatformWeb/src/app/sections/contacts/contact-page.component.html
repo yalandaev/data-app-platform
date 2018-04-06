@@ -1,14 +1,20 @@
 <app-text-input
+    [(model)]="viewModel.fields['Id']"
+></app-text-input>
+<app-text-input
     [(model)]="viewModel.fields['FirstName']"
 ></app-text-input>
 <app-text-input
     [(model)]="viewModel.fields['LastName']"
 ></app-text-input> 
 <app-text-input
-    [(model)]="viewModel.fields['LastName']"
+    [(model)]="viewModel.fields['Phone']"
+></app-text-input> 
+<app-text-input
+    [(model)]="viewModel.fields['Email']"
 ></app-text-input> 
 
-<button (click)="save()">Save</button>
+<button (click)="save()">Save</button><button (click)="close()">Close</button>
 <br>
 
 <p>ViewModel:</p>

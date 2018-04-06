@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataTableColumn } from '../../controls/data-table/models/column.model';
 import { ColumnType } from '../../controls/data-table/models/column-type.enum';
 import { FilterGroup, Condition, LogicalOperation, ComparisonType, ConditionType } from '../../core.module';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -15,7 +16,9 @@ export class ContactsComponent implements OnInit {
   filter: FilterGroup = null;
   data = null;
 
-  constructor() {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute) {
     this.columns = [
       {
         name: 'Id',
@@ -65,20 +68,31 @@ export class ContactsComponent implements OnInit {
       this.filter = new FilterGroup(
         LogicalOperation.AND,
         [
-          new Condition('FirstName', ComparisonType.FilledIn),
-          new Condition('Manager.FirstName', ComparisonType.Equals, ConditionType.Constant, 'Mark'),
-          new Condition('LastName', ComparisonType.StartWith, ConditionType.Constant, 'Yalandaev')
-        ],
-        [
-          new FilterGroup(
-            LogicalOperation.OR,
-            [
-              new Condition('Manager.Phone', ComparisonType.Equals, ConditionType.Constant, '79171573840'),
-              new Condition('Manager.Email', ComparisonType.Equals, ConditionType.Constant, 'ivanov@gmail.com')
-            ], [])
+          new Condition('FirstName', ComparisonType.FilledIn)
         ]);
+
+      // Big example:
+      // this.filter = new FilterGroup(
+      //   LogicalOperation.AND,
+      //   [
+      //     new Condition('FirstName', ComparisonType.FilledIn),
+      //     new Condition('Manager.FirstName', ComparisonType.FilledIn, ConditionType.Constant, 'Mark'),
+      //     new Condition('LastName', ComparisonType.StartWith, ConditionType.Constant, 'Yalandaev')
+      //   ],
+      //   [
+      //     new FilterGroup(
+      //       LogicalOperation.OR,
+      //       [
+      //         new Condition('Manager.Phone', ComparisonType.Equals, ConditionType.Constant, '79171573840'),
+      //         new Condition('Manager.Email', ComparisonType.Equals, ConditionType.Constant, 'ivanov@gmail.com')
+      //       ], [])
+      //   ]);
     }
 
   ngOnInit() {
+  }
+
+  create() {
+    this.router.navigate(['/contacts/new']); // TODO: generalize it for common case
   }
 }

@@ -3,7 +3,7 @@ using DataAppPlatform.Core.DataService.Models.Filter;
 
 namespace DataAppPlatform.Core.DataService.Models.TableData
 {
-    public class DataRequest
+    public class DataQueryRequest
     {
         public string EntitySchema { get; set; }
         public string OrderBy { get; set; }

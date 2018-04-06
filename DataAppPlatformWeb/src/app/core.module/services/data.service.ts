@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { DataResponse } from '../api/data-service/data-response.model';
-import { DataRequest } from '../api/data-service/data-request.model';
-import { EntityDataRequest } from '../api/data-service/entity-data-request.model';
-import { EntityDataUpdateRequest } from '../api/data-service/entity-data-update-request.model';
+
+import { EntityDataQueryRequest } from '../api/data-service/entity-data-query-request.model';
+import { DataQueryRequest } from '../api/data-service/data-query-request.model';
+import { EntityDataChangeRequest } from '../api/data-service/entity-data-change-request.model';
+
 
 @Injectable()
 export class DataService {
@@ -13,15 +15,19 @@ export class DataService {
 
   constructor(private http: HttpClient) { }
 
-  getData(request: DataRequest): Observable<DataResponse> {
+  getData(request: DataQueryRequest): Observable<DataResponse> {
     return this.http.post<DataResponse>(this.url + 'GetData', request);
   }
 
-  getEntityData(request: EntityDataRequest): Observable<any> {
-    return this.http.post(this.url + 'GetEntityData', request);
+  getEntityData(request: EntityDataQueryRequest): Observable<any> {
+    return this.http.post(this.url + 'GetEntity', request);
   }
 
-  setEntityData(request: EntityDataUpdateRequest): Observable<any> {
-    return this.http.post(this.url + 'SetEntityData', request);
+  setEntityData(request: EntityDataChangeRequest): Observable<any> {
+    return this.http.post(this.url + 'SetEntity', request);
+  }
+
+  createEntityData(request: EntityDataChangeRequest): Observable<any> {
+    return this.http.post(this.url + 'CreateEntity', request);
   }
 }

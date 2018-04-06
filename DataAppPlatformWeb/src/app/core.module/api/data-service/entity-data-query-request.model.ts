@@ -1,4 +1,4 @@
-export class EntityDataRequest {
+export class EntityDataQueryRequest {
     constructor(
         private entitySchema: string,
         private entityId: number,

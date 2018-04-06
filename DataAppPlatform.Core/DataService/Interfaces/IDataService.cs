@@ -6,8 +6,9 @@ namespace DataAppPlatform.Core.DataService.Interfaces
 {
     public interface IDataService
     {
-        DataResponse GetData(DataRequest request);
-        EntityDataResponse GetEntityData(EntityDataRequest request);
-        void SetEntityData(EntityDataUpdateRequest request);
+        DataResponse GetData(DataQueryRequest queryRequest);
+        EntityDataResponse GetEntity(EntityDataQueryRequest queryRequest);
+        void SetEntity(EntityDataChangeRequest request);
+        void CreateEntity(EntityDataChangeRequest request);
     }
 }

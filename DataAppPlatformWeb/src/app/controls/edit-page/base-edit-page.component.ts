@@ -1,23 +1,34 @@
 import { PageViewModel } from './page-view-model.model';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DataService, EntityDataUpdateRequest, EntityDataRequest } from '../../core.module';
+import { DataService, EntityDataChangeRequest, EntityDataQueryRequest } from '../../core.module';
+
+export enum EditPageMode {
+    New,
+    Edit
+}
 
 export abstract class BasePageComponent {
     public viewModel: PageViewModel;
+    protected mode: EditPageMode;
 
     constructor(
         private dataService: DataService,
-        private router: Router,
-        private route: ActivatedRoute
+        protected router: Router,
+        protected route: ActivatedRoute
     ) {
         this.route.params.subscribe( params => {
+            const idParam = params['id'];
+            this.mode = idParam === 'new' ? EditPageMode.New : EditPageMode.Edit;
             this.viewModel = this.getViewModel();
-            this.viewModel.entityId = params['id'];
-            this.getData();
+            if (this.mode === EditPageMode.Edit) {
+                this.viewModel.entityId = idParam;
+                this.getData();
+            }
         });
     }
 
     abstract getViewModel(): PageViewModel;
+    abstract close(): void;
 
     protected getQueryColumns() {
         return Object.keys(this.viewModel.fields);
@@ -37,13 +48,17 @@ export abstract class BasePageComponent {
     }
 
     protected save() {
-        const updateRequest = new EntityDataUpdateRequest(this.viewModel.entitySchema, this.getOutputData(true), this.viewModel.entityId);
-        this.dataService.setEntityData(updateRequest).subscribe(response => { console.log(response); });
+        const updateRequest = new EntityDataChangeRequest(this.viewModel.entitySchema, this.getOutputData(true), this.viewModel.entityId);
+        if (this.mode === EditPageMode.Edit) {
+            this.dataService.setEntityData(updateRequest).subscribe(response => { console.log(response); });
+        } else {
+            this.dataService.createEntityData(updateRequest).subscribe(response => { console.log(response); });
+        }
     }
 
     protected getData() {
         this.dataService.getEntityData(
-            new EntityDataRequest(this.viewModel.entitySchema, this.viewModel.entityId, this.getQueryColumns()))
+            new EntityDataQueryRequest(this.viewModel.entitySchema, this.viewModel.entityId, this.getQueryColumns()))
             .subscribe(response => {
                 const data = response.Fields;
                 Object.keys(this.viewModel.fields).forEach(key => {

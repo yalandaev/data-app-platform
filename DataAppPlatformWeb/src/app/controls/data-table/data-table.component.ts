@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DataTableColumn } from './models/column.model';
 import { Router } from '@angular/router';
-import { DataRequest, FilterGroup, Sort, DataService } from '../../core.module';
+import { FilterGroup, Sort, DataService, DataQueryRequest } from '../../core.module';
+
 
 @Component({
   selector: 'app-data-table',
@@ -40,7 +41,7 @@ export class DataTableComponent implements OnInit {
 
   ngOnInit() {
     this.dataService.getData(
-      new DataRequest(this.entitySchema,
+      new DataQueryRequest(this.entitySchema,
         this.orderBy,
         this.sort,
         this.columns.map(f => f.name),

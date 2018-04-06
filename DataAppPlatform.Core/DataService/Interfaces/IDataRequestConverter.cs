@@ -6,8 +6,9 @@ namespace DataAppPlatform.Core.DataService.Interfaces
 {
     public interface IDataRequestConverter
     {
-        QueryModel GetQueryModel(DataRequest request);
-        QueryModel GetQueryModel(EntityDataRequest request);
-        EntityDataUpdateRequest ReplaceLookupFields(EntityDataUpdateRequest request);
+        QueryModel GetQueryModel(DataQueryRequest queryRequest);
+        QueryModel GetQueryModel(EntityDataQueryRequest queryRequest);
+        void ReplaceLookupFields(EntityDataChangeRequest request);
+        void AddTimestamps(EntityDataChangeRequest request);
     }
 }

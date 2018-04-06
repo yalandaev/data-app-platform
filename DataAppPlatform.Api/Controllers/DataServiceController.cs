@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using DataAppPlatform.Core.DataService.Interfaces;
@@ -27,23 +28,27 @@ namespace DataAppPlatform.Api.Controllers
         }
 
         [HttpPost("GetData")]
-        public DataResponse GetData([FromBody]DataRequest request)
+        public DataResponse GetData([FromBody]DataQueryRequest queryRequest)
         {
-            return _dataService.GetData(request);
+            return _dataService.GetData(queryRequest);
         }
 
-        [HttpPost("GetEntityData")]
-        public EntityDataResponse GetEntityData([FromBody]EntityDataRequest request)
+        [HttpPost("GetEntity")]
+        public EntityDataResponse GetEntity([FromBody]EntityDataQueryRequest queryRequest)
         {
-            return _dataService.GetEntityData(request);
+            return _dataService.GetEntity(queryRequest);
         }
 
-        [HttpPost("SetEntityData")]
-        public void SetEntityData([FromBody]EntityDataUpdateRequest request)
+        [HttpPost("SetEntity")]
+        public void SetEntity([FromBody]EntityDataChangeRequest request)
         {
-            _dataService.SetEntityData(request);
+            _dataService.SetEntity(request);
         }
 
-        
+        [HttpPost("CreateEntity")]
+        public void CreateEntity([FromBody]EntityDataChangeRequest request)
+        {
+            _dataService.CreateEntity(request);
+        }
     }
 }

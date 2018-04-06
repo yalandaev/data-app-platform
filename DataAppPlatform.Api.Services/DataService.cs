@@ -29,9 +29,9 @@ namespace DataAppPlatform.DataServices
             _connectionString = _dataContext.Database.GetDbConnection().ConnectionString;
         }
 
-        public DataResponse GetData(DataRequest request)
+        public DataResponse GetData(DataQueryRequest queryRequest)
         {
-            QueryModel queryModel = _dataRequestConverter.GetQueryModel(request);
+            QueryModel queryModel = _dataRequestConverter.GetQueryModel(queryRequest);
             var sqlString = _queryGenerator.GetQuery(queryModel);
 
             Debug.WriteLine(sqlString);
@@ -46,9 +46,9 @@ namespace DataAppPlatform.DataServices
             };
         }
 
-        public EntityDataResponse GetEntityData(EntityDataRequest request)
+        public EntityDataResponse GetEntity(EntityDataQueryRequest queryRequest)
         {
-            QueryModel queryModel = _dataRequestConverter.GetQueryModel(request);
+            QueryModel queryModel = _dataRequestConverter.GetQueryModel(queryRequest);
             var sqlString = _queryGenerator.GetQuery(queryModel);
             Debug.WriteLine(sqlString);
             var queryResult = GetData(sqlString, GetMappedObject);
@@ -56,14 +56,27 @@ namespace DataAppPlatform.DataServices
             return GetEntityDataResponse(queryResult);
         }
 
-        public void SetEntityData(EntityDataUpdateRequest request)
+        public void SetEntity(EntityDataChangeRequest request)
         {
-            request = _dataRequestConverter.ReplaceLookupFields(request);
+            _dataRequestConverter.ReplaceLookupFields(request);
             var queryString = _queryGenerator.GetUpdateQuery(request);
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 connection.Query(queryString);
+                connection.Dispose();
+            }
+        }
+
+        public void CreateEntity(EntityDataChangeRequest request)
+        {
+            _dataRequestConverter.ReplaceLookupFields(request);
+            _dataRequestConverter.AddTimestamps(request);
+            var queryString = _queryGenerator.GetInsertQuery(request);
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var result = connection.Query(queryString);
                 connection.Dispose();
             }
         }

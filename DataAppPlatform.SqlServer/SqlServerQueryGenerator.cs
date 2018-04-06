@@ -13,13 +13,13 @@ namespace DataAppPlatform.SqlServer
     public class SqlServerQueryGenerator: ISqlQueryGenerator
     {
         [Obsolete]
-        public string GetQuery(DataRequest request)
+        public string GetQuery(DataQueryRequest queryRequest)
         {
-            string offset = $"OFFSET {(request.Page - 1)*request.PageSize} ROWS FETCH NEXT {request.PageSize} ROWS ONLY";
-            string columns = $"{GetColumns(request)}";
-            string from = $"[{request.EntitySchema}]";
-            string orderBy = $"[{(string.IsNullOrEmpty(request.OrderBy) ? "Id" : request.OrderBy)}]";
-            string sort = request.Sort == 0 ? "DESC" : request.Sort.ToString("F");
+            string offset = $"OFFSET {(queryRequest.Page - 1)*queryRequest.PageSize} ROWS FETCH NEXT {queryRequest.PageSize} ROWS ONLY";
+            string columns = $"{GetColumns(queryRequest)}";
+            string from = $"[{queryRequest.EntitySchema}]";
+            string orderBy = $"[{(string.IsNullOrEmpty(queryRequest.OrderBy) ? "Id" : queryRequest.OrderBy)}]";
+            string sort = queryRequest.Sort == 0 ? "DESC" : queryRequest.Sort.ToString("F");
 
             return $"SELECT {columns} FROM {from} ORDER BY {orderBy} {sort} {offset}";
         }
@@ -42,11 +42,21 @@ namespace DataAppPlatform.SqlServer
             return query;
         }
 
-        public string GetUpdateQuery(EntityDataUpdateRequest request)
+        public string GetUpdateQuery(EntityDataChangeRequest request)
         {
             string query = $"UPDATE [{request.EntitySchema}]" + "\r\n";
             query += "SET " + GetSetUpdateExpression(request.Fields) + "\r\n";
             query += $"WHERE [Id] = {request.EntityId}";
+
+            return query;
+        }
+
+        public string GetInsertQuery(EntityDataChangeRequest request)
+        {
+            var columns = string.Join(", ", request.Fields.Select(x => $"[{x.Key}]").ToList());
+            var values = string.Join(", ", request.Fields.Select(x => $"'{x.Value.Value}'").ToList());
+            string query = $"INSERT INTO [{request.EntitySchema}] ({columns})" + "\r\n";
+            query += "VALUES (" + values + ")";
 
             return query;
         }
@@ -181,9 +191,9 @@ namespace DataAppPlatform.SqlServer
             return joins;
         }
 
-        private string GetColumns(DataRequest request)
+        private string GetColumns(DataQueryRequest queryRequest)
         {
-            return string.Join(',', request.Columns.Select(x => $"[{x}]"));
+            return string.Join(',', queryRequest.Columns.Select(x => $"[{x}]"));
         }
     }
 }

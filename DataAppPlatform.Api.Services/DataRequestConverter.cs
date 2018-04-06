@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Security;
@@ -20,28 +21,28 @@ namespace DataAppPlatform.DataServices
             _schemaInfoProvider = schemaInfoProvider;
         }
 
-        public QueryModel GetQueryModel(DataRequest request)
+        public QueryModel GetQueryModel(DataQueryRequest queryRequest)
         {
             int joinCounter = 1;
             QueryModel model = new QueryModel
             {
                 RootSchema = new QueryTableModel()
                 {
-                    TableName = $"[{request.EntitySchema}]",
+                    TableName = $"[{queryRequest.EntitySchema}]",
                     Alias = $"[T{joinCounter++}]",
                     ReferenceName = string.Empty,
                     Columns = new List<QueryColumnModel>(),
                     Join = new List<QueryTableModel>(),
                     JoinPath = string.Empty
                 },
-                OrderBy = $"[{(string.IsNullOrEmpty(request.OrderBy) ? "Id" : request.OrderBy)}]",
-                Sort = request.Sort == 0 ? "DESC" : request.Sort.ToString("F"),
-                Fetch = request.PageSize,
-                Offset = (request.Page - 1) * request.PageSize,
-                Filter = request.Filter
+                OrderBy = $"[{(string.IsNullOrEmpty(queryRequest.OrderBy) ? "Id" : queryRequest.OrderBy)}]",
+                Sort = queryRequest.Sort == 0 ? "DESC" : queryRequest.Sort.ToString("F"),
+                Fetch = queryRequest.PageSize,
+                Offset = (queryRequest.Page - 1) * queryRequest.PageSize,
+                Filter = queryRequest.Filter
             };
 
-            var rootColumns = request.Columns.Where(x => x.Split('.').Length == 1)
+            var rootColumns = queryRequest.Columns.Where(x => x.Split('.').Length == 1)
                 .Select(x => new QueryColumnModel()
                 {
                     Name = $"[{x}]",
@@ -50,7 +51,7 @@ namespace DataAppPlatform.DataServices
 
             model.RootSchema.Columns.AddRange(rootColumns);
 
-            foreach (string column in request.Columns)
+            foreach (string column in queryRequest.Columns)
             {
                 var joinTokens = column.Split('.');
                 if(joinTokens.Length == 1)
@@ -60,29 +61,29 @@ namespace DataAppPlatform.DataServices
 
                 BuldJoinChain(model.RootSchema, joinTokens);
             }
-            BuldJoinChainFromFilter(model.RootSchema, request.Filter);
+            BuldJoinChainFromFilter(model.RootSchema, queryRequest.Filter);
 
             Dictionary<string, string> tableAliases = new Dictionary<string, string>();
             SetAliasesToJoinTable(model.RootSchema, ref joinCounter, tableAliases);
-            SetColumnsToJoinTable(model.RootSchema, request);
+            SetColumnsToJoinTable(model.RootSchema, queryRequest);
             SetAliasesToFilter(model.Filter, tableAliases);
-            model.OrderBy = GetOrderByExpression(request, model);
+            model.OrderBy = GetOrderByExpression(queryRequest, model);
 
             return model;
         }
 
-        public QueryModel GetQueryModel(EntityDataRequest request)
+        public QueryModel GetQueryModel(EntityDataQueryRequest queryRequest)
         {
-            request.Columns.AddRange(request.Columns
-                .Where(column => _schemaInfoProvider.GetColumnType(request.EntitySchema, column) == ColumnType.Lookup)
-                .Select(column => $"{column}.{_schemaInfoProvider.GetTableDisplayColumn(_schemaInfoProvider.GetColumnSchema(request.EntitySchema, column))}"));
-            DataRequest dataRequest = TransformToDataRequest(request);
+            queryRequest.Columns.AddRange(queryRequest.Columns
+                .Where(column => _schemaInfoProvider.GetColumnType(queryRequest.EntitySchema, column) == ColumnType.Lookup)
+                .Select(column => $"{column}.{_schemaInfoProvider.GetTableDisplayColumn(_schemaInfoProvider.GetColumnSchema(queryRequest.EntitySchema, column))}"));
+            DataQueryRequest dataQueryRequest = TransformToDataRequest(queryRequest);
 
-            var queryModel = GetQueryModel(dataRequest);
+            var queryModel = GetQueryModel(dataQueryRequest);
 
             foreach (var column in queryModel.RootSchema.Columns)
             {
-                if (_schemaInfoProvider.GetColumnType(request.EntitySchema, column.Name) == ColumnType.Lookup)
+                if (_schemaInfoProvider.GetColumnType(queryRequest.EntitySchema, column.Name) == ColumnType.Lookup)
                     column.Name = column.Name.Insert(column.Name.Length - 1, "Id");
                 column.Alias += ".value";
             }
@@ -99,22 +100,28 @@ namespace DataAppPlatform.DataServices
             return queryModel;
         }
 
-        public EntityDataUpdateRequest ReplaceLookupFields(EntityDataUpdateRequest request)
+        public void ReplaceLookupFields(EntityDataChangeRequest request)
         {
             foreach (var field in request.Fields.Where(x => _schemaInfoProvider.GetColumnType(request.EntitySchema, x.Key) == ColumnType.Lookup).ToList())
             {
                 request.Fields.Remove(field.Key);
                 request.Fields.Add($"{field.Key}Id", field.Value);
             }
-            return request;
         }
 
-        private DataRequest TransformToDataRequest(EntityDataRequest request)
+        public void AddTimestamps(EntityDataChangeRequest request)
         {
-            DataRequest dataRequest = new DataRequest()
+            request.Fields.Add("ModifiedOn", new EntityDataFieldUpdate() { Value = DateTime.UtcNow });
+            if(!request.EntityId.HasValue)
+                request.Fields.Add("CreatedOn", new EntityDataFieldUpdate() { Value = DateTime.UtcNow });
+        }
+
+        private DataQueryRequest TransformToDataRequest(EntityDataQueryRequest queryRequest)
+        {
+            DataQueryRequest dataQueryRequest = new DataQueryRequest()
             {
-                Columns = request.Columns,
-                EntitySchema = request.EntitySchema,
+                Columns = queryRequest.Columns,
+                EntitySchema = queryRequest.EntitySchema,
                 Filter = new FilterGroup()
                 {
                     Conditions = new List<Condition>()
@@ -122,7 +129,7 @@ namespace DataAppPlatform.DataServices
                         new Condition()
                         {
                             Column = "Id",
-                            Value = request.EntityId,
+                            Value = queryRequest.EntityId,
                             Type = ConditionType.Constant,
                             ComparisonType = ComparisonType.Equals
                         }
@@ -132,7 +139,7 @@ namespace DataAppPlatform.DataServices
                 PageSize = 1
             };
 
-            return dataRequest;
+            return dataQueryRequest;
         }
 
         private void BuldJoinChainFromFilter(QueryTableModel rootSchema, FilterGroup filter)
@@ -219,13 +226,13 @@ namespace DataAppPlatform.DataServices
             }
         }
 
-        private string GetOrderByExpression(DataRequest request, QueryModel queryModel)
+        private string GetOrderByExpression(DataQueryRequest queryRequest, QueryModel queryModel)
         {
-            if (!string.IsNullOrEmpty(request.OrderBy))
+            if (!string.IsNullOrEmpty(queryRequest.OrderBy))
             {
-                var orderByTokens = request.OrderBy.Split('.');
+                var orderByTokens = queryRequest.OrderBy.Split('.');
                 if (orderByTokens.Length == 1)
-                    return $"{queryModel.RootSchema.Alias}.[{request.OrderBy}]";
+                    return $"{queryModel.RootSchema.Alias}.[{queryRequest.OrderBy}]";
 
                 if (orderByTokens.Length > 1)
                 {
@@ -268,12 +275,12 @@ namespace DataAppPlatform.DataServices
             }
         }
 
-        private void SetColumnsToJoinTable(QueryTableModel parent, DataRequest request)
+        private void SetColumnsToJoinTable(QueryTableModel parent, DataQueryRequest queryRequest)
         {
             foreach (QueryTableModel joinModel in parent.Join)
             {
                 int joinLevel = joinModel.JoinPath.Split('.').Length + 1;
-                var columns = request.Columns
+                var columns = queryRequest.Columns
                     .Where(x => x.Split('.').Length == joinLevel && x.StartsWith(joinModel.JoinPath))
                     .Select(x => new QueryColumnModel()
                     {
@@ -281,7 +288,7 @@ namespace DataAppPlatform.DataServices
                         Alias = x
                     });
                 joinModel.Columns.AddRange(columns);
-                SetColumnsToJoinTable(joinModel, request);
+                SetColumnsToJoinTable(joinModel, queryRequest);
             }
         }
 

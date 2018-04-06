@@ -7,8 +7,9 @@ namespace DataAppPlatform.Core.DataService.Interfaces
 {
     public interface ISqlQueryGenerator
     {
-        string GetQuery(DataRequest request);
+        string GetQuery(DataQueryRequest queryRequest);
         string GetQuery(QueryModel queryModel);
-        string GetUpdateQuery(EntityDataUpdateRequest request);
+        string GetUpdateQuery(EntityDataChangeRequest request);
+        string GetInsertQuery(EntityDataChangeRequest request);
     }
 }

@@ -16,7 +16,7 @@ namespace DataAppPlatform.DataServices.Tests
         [Fact]
         public void Should_GenerateQueryModel()
         {
-            DataRequest request = new DataRequest()
+            DataQueryRequest queryRequest = new DataQueryRequest()
             {
                 Columns = new List<string>()
                 {
@@ -31,10 +31,10 @@ namespace DataAppPlatform.DataServices.Tests
             var mockSchemaInfoProvider = new Mock<ISchemaInfoProvider>();
             IDataRequestConverter dataRequestConverter = new DataRequestConverter(mockSchemaInfoProvider.Object);
 
-            QueryModel queryModel = dataRequestConverter.GetQueryModel(request);
+            QueryModel queryModel = dataRequestConverter.GetQueryModel(queryRequest);
 
             Assert.NotNull(queryModel);
-            Assert.Equal($"[{request.EntitySchema}]", queryModel.RootSchema.TableName);
+            Assert.Equal($"[{queryRequest.EntitySchema}]", queryModel.RootSchema.TableName);
             Assert.Equal("[T1]", queryModel.RootSchema.Alias);
             Assert.Equal(string.Empty, queryModel.RootSchema.ReferenceName);
             Assert.Equal("[T1].[Id]", queryModel.OrderBy);
@@ -50,7 +50,7 @@ namespace DataAppPlatform.DataServices.Tests
         [Fact]
         public void Should_GenerateQueryModel_When_PagingSortOrderSpecified()
         {
-            DataRequest request = new DataRequest()
+            DataQueryRequest queryRequest = new DataQueryRequest()
             {
                 Columns = new List<string>()
                 {
@@ -66,11 +66,11 @@ namespace DataAppPlatform.DataServices.Tests
             var mockSchemaInfoProvider = new Mock<ISchemaInfoProvider>();
             IDataRequestConverter dataRequestConverter = new DataRequestConverter(mockSchemaInfoProvider.Object);
 
-            QueryModel queryModel = dataRequestConverter.GetQueryModel(request);
+            QueryModel queryModel = dataRequestConverter.GetQueryModel(queryRequest);
 
             Assert.NotNull(queryModel);
 
-            Assert.Equal($"[T1].[{request.OrderBy}]", queryModel.OrderBy);
+            Assert.Equal($"[T1].[{queryRequest.OrderBy}]", queryModel.OrderBy);
             Assert.Equal(Sort.ASC.ToString(), queryModel.Sort);
             Assert.Equal(30, queryModel.Offset);
             Assert.Equal(15, queryModel.Fetch);
@@ -79,7 +79,7 @@ namespace DataAppPlatform.DataServices.Tests
         [Fact]
         public void Should_GenerateQueryModel_When_ComplexRequest()
         {
-            DataRequest request = new DataRequest()
+            DataQueryRequest queryRequest = new DataQueryRequest()
             {
                 Columns = new List<string>()
                 {
@@ -103,7 +103,7 @@ namespace DataAppPlatform.DataServices.Tests
             mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Departments]"), It.Is<string>(s => s == "Head"))).Returns("Contacts");
             IDataRequestConverter dataRequestConverter = new DataRequestConverter(mockSchemaInfoProvider.Object);
 
-            QueryModel queryModel = dataRequestConverter.GetQueryModel(request);
+            QueryModel queryModel = dataRequestConverter.GetQueryModel(queryRequest);
 
             Assert.NotNull(queryModel);
 
@@ -134,7 +134,7 @@ namespace DataAppPlatform.DataServices.Tests
         [Fact]
         public void Should_GenerateQueryModel_When_ComplexRequestWithoutTableChain()
         {
-            DataRequest request = new DataRequest()
+            DataQueryRequest queryRequest = new DataQueryRequest()
             {
                 Columns = new List<string>()
                 {
@@ -154,7 +154,7 @@ namespace DataAppPlatform.DataServices.Tests
             mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Departments]"), It.Is<string>(s => s == "Head"))).Returns("Contacts");
             IDataRequestConverter dataRequestConverter = new DataRequestConverter(mockSchemaInfoProvider.Object);
 
-            QueryModel queryModel = dataRequestConverter.GetQueryModel(request);
+            QueryModel queryModel = dataRequestConverter.GetQueryModel(queryRequest);
 
             Assert.NotNull(queryModel);
 
@@ -167,7 +167,7 @@ namespace DataAppPlatform.DataServices.Tests
         [Fact]
         public void Should_GenerateQueryModel_When_JoinOnlyInFilter()
         {
-            DataRequest request = new DataRequest()
+            DataQueryRequest queryRequest = new DataQueryRequest()
             {
                 Columns = new List<string>()
                 {
@@ -197,7 +197,7 @@ namespace DataAppPlatform.DataServices.Tests
             mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Departments]"), It.Is<string>(s => s == "Head"))).Returns("Contacts");
             IDataRequestConverter dataRequestConverter = new DataRequestConverter(mockSchemaInfoProvider.Object);
 
-            QueryModel queryModel = dataRequestConverter.GetQueryModel(request);
+            QueryModel queryModel = dataRequestConverter.GetQueryModel(queryRequest);
 
             Assert.NotNull(queryModel);
 
@@ -210,7 +210,7 @@ namespace DataAppPlatform.DataServices.Tests
         [Fact]
         public void Should_GenerateQueryModel_When_EntityDataRequestPassed()
         {
-            EntityDataRequest request = new EntityDataRequest()
+            EntityDataQueryRequest queryRequest = new EntityDataQueryRequest()
             {
                 EntitySchema = "Contacts",
                 EntityId = 1,
@@ -232,7 +232,7 @@ namespace DataAppPlatform.DataServices.Tests
             mockSchemaInfoProvider.Setup(x => x.GetColumnType(It.Is<string>(s => s == "Contacts"), It.Is<string>(s => s == "Department" || s == "[Department]"))).Returns(ColumnType.Lookup);
             IDataRequestConverter dataRequestConverter = new DataRequestConverter(mockSchemaInfoProvider.Object);
 
-            QueryModel queryModel = dataRequestConverter.GetQueryModel(request);
+            QueryModel queryModel = dataRequestConverter.GetQueryModel(queryRequest);
 
             Assert.NotNull(queryModel);
             Assert.Equal("[T1]", queryModel.RootSchema.Alias);
@@ -252,7 +252,7 @@ namespace DataAppPlatform.DataServices.Tests
         [Fact]
         public void Should_ReplaceLookupFields()
         {
-            EntityDataUpdateRequest request = new EntityDataUpdateRequest()
+            EntityDataChangeRequest request = new EntityDataChangeRequest()
             {
                 EntitySchema = "Contacts",
                 EntityId = 50,
@@ -276,7 +276,7 @@ namespace DataAppPlatform.DataServices.Tests
             mockSchemaInfoProvider.Setup(x => x.GetColumnType(It.Is<string>(s => s == "Contacts"), It.Is<string>(s => s == "Department" || s == "[Department]"))).Returns(ColumnType.Lookup);
             IDataRequestConverter dataRequestConverter = new DataRequestConverter(mockSchemaInfoProvider.Object);
 
-            request = dataRequestConverter.ReplaceLookupFields(request);
+            dataRequestConverter.ReplaceLookupFields(request);
 
             Assert.NotNull(request);
             Assert.True(request.Fields.ContainsKey("ManagerId"));
@@ -284,6 +284,45 @@ namespace DataAppPlatform.DataServices.Tests
             Assert.True(request.Fields.ContainsKey("DepartmentId"));
             Assert.False(request.Fields.ContainsKey("Department"));
 
+        }
+
+        [Fact]
+        public void Should_AddModifiedOn_WhenUpdateEntity()
+        {
+            EntityDataChangeRequest request = new EntityDataChangeRequest()
+            {
+                EntitySchema = "Contacts",
+                EntityId = 50,
+                Fields = new Dictionary<string, EntityDataFieldUpdate>()
+            };
+
+            var mockSchemaInfoProvider = new Mock<ISchemaInfoProvider>();
+            IDataRequestConverter dataRequestConverter = new DataRequestConverter(mockSchemaInfoProvider.Object);
+
+            dataRequestConverter.AddTimestamps(request);
+
+            Assert.NotNull(request);
+            Assert.False(request.Fields.ContainsKey("CreatedOn"));
+            Assert.True(request.Fields.ContainsKey("ModifiedOn"));
+        }
+
+        [Fact]
+        public void Should_AddTimeStamps_WhenCreateEntity()
+        {
+            EntityDataChangeRequest request = new EntityDataChangeRequest()
+            {
+                EntitySchema = "Contacts",
+                Fields = new Dictionary<string, EntityDataFieldUpdate>()
+            };
+
+            var mockSchemaInfoProvider = new Mock<ISchemaInfoProvider>();
+            IDataRequestConverter dataRequestConverter = new DataRequestConverter(mockSchemaInfoProvider.Object);
+
+            dataRequestConverter.AddTimestamps(request);
+
+            Assert.NotNull(request);
+            Assert.True(request.Fields.ContainsKey("CreatedOn"));
+            Assert.True(request.Fields.ContainsKey("ModifiedOn"));
         }
     }
 }

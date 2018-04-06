@@ -38,7 +38,7 @@ namespace DataAppPlatform.SqlServer.Tests
         [Fact]
         public void ComplexAllFeaturesQueryTest()
         {
-            DataRequest request = new DataRequest()
+            DataQueryRequest queryRequest = new DataQueryRequest()
             {
                 EntitySchema = "Contacts",
                 Columns = new List<string>()
@@ -81,7 +81,7 @@ namespace DataAppPlatform.SqlServer.Tests
                 Sort = Sort.ASC
             };
 
-            QueryModel queryModel = _dataRequestConverter.GetQueryModel(request);
+            QueryModel queryModel = _dataRequestConverter.GetQueryModel(queryRequest);
             string sqlQuery = _sqlServerQueryGenerator.GetQuery(queryModel);
 
             var expectedQuery =
@@ -95,7 +95,7 @@ namespace DataAppPlatform.SqlServer.Tests
         [Fact]
         public void GenerateJoinsFromReferenceValueConditionsTest()
         {
-            DataRequest request = new DataRequest()
+            DataQueryRequest queryRequest = new DataQueryRequest()
             {
                 EntitySchema = "Contacts",
                 Columns = new List<string>()
@@ -115,7 +115,7 @@ namespace DataAppPlatform.SqlServer.Tests
                 Sort = Sort.ASC
             };
 
-            QueryModel queryModel = _dataRequestConverter.GetQueryModel(request);
+            QueryModel queryModel = _dataRequestConverter.GetQueryModel(queryRequest);
             string sqlQuery = _sqlServerQueryGenerator.GetQuery(queryModel);
 
             var expectedQuery =
@@ -129,7 +129,7 @@ namespace DataAppPlatform.SqlServer.Tests
         [Fact]
         public void GenerateJoinsFromColumnConditionsTest()
         {
-            DataRequest request = new DataRequest()
+            DataQueryRequest queryRequest = new DataQueryRequest()
             {
                 EntitySchema = "Contacts",
                 Columns = new List<string>()
@@ -149,7 +149,7 @@ namespace DataAppPlatform.SqlServer.Tests
                 Sort = Sort.ASC
             };
 
-            QueryModel queryModel = _dataRequestConverter.GetQueryModel(request);
+            QueryModel queryModel = _dataRequestConverter.GetQueryModel(queryRequest);
             string sqlQuery = _sqlServerQueryGenerator.GetQuery(queryModel);
 
             var expectedQuery =
@@ -163,7 +163,7 @@ namespace DataAppPlatform.SqlServer.Tests
         [Fact]
         public void GenerateQueryFromEntityDataRequestTest()
         {
-            EntityDataRequest request = new EntityDataRequest()
+            EntityDataQueryRequest queryRequest = new EntityDataQueryRequest()
             {
                 EntitySchema = "Contacts",
                 EntityId = 1,
@@ -176,7 +176,7 @@ namespace DataAppPlatform.SqlServer.Tests
                 }
             };
 
-            QueryModel queryModel = _dataRequestConverter.GetQueryModel(request);
+            QueryModel queryModel = _dataRequestConverter.GetQueryModel(queryRequest);
             string sqlQuery = _sqlServerQueryGenerator.GetQuery(queryModel);
 
             var expectedQuery =
@@ -188,9 +188,9 @@ namespace DataAppPlatform.SqlServer.Tests
         }
 
         [Fact]
-        public void GenerateQueryFromEntityDataUpdateRequestTest()
+        public void GenerateQueryFromEntityDataChangeRequestTest()
         {
-            EntityDataUpdateRequest request = new EntityDataUpdateRequest()
+            EntityDataChangeRequest request = new EntityDataChangeRequest()
             {
                 EntitySchema = "Contacts",
                 EntityId = 50,
@@ -210,6 +210,38 @@ namespace DataAppPlatform.SqlServer.Tests
             });
 
             string sqlQuery = _sqlServerQueryGenerator.GetUpdateQuery(request);
+
+            var expectedQuery =
+                File.ReadAllText(
+                    $@"ExpectedQueries\SqlServerQueryGeneratorIntegrationTests\{MethodBase.GetCurrentMethod().Name}.sql");
+
+
+            Assert.Equal(expectedQuery, sqlQuery);
+        }
+
+        [Fact]
+        public void GenerateInsertQueryFromEntityDataChangeRequestTest()
+        {
+            EntityDataChangeRequest request = new EntityDataChangeRequest()
+            {
+                EntitySchema = "Contacts",
+                EntityId = 50,
+                Fields = new Dictionary<string, EntityDataFieldUpdate>()
+            };
+            request.Fields.Add("FirstName", new EntityDataFieldUpdate()
+            {
+                Value = "Foo"
+            });
+            request.Fields.Add("LastName", new EntityDataFieldUpdate()
+            {
+                Value = "Bar"
+            });
+            request.Fields.Add("ManagerId", new EntityDataFieldUpdate()
+            {
+                Value = 12467
+            });
+
+            string sqlQuery = _sqlServerQueryGenerator.GetInsertQuery(request);
 
             var expectedQuery =
                 File.ReadAllText(

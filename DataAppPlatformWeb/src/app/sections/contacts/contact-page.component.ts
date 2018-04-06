@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PageViewModel } from '../../controls/edit-page/page-view-model.model';
-import { BasePageComponent } from '../../controls/edit-page/base-edit-page.component';
+import { BasePageComponent, EditPageMode } from '../../controls/edit-page/base-edit-page.component';
 import { DataService } from '../../core.module';
 
 @Component({
@@ -22,6 +22,12 @@ export class ContactPageComponent extends BasePageComponent {
         return new PageViewModel(
             'Contacts',
             {
+                'Id': {
+                    label: 'Id',
+                    required: true,
+                    visible: true,
+                    enabled: false
+                },
                 'FirstName': {
                     label: 'First name',
                     required: true,
@@ -33,8 +39,30 @@ export class ContactPageComponent extends BasePageComponent {
                     required: true,
                     visible: true,
                     enabled: true
+                },
+                'Phone': {
+                    label: 'Phone',
+                    required: true,
+                    visible: true,
+                    enabled: true
+                },
+                'Email': {
+                    label: 'Email',
+                    required: true,
+                    visible: true,
+                    enabled: true
                 }
             }
         );
+    }
+
+    protected save() {
+        super.save();
+        if (this.mode === EditPageMode.New) {
+            this.router.navigate(['/contacts']);
+        }
+    }
+    close() {
+        this.router.navigate(['/contacts']);
     }
 }

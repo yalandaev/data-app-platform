@@ -2,10 +2,10 @@
 
 namespace DataAppPlatform.Core.DataService.Models.EntityData
 {
-    public class EntityDataUpdateRequest
+    public class EntityDataQueryRequest
     {
         public string EntitySchema { get; set; }
         public long EntityId { get; set; }
-        public Dictionary<string, EntityDataFieldUpdate> Fields { get; set; }
+        public List<string> Columns { get; set; }
     }
 }

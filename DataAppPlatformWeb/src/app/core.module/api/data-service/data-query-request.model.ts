@@ -1,8 +1,7 @@
 import { Sort } from './filter/sort.enum';
-import { DataColumn } from './data-column.model';
 import { FilterGroup } from './filter/filter-group.model';
 
-export class DataRequest {
+export class DataQueryRequest {
     constructor(
         private entitySchema: string,
         private orderBy: string,

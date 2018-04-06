@@ -1,11 +1,13 @@
 <p>
   contacts works!
 </p>
+<button (click)="create()">New</button>
+<br>
 <app-data-table
   entitySchema = "Contacts"
   orderBy = "Manager.Id"
   sort = "asc"
-  pageSize = 5
+  pageSize = 10
   [columns]="columns"
   [filter]="filter"
 ></app-data-table>
