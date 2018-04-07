@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataAppPlatform.Api.Contract\DataAppPlatform.Api.Contract.csproj" />
     <ProjectReference Include="..\DataAppPlatform.Entities\DataAppPlatform.Entities.csproj" />
   </ItemGroup>
 

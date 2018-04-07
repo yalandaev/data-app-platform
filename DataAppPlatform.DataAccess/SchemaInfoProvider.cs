@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using DataAppPlatform.Core.DataService.Interfaces;
-using DataAppPlatform.Core.DataService.Models;
+using DataAppPlatform.DataService.Models;
 using DataAppPlatform.Entities;
 using DataAppPlatform.Entities.Common.Attributes;
 using Microsoft.EntityFrameworkCore;

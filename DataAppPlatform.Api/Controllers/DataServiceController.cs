@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAppPlatform.Api.Contract.DataService.AutoComplete;
+using DataAppPlatform.Api.Contract.DataService.EntityData;
+using DataAppPlatform.Api.Contract.DataService.TableData;
 using DataAppPlatform.Core.DataService.Interfaces;
-using DataAppPlatform.Core.DataService.Models;
-using DataAppPlatform.Core.DataService.Models.EntityData;
-using DataAppPlatform.Core.DataService.Models.TableData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -20,7 +20,7 @@ namespace DataAppPlatform.Api.Controllers
     [Authorize]
     public class DataServiceController : Controller
     {
-        private IDataService _dataService;
+        private readonly IDataService _dataService;
 
         public DataServiceController(IDataService dataService)
         {
@@ -49,6 +49,12 @@ namespace DataAppPlatform.Api.Controllers
         public void CreateEntity([FromBody]EntityDataChangeRequest request)
         {
             _dataService.CreateEntity(request);
+        }
+
+        [HttpGet("LookupAutoComplete")]
+        public List<LookupAutoCompleteListItem> AutoCompleteSearch([FromBody]LookupAutoCompleteRequest request)
+        {
+            return _dataService.GetLookupAutoComplete(request);
         }
     }
 }

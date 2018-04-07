@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Security;
 using System.Text.RegularExpressions;
+using DataAppPlatform.Api.Contract.DataService.AutoComplete;
+using DataAppPlatform.Api.Contract.DataService.EntityData;
+using DataAppPlatform.Api.Contract.DataService.TableData;
 using DataAppPlatform.Core.DataService.Interfaces;
-using DataAppPlatform.Core.DataService.Models;
-using DataAppPlatform.Core.DataService.Models.EntityData;
-using DataAppPlatform.Core.DataService.Models.Filter;
-using DataAppPlatform.Core.DataService.Models.TableData;
+using DataAppPlatform.DataService.Models;
+using DataAppPlatform.DataService.Models.Filter;
+using DataAppPlatform.DataService.Models.TableData;
 
 namespace DataAppPlatform.DataServices
 {
@@ -114,6 +114,39 @@ namespace DataAppPlatform.DataServices
             request.Fields.Add("ModifiedOn", new EntityDataFieldUpdate() { Value = DateTime.UtcNow });
             if(!request.EntityId.HasValue)
                 request.Fields.Add("CreatedOn", new EntityDataFieldUpdate() { Value = DateTime.UtcNow });
+        }
+
+        public QueryModel GetQueryModel(LookupAutoCompleteRequest request)
+        {
+            DataQueryRequest dataQueryRequest = TransformToDataRequest(request);
+            var queryModel = GetQueryModel(dataQueryRequest);
+            return queryModel;
+        }
+
+        private DataQueryRequest TransformToDataRequest(LookupAutoCompleteRequest request)
+        {
+            DataQueryRequest dataQueryRequest = new DataQueryRequest()
+            {
+                Columns = new List<string>() { "Id" },
+                EntitySchema = request.EntitySchema,
+                Filter = request.Filter,
+                Page = 1,
+                PageSize = 10
+            };
+
+            string displayColumn = _schemaInfoProvider.GetTableDisplayColumn(request.EntitySchema);
+            dataQueryRequest.OrderBy = displayColumn;
+            dataQueryRequest.Sort = Sort.ASC;
+            dataQueryRequest.Columns.Add(displayColumn);
+            dataQueryRequest.Filter.Conditions.Add(new Condition()
+            {
+                Column = displayColumn,
+                ComparisonType = ComparisonType.StartWith,
+                Type = ConditionType.Constant,
+                Value = request.Term
+            });
+
+            return dataQueryRequest;
         }
 
         private DataQueryRequest TransformToDataRequest(EntityDataQueryRequest queryRequest)

@@ -1,4 +1,4 @@
-﻿namespace DataAppPlatform.Core.DataService.Models.EntityData
+﻿namespace DataAppPlatform.Api.Contract.DataService.EntityData
 {
     public class EntityDataField
     {

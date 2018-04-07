@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DataAppPlatform.Core.DataService.Models.EntityData
+namespace DataAppPlatform.Api.Contract.DataService.EntityData
 {
     public class EntityDataQueryRequest
     {

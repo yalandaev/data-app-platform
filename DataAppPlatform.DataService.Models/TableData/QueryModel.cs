@@ -1,6 +1,6 @@
-﻿using DataAppPlatform.Core.DataService.Models.Filter;
+﻿using DataAppPlatform.DataService.Models.Filter;
 
-namespace DataAppPlatform.Core.DataService.Models.TableData
+namespace DataAppPlatform.DataService.Models.TableData
 {
     public class QueryModel
     {

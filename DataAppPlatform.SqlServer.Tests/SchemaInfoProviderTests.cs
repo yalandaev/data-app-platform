@@ -1,5 +1,5 @@
-﻿using DataAppPlatform.Core.DataService.Models;
-using DataAppPlatform.DataAccess;
+﻿using DataAppPlatform.DataAccess;
+using DataAppPlatform.DataService.Models;
 using DataAppPlatform.Entities;
 using Xunit;
 

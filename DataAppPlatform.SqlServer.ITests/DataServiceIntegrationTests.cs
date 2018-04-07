@@ -4,14 +4,14 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
-using DataAppPlatform.Core.DataService.Models;
-using DataAppPlatform.Core.DataService.Models.EntityData;
-using DataAppPlatform.Core.DataService.Models.Filter;
-using DataAppPlatform.Core.DataService.Models.TableData;
+using DataAppPlatform.Api.Contract.DataService.AutoComplete;
+using DataAppPlatform.Api.Contract.DataService.EntityData;
+using DataAppPlatform.Api.Contract.DataService.TableData;
 using DataAppPlatform.DataAccess;
+using DataAppPlatform.DataService.Models.Filter;
 using DataAppPlatform.Entities;
 using DataAppPlatform.SqlServer;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -29,6 +29,7 @@ namespace DataAppPlatform.DataServices.Tests
             _dataService = new DataServices.DataService(new SqlServerQueryGenerator(), _dataContext, new DataRequestConverter(new SchemaInfoProvider()));
 
             _dataContext.Contacts.RemoveRange(_dataContext.Contacts.ToList());
+            _dataContext.Database.ExecuteSqlCommand("DBCC CHECKIDENT('Contacts', RESEED, 0)");
             _dataContext.SaveChanges();
         }
 
@@ -272,6 +273,67 @@ namespace DataAppPlatform.DataServices.Tests
             Assert.Equal(contact.FirstName, firstName);
             Assert.Equal(contact.LastName, lastName);
             Assert.NotNull(contact.ModifiedOn);
+        }
+
+        [Fact]
+        public void LookupAutoCompleteTest()
+        {
+            LookupAutoCompleteRequest request = new LookupAutoCompleteRequest()
+            {
+                EntitySchema = "Contacts",
+                Term = "Ivano",
+                Filter = new FilterGroup()
+                {
+                    LogicalOperation = LogicalOperation.AND,
+                    Conditions = new List<Condition>()
+                    {
+                        new Condition()
+                        {
+                            Column = "FirstName",
+                            ComparisonType = ComparisonType.StartWith,
+                            Value = "An"
+                        }
+                    }
+                },
+            };
+
+            var contact1 = new Contact()
+            {
+                FirstName = "Anton",
+                LastName = "Ivanov"
+            };
+            var contact2 = new Contact()
+            {
+                FirstName = "Anna",
+                LastName = "Ivanova"
+            };
+            var contact3 = new Contact()
+            {
+                FirstName = "Mark",
+                LastName = "Ivanov"
+            };
+            var contact4 = new Contact()
+            {
+                FirstName = "Anna",
+                LastName = "Petrova"
+            };
+            _dataContext.Contacts.Add(contact1);
+            _dataContext.Contacts.Add(contact2);
+            _dataContext.Contacts.Add(contact3);
+            _dataContext.Contacts.Add(contact4);
+            _dataContext.SaveChanges();
+
+            var response = _dataService.GetLookupAutoComplete(request);
+
+            var actualJsonData = JsonConvert.SerializeObject(response, Formatting.Indented);
+            var expectedJsonData =
+                File.ReadAllText(
+                    $@"ExpectedResponses\DataServiceIntegrationTests\{MethodBase.GetCurrentMethod().Name}.json");
+            expectedJsonData = expectedJsonData.Replace("15", contact1.Id.ToString());
+            expectedJsonData = expectedJsonData.Replace("45", contact2.Id.ToString());
+
+            Assert.NotNull(response);
+            Assert.Equal(expectedJsonData, actualJsonData);
         }
     }
 }

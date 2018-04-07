@@ -25,7 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAppPlatform.DataService
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAppPlatform.DataServices.Tests", "DataAppPlatform.SqlServer.ITests\DataAppPlatform.DataServices.Tests.csproj", "{B6DF9682-6A45-4425-AE47-4A30BABB1652}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.ApplicationServices", "DataAppPlatform.ApplicationServices\DataAppPlatform.ApplicationServices.csproj", "{A5F6C3F7-70BB-4E86-A7CE-BC9DDA2144F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAppPlatform.ApplicationServices", "DataAppPlatform.ApplicationServices\DataAppPlatform.ApplicationServices.csproj", "{A5F6C3F7-70BB-4E86-A7CE-BC9DDA2144F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAppPlatform.DataService.Models", "DataAppPlatform.DataService.Models\DataAppPlatform.DataService.Models.csproj", "{75B335BA-5A96-4B04-8EF5-FC05AEE135A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +79,10 @@ Global
 		{A5F6C3F7-70BB-4E86-A7CE-BC9DDA2144F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5F6C3F7-70BB-4E86-A7CE-BC9DDA2144F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5F6C3F7-70BB-4E86-A7CE-BC9DDA2144F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75B335BA-5A96-4B04-8EF5-FC05AEE135A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75B335BA-5A96-4B04-8EF5-FC05AEE135A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75B335BA-5A96-4B04-8EF5-FC05AEE135A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75B335BA-5A96-4B04-8EF5-FC05AEE135A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

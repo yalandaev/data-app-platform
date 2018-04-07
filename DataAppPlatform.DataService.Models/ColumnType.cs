@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DataAppPlatform.Core.DataService.Models
+﻿namespace DataAppPlatform.DataService.Models
 {
     public enum ColumnType
     {

@@ -5,11 +5,12 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using Dapper;
+using DataAppPlatform.Api.Contract.DataService.AutoComplete;
+using DataAppPlatform.Api.Contract.DataService.EntityData;
+using DataAppPlatform.Api.Contract.DataService.TableData;
 using DataAppPlatform.Core.DataService.Interfaces;
-using DataAppPlatform.Core.DataService.Models;
-using DataAppPlatform.Core.DataService.Models.EntityData;
-using DataAppPlatform.Core.DataService.Models.TableData;
 using DataAppPlatform.DataAccess;
+using DataAppPlatform.DataService.Models.TableData;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAppPlatform.DataServices
@@ -81,6 +82,36 @@ namespace DataAppPlatform.DataServices
             }
         }
 
+        public List<LookupAutoCompleteListItem> GetLookupAutoComplete(LookupAutoCompleteRequest request)
+        {
+            QueryModel queryModel = _dataRequestConverter.GetQueryModel(request);
+            var sqlString = _queryGenerator.GetQuery(queryModel);
+            Debug.WriteLine(sqlString);
+            var queryResult = GetData(sqlString, GetMappedObject);
+            return ToLookupAutoCompleteResult(queryResult);
+        }
+
+        private List<LookupAutoCompleteListItem> ToLookupAutoCompleteResult(IEnumerable<IDictionary<string, object>> queryResult)
+        {
+            List<LookupAutoCompleteListItem> result = new List<LookupAutoCompleteListItem>();
+            var expandoObjects = queryResult as IList<IDictionary<string, object>> ?? queryResult.ToList();
+            if (!expandoObjects.Any())
+                return result;
+
+            var displayColumnName = expandoObjects.First().Keys.SingleOrDefault(k => k != "Id");
+
+            foreach (var expandoObject in expandoObjects)
+            {
+                result.Add(new LookupAutoCompleteListItem()
+                {
+                    Id = (long) expandoObject["Id"],
+                    DisplayValue = (string) expandoObject[displayColumnName]
+                });
+            }
+
+            return result;
+        }
+
         private EntityDataResponse GetEntityDataResponse(IEnumerable<ExpandoObject> queryResult)
         {
             EntityDataResponse response = new EntityDataResponse()
@@ -111,7 +142,7 @@ namespace DataAppPlatform.DataServices
 
             foreach (var column in row)
             {
-                ((IDictionary<string, object>)@object).Add(column.Key, column.Value == null ? string.Empty : column.Value);
+                ((IDictionary<string, object>)@object).Add(column.Key, column.Value ?? string.Empty);
             }
             return @object;
         }

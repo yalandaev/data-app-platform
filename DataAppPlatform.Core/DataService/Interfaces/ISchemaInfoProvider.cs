@@ -1,4 +1,4 @@
-﻿using DataAppPlatform.Core.DataService.Models;
+﻿using DataAppPlatform.DataService.Models;
 
 namespace DataAppPlatform.Core.DataService.Interfaces
 {

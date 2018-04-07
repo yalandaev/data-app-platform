@@ -1,4 +1,4 @@
-﻿namespace DataAppPlatform.Core.DataService.Models.Filter
+﻿namespace DataAppPlatform.DataService.Models.Filter
 {
     public enum ConditionType
     {

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
+using DataAppPlatform.Api.Contract.DataService.EntityData;
+using DataAppPlatform.Api.Contract.DataService.TableData;
 using DataAppPlatform.Core.DataService.Interfaces;
-using DataAppPlatform.Core.DataService.Models.EntityData;
-using DataAppPlatform.Core.DataService.Models.Filter;
-using DataAppPlatform.Core.DataService.Models.TableData;
+using DataAppPlatform.DataService.Models.Filter;
+using DataAppPlatform.DataService.Models.TableData;
 
 namespace DataAppPlatform.SqlServer
 {

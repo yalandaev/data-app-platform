@@ -1,4 +1,4 @@
-﻿namespace DataAppPlatform.Core.DataService.Models.TableData
+﻿namespace DataAppPlatform.Api.Contract.DataService.TableData
 {
     public class DataResponse
     {

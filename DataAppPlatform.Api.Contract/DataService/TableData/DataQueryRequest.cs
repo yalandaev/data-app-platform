@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using DataAppPlatform.Core.DataService.Models.Filter;
+using DataAppPlatform.DataService.Models.Filter;
 
-namespace DataAppPlatform.Core.DataService.Models.TableData
+namespace DataAppPlatform.Api.Contract.DataService.TableData
 {
     public class DataQueryRequest
     {

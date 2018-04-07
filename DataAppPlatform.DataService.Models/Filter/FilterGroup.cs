@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DataAppPlatform.Core.DataService.Models.Filter
+namespace DataAppPlatform.DataService.Models.Filter
 {
     public class FilterGroup
     {

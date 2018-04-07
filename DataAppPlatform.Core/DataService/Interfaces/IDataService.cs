@@ -1,6 +1,8 @@
-﻿using DataAppPlatform.Core.DataService.Models;
-using DataAppPlatform.Core.DataService.Models.EntityData;
-using DataAppPlatform.Core.DataService.Models.TableData;
+﻿using System.Collections.Generic;
+using DataAppPlatform.Api.Contract.DataService.AutoComplete;
+using DataAppPlatform.Api.Contract.DataService.EntityData;
+using DataAppPlatform.Api.Contract.DataService.TableData;
+
 
 namespace DataAppPlatform.Core.DataService.Interfaces
 {
@@ -10,5 +12,6 @@ namespace DataAppPlatform.Core.DataService.Interfaces
         EntityDataResponse GetEntity(EntityDataQueryRequest queryRequest);
         void SetEntity(EntityDataChangeRequest request);
         void CreateEntity(EntityDataChangeRequest request);
+        List<LookupAutoCompleteListItem> GetLookupAutoComplete(LookupAutoCompleteRequest request);
     }
 }

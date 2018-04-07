@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DataAppPlatform.Api.Contract.DataService.AutoComplete;
+using DataAppPlatform.Api.Contract.DataService.EntityData;
+using DataAppPlatform.Api.Contract.DataService.TableData;
 using DataAppPlatform.Core.DataService.Interfaces;
-using DataAppPlatform.Core.DataService.Models;
-using DataAppPlatform.Core.DataService.Models.EntityData;
-using DataAppPlatform.Core.DataService.Models.Filter;
-using DataAppPlatform.Core.DataService.Models.TableData;
+using DataAppPlatform.DataService.Models;
+using DataAppPlatform.DataService.Models.Filter;
+using DataAppPlatform.DataService.Models.TableData;
 using Moq;
 using Xunit;
 
@@ -324,5 +326,51 @@ namespace DataAppPlatform.DataServices.Tests
             Assert.True(request.Fields.ContainsKey("CreatedOn"));
             Assert.True(request.Fields.ContainsKey("ModifiedOn"));
         }
+
+        [Fact]
+        public void Should_GenerateQueryModel_When_LookupAutoCompleteRequest()
+        {
+            LookupAutoCompleteRequest request = new LookupAutoCompleteRequest()
+            {
+                EntitySchema = "Contacts",
+                Term = "Makarena",
+                Filter = new FilterGroup()
+                {
+                    LogicalOperation = LogicalOperation.AND,
+                    Conditions = new List<Condition>()
+                    {
+                        new Condition()
+                        {
+                            Column = "FirstName",
+                            ComparisonType = ComparisonType.Equals,
+                            Value = "SomeValue"
+                        }
+                    }
+                },
+            };
+
+            string contactsTableDisplayColumn = "FullName";
+            var mockSchemaInfoProvider = new Mock<ISchemaInfoProvider>();
+            mockSchemaInfoProvider.Setup(x => x.GetTableDisplayColumn(It.Is<string>(s => s == "Contacts"))).Returns(contactsTableDisplayColumn);
+            IDataRequestConverter dataRequestConverter = new DataRequestConverter(mockSchemaInfoProvider.Object);
+
+            QueryModel queryModel = dataRequestConverter.GetQueryModel(request);
+
+            Assert.NotNull(queryModel);
+            Assert.Equal(0, queryModel.Offset);
+            Assert.Equal(10, queryModel.Fetch);
+            Assert.Equal($"[{request.EntitySchema}]", queryModel.RootSchema.TableName);
+            Assert.True(queryModel.Filter.Conditions
+                .Any(condition => condition.Column == $"[T1].[{contactsTableDisplayColumn}]" 
+                    && (string)condition.Value == request.Term 
+                    && condition.ComparisonType == ComparisonType.StartWith));
+            Assert.True(queryModel.Filter.Conditions
+                .Any(condition => condition.Column == "[T1].[FirstName]"
+                                  && (string)condition.Value == "SomeValue"
+                                  && condition.ComparisonType == ComparisonType.Equals));
+
+        }
     }
 }
+
+

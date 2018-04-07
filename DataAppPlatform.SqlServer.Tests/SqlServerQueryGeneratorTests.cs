@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using DataAppPlatform.Api.Contract.DataService.TableData;
 using DataAppPlatform.Core.DataService.Interfaces;
-using DataAppPlatform.Core.DataService.Models.Filter;
-using DataAppPlatform.Core.DataService.Models.TableData;
+using DataAppPlatform.DataService.Models.Filter;
+using DataAppPlatform.DataService.Models.TableData;
 using Xunit;
 
 namespace DataAppPlatform.SqlServer.Tests

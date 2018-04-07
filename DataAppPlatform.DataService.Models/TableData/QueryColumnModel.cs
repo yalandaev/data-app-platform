@@ -1,4 +1,4 @@
-﻿namespace DataAppPlatform.Core.DataService.Models.TableData
+﻿namespace DataAppPlatform.DataService.Models.TableData
 {
     public class QueryColumnModel
     {
