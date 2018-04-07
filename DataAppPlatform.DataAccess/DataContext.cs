@@ -50,6 +50,13 @@ namespace DataAppPlatform.DataAccess
             return await base.SaveChangesAsync(cancellationToken);
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Contact>()
+                .Property(p => p.FullName)
+                .HasComputedColumnSql("[LastName] + ' ' + [FirstName]");
+        }
+
         private void AddTimestamps()
         {
             var entities = ChangeTracker.Entries().Where(x => x.Entity is Entity && (x.State == EntityState.Added || x.State == EntityState.Modified));

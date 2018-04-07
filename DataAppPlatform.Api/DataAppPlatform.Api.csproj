@@ -24,6 +24,7 @@
     <ProjectReference Include="..\DataAppPlatform.Api.Services\DataAppPlatform.DataServices.csproj" />
     <ProjectReference Include="..\DataAppPlatform.ApplicationServices\DataAppPlatform.ApplicationServices.csproj" />
     <ProjectReference Include="..\DataAppPlatform.Core\DataAppPlatform.Core.csproj" />
+    <ProjectReference Include="..\DataAppPlatform.DataAccess\DataAppPlatform.DataAccess.csproj" />
     <ProjectReference Include="..\DataAppPlatform.SqlServer\DataAppPlatform.SqlServer.csproj" />
   </ItemGroup>
 

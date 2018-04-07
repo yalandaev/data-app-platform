@@ -4,8 +4,8 @@ namespace DataAppPlatform.Core.DataService.Interfaces
 {
     public interface ISchemaInfoProvider
     {
-        string GetColumnSchema(string tableName, string referenceField);
+        string GetReferenceColumnSchema(string tableName, string referenceField);
         ColumnType GetColumnType(string tableName, string columnName);
-        string GetTableDisplayColumn(string requestEntitySchema);
+        string GetTableDisplayColumn(string tableName);
     }
 }

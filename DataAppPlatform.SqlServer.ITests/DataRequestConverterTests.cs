@@ -98,9 +98,9 @@ namespace DataAppPlatform.DataServices.Tests
             };
 
             var mockSchemaInfoProvider = new Mock<ISchemaInfoProvider>();
-            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]"), It.Is<string>(s => s == "Manager"))).Returns("Contacts");
-            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]"), It.Is<string>(s => s == "Department"))).Returns("Departments");
-            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Departments]"), It.Is<string>(s => s == "Head"))).Returns("Contacts");
+            mockSchemaInfoProvider.Setup(x => x.GetReferenceColumnSchema(It.Is<string>(s => s == "[Contacts]"), It.Is<string>(s => s == "Manager"))).Returns("Contacts");
+            mockSchemaInfoProvider.Setup(x => x.GetReferenceColumnSchema(It.Is<string>(s => s == "[Contacts]"), It.Is<string>(s => s == "Department"))).Returns("Departments");
+            mockSchemaInfoProvider.Setup(x => x.GetReferenceColumnSchema(It.Is<string>(s => s == "[Departments]"), It.Is<string>(s => s == "Head"))).Returns("Contacts");
             IDataRequestConverter dataRequestConverter = new DataRequestConverter(mockSchemaInfoProvider.Object);
 
             QueryModel queryModel = dataRequestConverter.GetQueryModel(queryRequest);
@@ -149,9 +149,9 @@ namespace DataAppPlatform.DataServices.Tests
             };
 
             var mockSchemaInfoProvider = new Mock<ISchemaInfoProvider>();
-            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]"), It.Is<string>(s => s == "Manager"))).Returns("Contacts");
-            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]"), It.Is<string>(s => s == "Department"))).Returns("Departments");
-            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Departments]"), It.Is<string>(s => s == "Head"))).Returns("Contacts");
+            mockSchemaInfoProvider.Setup(x => x.GetReferenceColumnSchema(It.Is<string>(s => s == "[Contacts]"), It.Is<string>(s => s == "Manager"))).Returns("Contacts");
+            mockSchemaInfoProvider.Setup(x => x.GetReferenceColumnSchema(It.Is<string>(s => s == "[Contacts]"), It.Is<string>(s => s == "Department"))).Returns("Departments");
+            mockSchemaInfoProvider.Setup(x => x.GetReferenceColumnSchema(It.Is<string>(s => s == "[Departments]"), It.Is<string>(s => s == "Head"))).Returns("Contacts");
             IDataRequestConverter dataRequestConverter = new DataRequestConverter(mockSchemaInfoProvider.Object);
 
             QueryModel queryModel = dataRequestConverter.GetQueryModel(queryRequest);
@@ -192,9 +192,9 @@ namespace DataAppPlatform.DataServices.Tests
             };
 
             var mockSchemaInfoProvider = new Mock<ISchemaInfoProvider>();
-            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]"), It.Is<string>(s => s == "Manager"))).Returns("Contacts");
-            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]"), It.Is<string>(s => s == "Department"))).Returns("Departments");
-            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Departments]"), It.Is<string>(s => s == "Head"))).Returns("Contacts");
+            mockSchemaInfoProvider.Setup(x => x.GetReferenceColumnSchema(It.Is<string>(s => s == "[Contacts]"), It.Is<string>(s => s == "Manager"))).Returns("Contacts");
+            mockSchemaInfoProvider.Setup(x => x.GetReferenceColumnSchema(It.Is<string>(s => s == "[Contacts]"), It.Is<string>(s => s == "Department"))).Returns("Departments");
+            mockSchemaInfoProvider.Setup(x => x.GetReferenceColumnSchema(It.Is<string>(s => s == "[Departments]"), It.Is<string>(s => s == "Head"))).Returns("Contacts");
             IDataRequestConverter dataRequestConverter = new DataRequestConverter(mockSchemaInfoProvider.Object);
 
             QueryModel queryModel = dataRequestConverter.GetQueryModel(queryRequest);
@@ -224,8 +224,8 @@ namespace DataAppPlatform.DataServices.Tests
             };
 
             var mockSchemaInfoProvider = new Mock<ISchemaInfoProvider>();
-            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]" || s == "Contacts"), It.Is<string>(s => s == "Manager"))).Returns("Contacts");
-            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]" || s == "Contacts"), It.Is<string>(s => s == "Department"))).Returns("Departments");
+            mockSchemaInfoProvider.Setup(x => x.GetReferenceColumnSchema(It.Is<string>(s => s == "[Contacts]" || s == "Contacts"), It.Is<string>(s => s == "Manager"))).Returns("Contacts");
+            mockSchemaInfoProvider.Setup(x => x.GetReferenceColumnSchema(It.Is<string>(s => s == "[Contacts]" || s == "Contacts"), It.Is<string>(s => s == "Department"))).Returns("Departments");
             mockSchemaInfoProvider.Setup(x => x.GetTableDisplayColumn(It.Is<string>(s => s == "Contacts"))).Returns("FullName");
             mockSchemaInfoProvider.Setup(x => x.GetTableDisplayColumn(It.Is<string>(s => s == "Departments"))).Returns("Title");
             mockSchemaInfoProvider.Setup(x => x.GetColumnType(It.Is<string>(s => s == "Contacts"), It.Is<string>(s => s == "Manager" || s == "[Manager]"))).Returns(ColumnType.Lookup);
@@ -268,8 +268,8 @@ namespace DataAppPlatform.DataServices.Tests
             });
 
             var mockSchemaInfoProvider = new Mock<ISchemaInfoProvider>();
-            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]" || s == "Contacts"), It.Is<string>(s => s == "Manager"))).Returns("Contacts");
-            mockSchemaInfoProvider.Setup(x => x.GetColumnSchema(It.Is<string>(s => s == "[Contacts]" || s == "Contacts"), It.Is<string>(s => s == "Department"))).Returns("Departments");
+            mockSchemaInfoProvider.Setup(x => x.GetReferenceColumnSchema(It.Is<string>(s => s == "[Contacts]" || s == "Contacts"), It.Is<string>(s => s == "Manager"))).Returns("Contacts");
+            mockSchemaInfoProvider.Setup(x => x.GetReferenceColumnSchema(It.Is<string>(s => s == "[Contacts]" || s == "Contacts"), It.Is<string>(s => s == "Department"))).Returns("Departments");
             mockSchemaInfoProvider.Setup(x => x.GetTableDisplayColumn(It.Is<string>(s => s == "Contacts"))).Returns("FullName");
             mockSchemaInfoProvider.Setup(x => x.GetTableDisplayColumn(It.Is<string>(s => s == "Departments"))).Returns("Title");
             mockSchemaInfoProvider.Setup(x => x.GetColumnType(It.Is<string>(s => s == "Contacts"), It.Is<string>(s => s == "Manager" || s == "[Manager]"))).Returns(ColumnType.Lookup);

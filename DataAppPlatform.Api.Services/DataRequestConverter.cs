@@ -76,7 +76,7 @@ namespace DataAppPlatform.DataServices
         {
             queryRequest.Columns.AddRange(queryRequest.Columns
                 .Where(column => _schemaInfoProvider.GetColumnType(queryRequest.EntitySchema, column) == ColumnType.Lookup)
-                .Select(column => $"{column}.{_schemaInfoProvider.GetTableDisplayColumn(_schemaInfoProvider.GetColumnSchema(queryRequest.EntitySchema, column))}"));
+                .Select(column => $"{column}.{_schemaInfoProvider.GetTableDisplayColumn(_schemaInfoProvider.GetReferenceColumnSchema(queryRequest.EntitySchema, column))}").ToList());
             DataQueryRequest dataQueryRequest = TransformToDataRequest(queryRequest);
 
             var queryModel = GetQueryModel(dataQueryRequest);
@@ -312,7 +312,7 @@ namespace DataAppPlatform.DataServices
                     Columns = new List<QueryColumnModel>(),
                     Join = new List<QueryTableModel>()
                 };
-                joinModel.TableName = $"[{_schemaInfoProvider.GetColumnSchema(joinModel.Parent.TableName, joinModel.ReferenceName)}]";
+                joinModel.TableName = $"[{_schemaInfoProvider.GetReferenceColumnSchema(joinModel.Parent.TableName, joinModel.ReferenceName)}]";
 
                 parent.Join.Add(joinModel);
             }

@@ -71,7 +71,7 @@ namespace DataAppPlatform.Api
             services.AddTransient<DataContext>();
             services.AddTransient<ISqlQueryGenerator, SqlServerQueryGenerator>();
             services.AddTransient<IDataRequestConverter, DataRequestConverter>();
-            services.AddTransient<ISchemaInfoProvider, SqlServerSchemaInfoProvider>();
+            services.AddTransient<ISchemaInfoProvider, SchemaInfoProvider>();
             services.AddTransient<IUserService, UserService>();
 
         }

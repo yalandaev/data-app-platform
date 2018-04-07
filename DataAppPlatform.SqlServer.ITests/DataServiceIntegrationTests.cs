@@ -26,7 +26,7 @@ namespace DataAppPlatform.DataServices.Tests
         public DataServiceIntegrationTests()
         {
             _dataContext = new DataContext();
-            _dataService = new DataServices.DataService(new SqlServerQueryGenerator(), _dataContext, new DataRequestConverter(new SqlServerSchemaInfoProvider()));
+            _dataService = new DataServices.DataService(new SqlServerQueryGenerator(), _dataContext, new DataRequestConverter(new SchemaInfoProvider()));
 
             _dataContext.Contacts.RemoveRange(_dataContext.Contacts.ToList());
             _dataContext.SaveChanges();
