@@ -1,0 +1,37 @@
+<div class="control control-wrapper" [class.hidden]="!innerModel.visible">
+    <div class="control-label-wrapper">
+        <label class="control-label">{{innerModel.label}}:</label>
+    </div>
+    <div class="control-input-wrapper">
+        <div *ngIf="this.innerModel.value" 
+            class="control-link-wrapper control-editable" 
+            [class.hidden]="editMode" 
+            (click)="switchToEditMode()" (focusin)="switchToEditMode()">
+            <a href="#" (mousedown)="clickOnLink($event)">{{innerModel.displayValue}}</a>
+        </div>
+        <input #textInput
+            type="text" 
+            [(ngModel)]="innerModel.displayValue" 
+            [class.hidden]="!editMode" 
+            [disabled]="!innerModel.enabled" (keyup)="inputKeyUp($event)" (focusout)="onFocusOut()">
+        <div class="control-input-icons-wrapper">
+            <div class="control-input-icon-wrapper" [class.hidden]="!innerModel.enabled || this.innerModel.value == null">
+                <div class="control-lookup-icon control-lookup-icon-clickable control-lookup-icon-clear" (click)="clear()"></div>
+            </div>
+            <div class="control-input-icon-wrapper" [class.hidden]="!innerModel.enabled">
+                <div class="control-lookup-icon control-lookup-icon-clickable control-lookup-icon-search"></div>
+            </div>
+            <div class="control-input-icon-wrapper" [class.hidden]="innerModel.enabled">
+                <div class="control-lookup-icon control-lookup-icon-locked"></div>
+            </div>
+        </div>
+        <div class="control-lookup-suggestions" [style.margin-top.px]="getSuggestionsMargin()" [class.hidden]="!suggestionsVisible"> 
+            <ul>
+                <li *ngFor="let suggestion of suggestions"
+                (mousedown)="suggestionMouseDown(suggestion)">
+                    {{ suggestion.DisplayValue }}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

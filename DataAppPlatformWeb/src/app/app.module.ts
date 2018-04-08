@@ -13,6 +13,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ContactPageComponent } from './sections/contacts/contact-page.component';
 import { TextInputComponent } from './controls/input/text-input/text-input.component';
 import { CoreModule } from './core.module/core.module';
+import { LookupInputComponent } from './controls/input/lookup-input/lookup-input.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { CoreModule } from './core.module/core.module';
     ContactPageComponent,
     UseFilterPipe,
     LoginComponent,
-    TextInputComponent
+    TextInputComponent,
+    LookupInputComponent
   ],
   imports: [
     BrowserModule,

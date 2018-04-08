@@ -51,6 +51,14 @@ export class ContactPageComponent extends BasePageComponent {
                     required: true,
                     visible: true,
                     enabled: true
+                },
+                'Manager': {
+                    label: 'Manager',
+                    required: true,
+                    visible: true,
+                    enabled: true,
+                    schemaName: 'Contacts',
+                    allowHyperlink: true
                 }
             }
         );

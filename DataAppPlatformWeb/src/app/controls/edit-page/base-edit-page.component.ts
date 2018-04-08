@@ -62,9 +62,11 @@ export abstract class BasePageComponent {
             .subscribe(response => {
                 const data = response.Fields;
                 Object.keys(this.viewModel.fields).forEach(key => {
-                    this.viewModel.fields[key].value = data[key].Value;
-                    this.viewModel.fields[key].oldValue = data[key].Value;
-                    this.viewModel.fields[key].displayValue = data[key].DisplayValue;
+                    const object = Object.assign({}, this.viewModel.fields[key]);
+                    object.value = data[key].Value;
+                    object.oldValue = data[key].Value;
+                    object.displayValue = data[key].DisplayValue;
+                    this.viewModel.fields[key] = object; // Replace whole object in order to get changes detection in input controls work
                 });
             });
     }

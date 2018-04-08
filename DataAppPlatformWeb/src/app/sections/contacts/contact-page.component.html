@@ -13,6 +13,9 @@
 <app-text-input
     [(model)]="viewModel.fields['Email']"
 ></app-text-input> 
+<app-lookup-input
+    [(model)]="viewModel.fields['Manager']"
+></app-lookup-input> 
 
 <button (click)="save()">Save</button><button (click)="close()">Close</button>
 <br>

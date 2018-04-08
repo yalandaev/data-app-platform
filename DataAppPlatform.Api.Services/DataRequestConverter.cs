@@ -134,6 +134,9 @@ namespace DataAppPlatform.DataServices
                 PageSize = 10
             };
 
+            if(dataQueryRequest.Filter == null)
+                dataQueryRequest.Filter = new FilterGroup();
+
             string displayColumn = _schemaInfoProvider.GetTableDisplayColumn(request.EntitySchema);
             dataQueryRequest.OrderBy = displayColumn;
             dataQueryRequest.Sort = Sort.ASC;

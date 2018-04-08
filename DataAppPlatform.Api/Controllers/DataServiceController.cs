@@ -51,7 +51,7 @@ namespace DataAppPlatform.Api.Controllers
             _dataService.CreateEntity(request);
         }
 
-        [HttpGet("LookupAutoComplete")]
+        [HttpPost("LookupAutoComplete")]
         public List<LookupAutoCompleteListItem> AutoCompleteSearch([FromBody]LookupAutoCompleteRequest request)
         {
             return _dataService.GetLookupAutoComplete(request);
