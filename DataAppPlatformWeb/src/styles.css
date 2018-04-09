@@ -107,6 +107,10 @@ body {
   .control-lookup-icon-locked {
     background-image: url('./assets/icons/padlock.png');
   } 
+
+  .control-lookup-icon-arrow-down {
+    background-image: url('./assets/icons/arrow-down.png');
+  } 
   
   .hidden {
     display: none;

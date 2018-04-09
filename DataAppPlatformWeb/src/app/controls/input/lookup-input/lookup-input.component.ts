@@ -3,20 +3,34 @@ import { DataService } from '../../../core.module';
 import { EntityPropertySchema } from '../../edit-page/entity-property-schema';
 import { LookupAutoCompleteListItem } from '../../../core.module/api/data-service/lookup-autocomplete-list-item.model';
 import { LookupAutoCompleteRequest } from '../../../core.module/api/data-service/lookup-autocomplete-request.model';
+import { LookupMode } from './lookup-mode.model';
+import { EditPageMode } from '../../edit-page/base-edit-page.component';
 
 @Component({
     selector: 'app-lookup-input',
     templateUrl: './lookup-input.component.html'
 })
 export class LookupInputComponent implements OnInit {
-
-    @ViewChild('textInput') input: ElementRef;
-
-    constructor(private dataService: DataService, private renderer: Renderer) { }
-
-    @Output() modelChange: EventEmitter<EntityPropertySchema> = new EventEmitter<EntityPropertySchema>();
+    constructor(
+        private dataService: DataService,
+        private renderer: Renderer) {
+    }
 
     private innerModel: EntityPropertySchema;
+    private editMode: boolean;
+    private inputFocused: boolean;
+    private suggestionsVisible: boolean;
+    private selectedValue: LookupAutoCompleteListItem;
+    private suggestions: LookupAutoCompleteListItem[];
+    private errorMessage: any = '';
+    private linkClicked: boolean; // hook to stop switchToEditMode()
+    private lookupMode: LookupMode;
+
+    @ViewChild('textInput')
+    input: ElementRef;
+
+    @Output()
+    modelChange: EventEmitter<EntityPropertySchema> = new EventEmitter<EntityPropertySchema>();
 
     @Input()
     set model(model: EntityPropertySchema) {
@@ -30,18 +44,21 @@ export class LookupInputComponent implements OnInit {
         this.editMode = this.selectedValue ? false : true;
     }
 
-    public myFocusTriggeringEventEmitter = new EventEmitter<boolean>();
+    @Input()
+    mode: string;
 
-    private inputValue: string;
-    private editMode: boolean;
-    private inputFocused: boolean;
-    private suggestionsVisible: boolean;
-    private selectedValue: LookupAutoCompleteListItem;
-    private suggestions: LookupAutoCompleteListItem[];
-    private errorMessage: any = '';
-    private linkClicked: boolean; // hook to stop switchToEditMode()
+    ngOnInit() {
+        if (this.mode === 'list') {
+            this.lookupMode = LookupMode.List;
+        } else {
+            this.lookupMode = LookupMode.Lookup;
+        }
+     }
 
-    ngOnInit() { }
+    arrowDownClicked() {
+        this.findLookupValues('');
+        this.editMode = true;
+    }
 
     getEditMode() {
         if (this.selectedValue == null) {
@@ -57,11 +74,14 @@ export class LookupInputComponent implements OnInit {
     }
 
     private onFocusOut() {
-        if (this.innerModel.value == null) {
+        this.suggestionsVisible = false;
+        if (this.innerModel.value == null || this.innerModel.value === '') {
             this.innerModel.displayValue = '';
-            this.suggestionsVisible = false;
         } else {
             this.editMode = false;
+            if (this.selectedValue) {
+                this.innerModel.displayValue = this.selectedValue.DisplayValue;
+            }
         }
     }
 
@@ -85,9 +105,15 @@ export class LookupInputComponent implements OnInit {
     }
 
     public inputKeyUp(event: KeyboardEvent) {
-        if (this.innerModel.displayValue && this.innerModel.displayValue.length === 0) {
-            this.suggestionsVisible = false;
-            this.setSelectedSuggestion(null);
+        if (this.innerModel.displayValue === '' && this.innerModel.displayValue.length === 0) {
+            if (this.lookupMode === LookupMode.Lookup) {
+                this.suggestionsVisible = false;
+                this.setSelectedSuggestion(null);
+            }
+            if (this.lookupMode === LookupMode.List) {
+                this.findLookupValues('');
+                this.editMode = true;
+            }
         }
         if (this.innerModel.displayValue && this.innerModel.displayValue.length > 0) {
             this.suggestionsVisible = true;
@@ -114,16 +140,36 @@ export class LookupInputComponent implements OnInit {
             return;
         }
         this.editMode = true;
+        if (this.lookupMode === LookupMode.List) {
+            this.findLookupValues('');
+        }
         this.setInputFocused();
     }
 
     private findLookupValues(search: string) {
-        this.dataService.getAutocompleteData(new LookupAutoCompleteRequest(this.innerModel.schemaName, search, null))
+        this.dataService.getAutocompleteData(new LookupAutoCompleteRequest(this.innerModel.schemaName, search, this.innerModel.filter))
         .subscribe(data => {
-            if (data) {
-                this.selectedValue = null;
-            }
             this.suggestions = data;
+            if (this.lookupMode === LookupMode.List) {
+                this.suggestionsVisible = true;
+                this.setInputFocused();
+            }
         });
+    }
+
+    private onInputClick() {
+        if (this.lookupMode === LookupMode.List) {
+            if (this.lookupMode === LookupMode.List) {
+                this.findLookupValues('');
+            }
+            this.setInputFocused();
+        }
+    }
+
+    private isLookupMode(): boolean {
+        return this.lookupMode === LookupMode.Lookup;
+    }
+    private isListMode(): boolean {
+        return this.lookupMode === LookupMode.List;
     }
 }

@@ -3,7 +3,7 @@
         <label class="control-label">{{innerModel.label}}:</label>
     </div>
     <div class="control-input-wrapper">
-        <div *ngIf="this.innerModel.value" 
+        <div *ngIf="innerModel.value" 
             class="control-link-wrapper control-editable" 
             [class.hidden]="editMode" 
             (click)="switchToEditMode()" (focusin)="switchToEditMode()">
@@ -13,16 +13,19 @@
             type="text" 
             [(ngModel)]="innerModel.displayValue" 
             [class.hidden]="!editMode" 
-            [disabled]="!innerModel.enabled" (keyup)="inputKeyUp($event)" (focusout)="onFocusOut()">
+            [disabled]="!innerModel.enabled" (keyup)="inputKeyUp($event)" (focusout)="onFocusOut()" (click)="onInputClick()">
         <div class="control-input-icons-wrapper">
-            <div class="control-input-icon-wrapper" [class.hidden]="!innerModel.enabled || this.innerModel.value == null">
+            <div class="control-input-icon-wrapper" [class.hidden]="!innerModel.enabled || innerModel.value == null || innerModel.value == ''">
                 <div class="control-lookup-icon control-lookup-icon-clickable control-lookup-icon-clear" (click)="clear()"></div>
             </div>
-            <div class="control-input-icon-wrapper" [class.hidden]="!innerModel.enabled">
+            <div *ngIf="isLookupMode()" class="control-input-icon-wrapper" [class.hidden]="!innerModel.enabled">
                 <div class="control-lookup-icon control-lookup-icon-clickable control-lookup-icon-search"></div>
             </div>
             <div class="control-input-icon-wrapper" [class.hidden]="innerModel.enabled">
                 <div class="control-lookup-icon control-lookup-icon-locked"></div>
+            </div>
+            <div *ngIf="isListMode()" class="control-input-icon-wrapper">
+                <div class="control-lookup-icon control-lookup-icon-arrow-down" (click)="arrowDownClicked()"></div>
             </div>
         </div>
         <div class="control-lookup-suggestions" [style.margin-top.px]="getSuggestionsMargin()" [class.hidden]="!suggestionsVisible"> 

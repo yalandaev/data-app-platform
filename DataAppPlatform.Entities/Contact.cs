@@ -24,5 +24,10 @@ namespace DataAppPlatform.Entities
 
         [ForeignKey(nameof(ManagerId))]
         public Contact Manager { get; set; }
+
+        public long? GenderId { get; set; }
+
+        [ForeignKey(nameof(GenderId))]
+        public Gender Gender { get; set; }
     }
 }

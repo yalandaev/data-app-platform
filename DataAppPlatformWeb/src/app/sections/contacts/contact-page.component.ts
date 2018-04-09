@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { PageViewModel } from '../../controls/edit-page/page-view-model.model';
 import { BasePageComponent, EditPageMode } from '../../controls/edit-page/base-edit-page.component';
 import { DataService } from '../../core.module';
+import { LookupMode } from '../../controls/input/lookup-input/lookup-mode.model';
 
 @Component({
     selector: 'app-contact-page',
@@ -17,6 +18,8 @@ export class ContactPageComponent extends BasePageComponent {
     ) {
         super(dataService, router, route);
     }
+
+    lookupMode = LookupMode;
 
     getViewModel(): PageViewModel {
         return new PageViewModel(
@@ -58,6 +61,14 @@ export class ContactPageComponent extends BasePageComponent {
                     visible: true,
                     enabled: true,
                     schemaName: 'Contacts',
+                    allowHyperlink: true
+                },
+                'Gender': {
+                    label: 'Gender',
+                    required: true,
+                    visible: true,
+                    enabled: true,
+                    schemaName: 'Gender',
                     allowHyperlink: true
                 }
             }

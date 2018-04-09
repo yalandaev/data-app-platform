@@ -27,6 +27,7 @@ namespace DataAppPlatform.DataAccess
         }
 
         public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Gender> Gender { get; set; }
         public DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -115,6 +116,16 @@ namespace DataAppPlatform.DataAccess
                 Username = "Admin",
                 Password = "Password"
             });
+
+            Gender.Add(new Gender()
+            {
+                Name = "Male"
+            });
+            Gender.Add(new Gender()
+            {
+                Name = "Female"
+            });
+            
             SaveChanges();
         }
     }
