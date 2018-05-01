@@ -14,6 +14,9 @@ import { ContactPageComponent } from './sections/contacts/contact-page.component
 import { TextInputComponent } from './controls/input/text-input/text-input.component';
 import { CoreModule } from './core.module/core.module';
 import { LookupInputComponent } from './controls/input/lookup-input/lookup-input.component';
+import { SelectInputComponent } from './controls/input/select-input/select-input.component';
+import { SelectFilterPipe } from './controls/input/select-input/select-filter-pipe/selectbox-filter-pipe.pipe';
+
 
 @NgModule({
   declarations: [
@@ -24,7 +27,9 @@ import { LookupInputComponent } from './controls/input/lookup-input/lookup-input
     UseFilterPipe,
     LoginComponent,
     TextInputComponent,
-    LookupInputComponent
+    LookupInputComponent,
+    SelectInputComponent,
+    SelectFilterPipe
   ],
   imports: [
     BrowserModule,

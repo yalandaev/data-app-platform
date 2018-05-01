@@ -19,6 +19,30 @@ export class ContactPageComponent extends BasePageComponent {
         super(dataService, router, route);
     }
 
+    listboxItems = [
+        {
+            value: 'FirstNameValue',
+            name: 'First name'
+        },
+        {
+            value: 'ManagerValue',
+            name: 'Manager'
+        },
+        {
+            value: 'LastNameValue',
+            name: 'Last Name'
+        },
+        {
+            value: 'AgeValue',
+            name: 'Age'
+        },
+        {
+            value: 'DateValue',
+            name: 'Date'
+        }
+    ];
+    listboxvalue: string;
+
     lookupMode = LookupMode;
 
     getViewModel(): PageViewModel {

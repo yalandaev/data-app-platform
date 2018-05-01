@@ -1,0 +1,25 @@
+<div class="control control-wrapper">
+	<div class="control-label-wrapper">
+			<label class="control-label">{{label}}:</label>
+	</div>
+	<div>
+		<div class="control-input-wrapper">
+			<input #textInput
+					type="text" 
+					[(ngModel)]="displayValue" (keyup)="inputKeyUp($event)" (focusout)="onFocusOut()" (click)="onInputClick()">
+			<div class="control-input-icons-wrapper">
+					<div class="control-input-icon-wrapper">
+							<div class="control-lookup-icon control-lookup-icon-arrow-down" (click)="arrowDownClicked()"></div>
+					</div>
+			</div>
+		</div>
+		<div class="control-lookup-suggestions" [class.hidden]="!itemsVisible"> 
+			<ul>
+				<li *ngFor="let item of items | listboxFilter:filter"
+				(mousedown)="itemMouseDown(item)">
+						{{ item.name }}
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

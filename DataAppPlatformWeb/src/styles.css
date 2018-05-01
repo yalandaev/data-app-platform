@@ -143,7 +143,6 @@ body {
   }
   
   .control-lookup-suggestions {
-    margin-top: 61px;
     position: absolute;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -153,6 +152,10 @@ body {
     text-align: center;
     background-color: white;
     z-index: 10000;
+    width: 400px;
+    max-height: 250px;
+    overflow: overlay;
+    margin-left: 1px;
   }
   
   .control-lookup-suggestions ul {
@@ -174,4 +177,8 @@ body {
     white-space: nowrap;
     line-height: 38px;
     cursor: pointer;
+  }
+
+  .control-lookup-suggestions ul li:hover {
+    background: #ebf5ff;
   }

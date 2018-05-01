@@ -21,6 +21,13 @@
     mode="list"
 ></app-lookup-input> 
 
+<app-select-input
+    [items]="listboxItems"
+    label="Listbox"
+    [(model)]="listboxvalue"
+></app-select-input> 
+{{listboxvalue}}
+
 <button (click)="save()">Save</button><button (click)="close()">Close</button>
 <br>
 

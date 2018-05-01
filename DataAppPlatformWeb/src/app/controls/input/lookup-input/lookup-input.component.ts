@@ -99,11 +99,6 @@ export class LookupInputComponent implements OnInit {
         this.editMode = true;
     }
 
-    private getSuggestionsMargin() {
-        const margin = this.suggestions ? ((this.suggestions.length - 1) * 20) + 41 : 0;
-        return margin;
-    }
-
     public inputKeyUp(event: KeyboardEvent) {
         if (this.innerModel.displayValue === '' && this.innerModel.displayValue.length === 0) {
             if (this.lookupMode === LookupMode.Lookup) {
