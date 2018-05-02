@@ -2,7 +2,8 @@
   data-table component
 </p>
 
-
+<app-quick-filter [(model)]="filter"></app-quick-filter>
+<button (click)="applyFilter()">Apply filter</button>
 <span *ngIf="data.length == 0">Loading data table...</span>
 <div class="rTable" *ngIf="data.length > 0">
   <div class="rTableRow">

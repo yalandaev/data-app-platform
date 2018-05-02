@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input, Renderer } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input, Renderer, AfterViewInit } from '@angular/core';
 import { SelectItem } from './models/select-item.model';
 
 
@@ -22,9 +22,7 @@ export class SelectInputComponent implements OnInit {
   modelChange: EventEmitter<string> = new EventEmitter<string>();
 
   @Input()
-  set model(value: string) {
-
-  }
+  model: string;
 
   @Input()
   label: string;
@@ -33,6 +31,9 @@ export class SelectInputComponent implements OnInit {
   items: SelectItem[];
 
   ngOnInit() {
+    if (this.items && this.model) {
+      this.displayValue = this.items.filter(x => x.value === this.model)[0].name;
+    }
   }
 
   itemMouseDown(item: SelectItem) {

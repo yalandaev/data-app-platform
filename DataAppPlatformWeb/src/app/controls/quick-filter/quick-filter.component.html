@@ -1,0 +1,4 @@
+<button (click)="addCondition()">Add condition</button>
+<div *ngFor="let condition of model.conditions; let index = index">
+  <app-quick-filter-item [(model)]="model.conditions[index]"></app-quick-filter-item>
+</div>

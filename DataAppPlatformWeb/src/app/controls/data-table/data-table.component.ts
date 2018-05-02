@@ -40,6 +40,10 @@ export class DataTableComponent implements OnInit {
   debugInformation: string;
 
   ngOnInit() {
+    this.applyFilter();
+  }
+
+  applyFilter() {
     this.dataService.getData(
       new DataQueryRequest(this.entitySchema,
         this.orderBy,

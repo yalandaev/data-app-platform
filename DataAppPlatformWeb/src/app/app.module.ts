@@ -16,6 +16,8 @@ import { CoreModule } from './core.module/core.module';
 import { LookupInputComponent } from './controls/input/lookup-input/lookup-input.component';
 import { SelectInputComponent } from './controls/input/select-input/select-input.component';
 import { SelectFilterPipe } from './controls/input/select-input/select-filter-pipe/selectbox-filter-pipe.pipe';
+import { QuickFilterComponent } from './controls/quick-filter/quick-filter.component';
+import { QuickFilterItemComponent } from './controls/quick-filter-item/quick-filter-item.component';
 
 
 @NgModule({
@@ -29,7 +31,9 @@ import { SelectFilterPipe } from './controls/input/select-input/select-filter-pi
     TextInputComponent,
     LookupInputComponent,
     SelectInputComponent,
-    SelectFilterPipe
+    SelectFilterPipe,
+    QuickFilterComponent,
+    QuickFilterItemComponent
   ],
   imports: [
     BrowserModule,

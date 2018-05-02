@@ -7,4 +7,8 @@ export class FilterGroup {
         private conditions: Array<Condition>,
         private filterGroups?: Array<FilterGroup>
     ) {}
+
+    addCondition(condition: Condition) {
+        this.conditions.push(condition);
+    }
 }
