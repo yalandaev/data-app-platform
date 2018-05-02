@@ -53,7 +53,7 @@ body {
     align-items: center;
     border: 1px solid #e5e5e5;
     height: 40px;
-    width: 400px;
+    width: 250px;
   }
   
   .control-link-wrapper {
@@ -152,7 +152,7 @@ body {
     text-align: center;
     background-color: white;
     z-index: 10000;
-    width: 400px;
+    width: 250px;
     max-height: 250px;
     overflow: overlay;
     margin-left: 1px;

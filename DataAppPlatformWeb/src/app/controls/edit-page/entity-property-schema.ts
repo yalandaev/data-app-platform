@@ -3,7 +3,7 @@ import { FilterGroup } from '../../core.module/api/data-service/filter/filter-gr
 export class EntityPropertySchema {
     value?: any;
     oldValue?: any;
-    label: string;
+    label?: string;
     enabled: boolean;
     visible: boolean;
     required: boolean;

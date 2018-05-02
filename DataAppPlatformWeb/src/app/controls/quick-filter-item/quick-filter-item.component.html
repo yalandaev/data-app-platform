@@ -1,17 +1,14 @@
 <app-select-input
     [items]="columnNames"
-    label="Column"
     [(model)]="model.column"
+    [style.display]="'inline-block'"
 ></app-select-input>
 <app-select-input
     [items]="comparisonTypes"
-    label="Comparison"
     [(model)]="model.comparisonType"
+    [style.display]="'inline-block'"
 ></app-select-input>
-<div class="control control-wrapper">
-    <div class="control-label-wrapper">
-        <label class="control-label">Value:</label>
-    </div>
+<div class="control control-wrapper" [style.display]="'inline-block'">
   <div class="control-input-wrapper">
     <input #textInput
       type="text" 

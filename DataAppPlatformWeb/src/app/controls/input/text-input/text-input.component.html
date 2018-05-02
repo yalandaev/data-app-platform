@@ -1,5 +1,5 @@
 <div class="control control-wrapper" [class.hidden]="!model.visible">
-    <div class="control-label-wrapper">
+    <div *ngIf="model.label" class="control-label-wrapper">
         <label class="control-label">{{model.label}}:</label>
     </div>
     <div class="control-input-wrapper">

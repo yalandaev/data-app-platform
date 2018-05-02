@@ -81,7 +81,6 @@ export class QuickFilterItemComponent implements OnInit {
   ];
 
   value: EntityPropertySchema = {
-    label: 'Value',
     required: true,
     visible: true,
     enabled: true
